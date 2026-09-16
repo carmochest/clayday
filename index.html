@@ -1,0 +1,657 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body>
+<title>Clay's Day</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#FAF5EA; --panel:#FFFCF4; --white:#FFFEFA; --sand:#F1E8D6; --sand-2:#E7DBC4;
+  --ink:#603F5B; --ink-soft:#92788D; --ink-faint:#B9A5B6; --line:#E7DCCE;
+  --coral:#F06051; --coral-ink:#fff; --sky:#44C5E6; --leaf:#70BE54; --sun:#FFC527; --plum:#7A5675;
+  --feed:#FFF1C9; --feed-e:#F0D58A; --feed-i:#6B4E00;
+  --nap:#DFF4FA; --nap-e:#B7E2EF; --nap-i:#1C5F74;
+  --night:#D6C6D3; --night-e:#BFA9BC; --night-i:#4A2E4B;
+  --care:#F6DAD5; --care-e:#EBBFB7; --care-i:#8A3A2C;
+  --self:#E6F4DD; --self-e:#C6E3B4; --self-i:#2C6320;
+  --work:#E7DBC4; --work-e:#D3C2A2; --work-i:#5A4727;
+  --duty:#F6EFE2; --duty-e:#E0D2B9; --duty-i:#6E5A55;
+  --dog:#F2DDB8; --dog-e:#DFC58F; --dog-i:#6A4B12;
+  --fam:#FBE3DF; --fam-e:#F1C1B8; --fam-i:#9A3A2C;
+  --sug:#FFFFFF; --sug-e:#C6E3B4; --sug-i:#2C6320;
+  --rail-day:#FFF6D6; --rail-eve:#F6DAD5; --rail-night:#5D4462; --rail-night-ink:#EBDDEA;
+  --radius:12px; --radius-lg:18px;
+  --elev:0 1px 2px rgba(96,63,91,.05),0 10px 28px rgba(96,63,91,.08);
+  --elev-hi:0 2px 4px rgba(96,63,91,.06),0 18px 40px rgba(96,63,91,.12);
+  --head:"Plus Jakarta Sans",-apple-system,system-ui,sans-serif; --body:"Plus Jakarta Sans",-apple-system,system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){ :root:not([data-theme="light"]){
+  --paper:#231A26; --panel:#2E2331; --white:#362A39; --sand:#3A2D3C; --sand-2:#463848;
+  --ink:#F3E9EE; --ink-soft:#B9A2B6; --ink-faint:#7B667A; --line:#463848;
+  --plum:#C9AFC6;
+  --feed:#4D3E13; --feed-e:#6E5A1F; --feed-i:#FFE39A;
+  --nap:#1E3E4A; --nap-e:#2F5A69; --nap-i:#B8E6F5;
+  --night:#3D2E44; --night-e:#553F5C; --night-i:#E4D3E6;
+  --care:#4E2A2A; --care-e:#6C3C3A; --care-i:#F8C9C0;
+  --self:#28402A; --self-e:#3B5A3D; --self-i:#C8EBBB;
+  --work:#463A28; --work-e:#5F5038; --work-i:#EBD9B5;
+  --duty:#3A3038; --duty-e:#50444F; --duty-i:#DCCBD8;
+  --dog:#4B3B1C; --dog-e:#6A5528; --dog-i:#F3DBA8;
+  --fam:#4E2B2B; --fam-e:#6D3E3C; --fam-i:#FAC8C0;
+  --sug:#2E2331; --sug-e:#3B5A3D; --sug-i:#C8EBBB;
+  --rail-day:#4A3F2A; --rail-eve:#4E2E36; --rail-night:#17111A; --rail-night-ink:#C9B4C6;
+  --elev:0 1px 2px rgba(0,0,0,.3),0 10px 28px rgba(0,0,0,.35);
+  --elev-hi:0 2px 4px rgba(0,0,0,.3),0 18px 40px rgba(0,0,0,.45);
+}}
+:root[data-theme="dark"]{
+  --paper:#231A26; --panel:#2E2331; --white:#362A39; --sand:#3A2D3C; --sand-2:#463848;
+  --ink:#F3E9EE; --ink-soft:#B9A2B6; --ink-faint:#7B667A; --line:#463848;
+  --plum:#C9AFC6;
+  --feed:#4D3E13; --feed-e:#6E5A1F; --feed-i:#FFE39A;
+  --nap:#1E3E4A; --nap-e:#2F5A69; --nap-i:#B8E6F5;
+  --night:#3D2E44; --night-e:#553F5C; --night-i:#E4D3E6;
+  --care:#4E2A2A; --care-e:#6C3C3A; --care-i:#F8C9C0;
+  --self:#28402A; --self-e:#3B5A3D; --self-i:#C8EBBB;
+  --work:#463A28; --work-e:#5F5038; --work-i:#EBD9B5;
+  --duty:#3A3038; --duty-e:#50444F; --duty-i:#DCCBD8;
+  --dog:#4B3B1C; --dog-e:#6A5528; --dog-i:#F3DBA8;
+  --fam:#4E2B2B; --fam-e:#6D3E3C; --fam-i:#FAC8C0;
+  --sug:#2E2331; --sug-e:#3B5A3D; --sug-i:#C8EBBB;
+  --rail-day:#4A3F2A; --rail-eve:#4E2E36; --rail-night:#17111A; --rail-night-ink:#C9B4C6;
+  --elev:0 1px 2px rgba(0,0,0,.3),0 10px 28px rgba(0,0,0,.35);
+  --elev-hi:0 2px 4px rgba(0,0,0,.3),0 18px 40px rgba(0,0,0,.45);
+}
+*{box-sizing:border-box}
+html{height:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:14px;line-height:1.45;padding-inline:16px;padding-block:12px 48px;
+  background-image:linear-gradient(180deg, rgba(240,96,81,.07) 0%, rgba(255,197,39,.05) 30%, rgba(68,197,230,.06) 70%, rgba(112,190,84,.05) 100%);background-attachment:fixed;}
+button,select,input{font:inherit;color:inherit}
+button{cursor:pointer}
+button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--sky);outline-offset:2px}
+.wrap{max-width:1180px;margin:0 auto}
+
+/* ---------- top bar ---------- */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:var(--panel);border-radius:999px;padding:8px 10px 8px 14px;box-shadow:var(--elev);margin-bottom:18px}
+.logo{display:flex;align-items:center;gap:10px;margin-right:auto}
+.cube{width:34px;height:36px;position:relative;flex:none}
+.cube i{position:absolute;display:block}
+.cube .t{left:0;top:0;width:34px;height:20px;background:var(--sun);clip-path:polygon(50% 0,100% 25%,50% 50%,0 25%)}
+.cube .l{left:0;top:5px;width:17px;height:31px;background:var(--coral);clip-path:polygon(0 0,100% 50%,100% 100%,0 60%)}
+.cube .r{left:17px;top:5px;width:17px;height:31px;background:var(--plum);clip-path:polygon(0 50%,100% 0,100% 60%,0 100%)}
+.logo h1{font-family:var(--head);font-weight:800;font-size:20px;letter-spacing:-.01em;margin:0;line-height:1}
+.logo h1 small{display:block;font-family:var(--body);font-weight:500;font-size:11px;color:var(--ink-soft);letter-spacing:.08em;text-transform:uppercase;margin-top:3px}
+.seg{display:inline-flex;background:var(--sand);border-radius:999px;padding:3px;gap:2px}
+.seg button{border:0;background:transparent;color:var(--ink-soft);font-weight:600;font-size:13px;padding:7px 12px;border-radius:999px;transition:background .15s,color .15s}
+.seg button:hover{color:var(--ink)}
+.seg button.on{background:var(--ink);color:var(--paper)}
+.seg button[disabled]{opacity:.35;cursor:not-allowed}
+.pill{display:inline-flex;align-items:center;gap:8px;background:var(--sand);border:0;border-radius:999px;padding:8px 14px;font-weight:600;font-size:13px;color:var(--ink)}
+.pill.coral{background:var(--coral);color:var(--coral-ink)}
+.pill.ghost{background:transparent;border:1.5px solid var(--line)}
+.who{display:flex;align-items:center;gap:6px}
+.who .av{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-family:var(--head);font-weight:700;font-size:12px;color:#fff}
+
+/* ---------- glance row ---------- */
+.glance{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:18px}
+.tile{background:var(--panel);border-radius:var(--radius-lg);padding:14px 16px;box-shadow:var(--elev);position:relative;overflow:hidden;min-height:96px}
+.tile .eyebrow{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:6px}
+.tile .big{font-family:var(--head);font-weight:700;font-size:24px;line-height:1.1;letter-spacing:-.01em;text-wrap:balance}
+.tile .sub{color:var(--ink-soft);font-size:12.5px;margin-top:5px}
+.tile.accent{background:var(--ink);color:var(--paper)}
+.tile.accent .eyebrow,.tile.accent .sub{color:var(--ink-faint)}
+.tile .blob{position:absolute;right:-18px;bottom:-22px;width:88px;height:88px;border-radius:50%;opacity:.35}
+.wx{display:flex;align-items:center;gap:10px}
+.wx .ico{font-size:30px;line-height:1}
+.wxpick{display:flex;gap:4px;margin-top:8px;flex-wrap:wrap}
+.wxpick button{border:1.5px solid var(--line);background:transparent;border-radius:999px;padding:3px 9px;font-size:12px;font-weight:600;color:var(--ink-soft)}
+.wxpick button.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+
+/* ---------- layout ---------- */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin-top:16px}
+.anch{display:flex;flex-wrap:wrap;gap:10px 18px}
+.seg.sm button{padding:5px 11px;font-size:12.5px}
+.seg.people{flex-wrap:wrap}
+.seg.people button{padding:6px 11px}
+.seg.people button i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;vertical-align:0}
+.card{background:var(--panel);border-radius:var(--radius-lg);box-shadow:var(--elev);padding:14px 16px}
+.card h3{font-family:var(--head);font-weight:700;font-size:15px;margin:0 0 10px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.card h3 .hint{font-family:var(--body);font-size:11px;font-weight:500;color:var(--ink-soft)}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.field{display:flex;flex-direction:column;gap:5px;font-size:12px;color:var(--ink-soft);font-weight:600}
+.field select,.field input[type="time"]{background:var(--sand);border:0;border-radius:10px;padding:8px 10px;color:var(--ink);font-weight:600;font-size:13px}
+.daysel{display:flex;gap:4px}
+.daysel button{width:32px;height:32px;border-radius:50%;border:0;background:var(--sand);font-weight:700;font-size:12px;color:var(--ink-soft)}
+.daysel button.on{background:var(--leaf);color:#fff}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{display:inline-flex;align-items:center;gap:4px;background:var(--feed);color:var(--feed-i);border-radius:10px;padding:3px 4px 3px 8px;box-shadow:0 2px 0 var(--feed-e)}
+.chip.opt{background:transparent;box-shadow:inset 0 0 0 1.5px var(--feed-e);color:var(--ink)}
+.chip input[type="time"]{border:0;background:transparent;color:inherit;font-weight:700;font-size:13px;width:auto;min-width:64px;max-width:96px;padding:2px 0;font-variant-numeric:tabular-nums}
+.chip input[type="time"]::-webkit-calendar-picker-indicator{display:none}
+.chip .tog{border:0;background:transparent;font-size:10px;font-weight:700;letter-spacing:.05em;padding:2px 5px;border-radius:6px;opacity:.7}
+.chip .tog:hover,.chip .x:hover{background:rgba(0,0,0,.08);opacity:1}
+.chip .x{border:0;background:transparent;font-size:15px;line-height:1;padding:2px 5px;border-radius:6px;opacity:.7}
+.btn{border:0;background:var(--sand);border-radius:999px;padding:7px 12px;font-weight:600;font-size:12.5px;color:var(--ink)}
+.btn:hover{background:var(--sand-2)}
+.btn.primary{background:var(--coral);color:#fff}
+.btn.primary:hover{filter:brightness(1.05)}
+.btn.leaf{background:var(--leaf);color:#fff}
+.btn.sky{background:var(--sky);color:#fff}
+.btn.plum{background:var(--plum);color:#fff}
+.logbtns{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.logbtns .btn{padding:9px 10px;text-align:left;display:flex;align-items:center;gap:8px;min-width:0;white-space:normal;line-height:1.2}
+.card,.cards>*{min-width:0}
+#bg{position:fixed;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none}
+.logbtns .btn span{font-size:16px}
+.loglist{list-style:none;margin:10px 0 0;padding:0;display:flex;flex-direction:column;gap:4px;max-height:180px;overflow:auto}
+.loglist li{display:flex;align-items:center;gap:8px;font-size:12.5px;padding:5px 8px;background:var(--sand);border-radius:8px}
+.loglist li time{font-variant-numeric:tabular-nums;font-weight:700;color:var(--ink)}
+.loglist li .w{color:var(--ink-soft);margin-left:auto;font-size:11px}
+.loglist li button{border:0;background:transparent;color:var(--ink-faint);padding:0 2px}
+.note{font-size:12px;color:var(--ink-soft);margin:8px 0 0;line-height:1.4}
+.adj{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.adj li{display:flex;gap:8px;font-size:12.5px;line-height:1.35;padding:7px 9px;border-radius:10px;background:var(--sand)}
+.adj li.warn{background:var(--care);color:var(--care-i)}
+.adj li.good{background:var(--self);color:var(--self-i)}
+.adj li.info{background:var(--nap);color:var(--nap-i)}
+.adj li b{font-weight:700}
+.adj li .act{margin-left:auto;align-self:center;border:0;background:rgba(0,0,0,.08);border-radius:999px;padding:3px 9px;font-size:11px;font-weight:700;white-space:nowrap}
+.adj li .act:hover{background:rgba(0,0,0,.16)}
+
+/* ---------- week strip ---------- */
+.week{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;padding:0 12px 12px}
+.wd{background:var(--sand);border-radius:14px;padding:8px 8px 9px;border:2px solid transparent;text-align:left;min-width:0;transition:transform .12s}
+.wd:hover{transform:translateY(-1px)}
+.wd.on{border-color:var(--ink)}
+.wd.today .dn::after{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--coral);margin-left:5px;vertical-align:1px}
+.wd .dn{font-family:var(--head);font-weight:700;font-size:13.5px}
+.wd .dots{display:flex;flex-wrap:wrap;gap:3px;margin-top:6px}
+.wd .dots i{display:inline-block;width:9px;height:9px;border-radius:3px}
+.wd .tag{font-size:10.5px;color:var(--ink-soft);margin-top:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media (max-width:640px){.week{gap:4px}.wd{padding:6px 5px}.wd .tag{display:none}.wd .dn{font-size:12px}}
+
+/* ---------- timeline ---------- */
+.tlcard{background:var(--panel);border-radius:var(--radius-lg);box-shadow:var(--elev);overflow:hidden}
+.tlhead{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 16px 12px;flex-wrap:wrap}
+.tlhead h2{font-family:var(--head);font-weight:800;font-size:20px;letter-spacing:-.01em;margin:0}
+.tlhead h2 small{font-family:var(--body);font-weight:500;color:var(--ink-soft);font-size:13px;margin-left:8px}
+.scroller{overflow-x:auto;overscroll-behavior-x:contain}
+.grid{display:grid;position:relative}
+.ch{position:sticky;top:0;z-index:3;background:var(--panel);padding:8px 8px 8px;font-size:12px;font-weight:700;border-bottom:1.5px solid var(--line);display:flex;align-items:center;gap:8px}
+.ch .av{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-family:var(--head);font-size:11px;color:#fff;flex:none}
+.ch small{display:block;font-weight:500;color:var(--ink-soft);font-size:10.5px}
+.ch.railh{position:sticky;left:0;z-index:4}
+.rail{position:relative;border-right:1.5px solid var(--line);position:sticky;left:0;z-index:2}
+.rail .hr{position:absolute;left:0;right:0;padding:3px 8px 0 0;text-align:right;font-size:11px;font-weight:600;font-variant-numeric:tabular-nums}
+.col{position:relative;border-right:1px solid var(--line)}
+.col:last-child{border-right:0}
+.hl{position:absolute;left:0;right:0;border-top:1px dashed var(--line);pointer-events:none}
+.ev{position:absolute;left:5px;right:5px;border-radius:10px;padding:5px 8px;font-size:11.5px;font-weight:600;line-height:1.3;overflow:hidden;box-shadow:0 3px 0 var(--e);background:var(--bg);color:var(--fg)}
+.ev small{display:block;font-weight:500;opacity:.78;font-size:10.5px;margin-top:1px}
+.ev .acts{position:absolute;right:5px;top:4px;display:flex;gap:3px}
+.ev .acts button{width:20px;height:20px;border-radius:50%;border:0;background:rgba(255,255,255,.75);color:var(--fg);font-size:11px;font-weight:800;line-height:1;display:grid;place-items:center;box-shadow:0 1px 2px rgba(0,0,0,.12);opacity:.55;transition:opacity .12s}
+.ev:hover .acts button,.ev .acts button:focus-visible{opacity:1}
+.ev .acts button.ok{background:var(--leaf);color:#fff}
+.ev .acts button.no:hover{background:var(--coral);color:#fff}
+.ev.hasacts{padding-right:52px}
+.tile .tacts{display:flex;gap:6px;margin-top:10px}
+.tile .tacts button{border:0;border-radius:999px;padding:5px 11px;font-size:12px;font-weight:700;background:rgba(255,255,255,.14);color:inherit}
+.tile .tacts button.ok{background:var(--leaf);color:#fff}
+.tile .tacts button:hover{filter:brightness(1.1)}
+.ev.feed{--bg:var(--feed);--e:var(--feed-e);--fg:var(--feed-i)}
+.ev.nap{--bg:var(--nap);--e:var(--nap-e);--fg:var(--nap-i)}
+.ev.night{--bg:var(--night);--e:var(--night-e);--fg:var(--night-i)}
+.ev.care{--bg:var(--care);--e:var(--care-e);--fg:var(--care-i)}
+.ev.self{--bg:var(--self);--e:var(--self-e);--fg:var(--self-i)}
+.ev.work{--bg:var(--work);--e:var(--work-e);--fg:var(--work-i)}
+.ev.duty{--bg:var(--duty);--e:var(--duty-e);--fg:var(--duty-i)}
+.ev.dog{--bg:var(--dog);--e:var(--dog-e);--fg:var(--dog-i)}
+.ev.fam{--bg:var(--fam);--e:var(--fam-e);--fg:var(--fam-i)}
+.ev.off{--bg:transparent;--e:transparent;--fg:var(--ink-faint);box-shadow:inset 0 0 0 1.5px var(--line);font-weight:500}
+.ev.sug{--bg:var(--sug);--e:transparent;--fg:var(--sug-i);box-shadow:inset 0 0 0 1.5px var(--sug-e);border-style:dashed}
+.ev.actual{box-shadow:0 3px 0 var(--e),inset 0 0 0 2px var(--coral)}
+.ev.cancel{opacity:.55;text-decoration:line-through}
+.nowline{position:absolute;left:0;right:0;height:0;border-top:2px solid var(--coral);z-index:2;pointer-events:none}
+.nowline::before{content:"";position:absolute;left:-1px;top:-5px;width:8px;height:8px;border-radius:50%;background:var(--coral)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;padding:10px 16px 14px;font-size:11.5px;color:var(--ink-soft)}
+.legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 18px);transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:9px 16px;border-radius:999px;font-weight:600;font-size:13px;box-shadow:var(--elev-hi);opacity:0;transition:opacity .2s;pointer-events:none;z-index:50}
+.toast.show{opacity:1}
+.foot{margin-top:18px;font-size:12px;color:var(--ink-soft);line-height:1.5}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<canvas id="bg" aria-hidden="true"></canvas>
+<div class="wrap">
+<div class="bar">
+  <div class="logo"><div class="cube" aria-hidden="true"><i class="t"></i><i class="l"></i><i class="r"></i></div>
+    <h1>Clay's Day<small>household schedule · Bangkok</small></h1></div>
+  <div class="seg" id="phaseSeg" role="tablist" aria-label="Phase"></div>
+  <button class="pill who" id="whoBtn" title="Who is logging? Tap to switch"><span class="av" id="whoAv">C</span><span id="whoName">Chet</span></button>
+  <span class="pill ghost" id="syncPill">Local only</span>
+</div>
+
+<div class="glance" id="glance"></div>
+
+<section class="tlcard">
+  <div class="tlhead">
+    <h2 id="tlTitle"></h2>
+    <div class="seg people" id="peopleSeg" role="tablist" aria-label="Whose day"></div>
+  </div>
+  <div class="week" id="week"></div>
+  <div class="scroller"><div class="grid" id="grid"></div></div>
+  <div class="legend">
+    <span><i style="background:var(--feed)"></i>Feed</span><span><i style="background:var(--nap)"></i>Nap</span><span><i style="background:var(--night)"></i>Night sleep</span>
+    <span><i style="background:var(--care)"></i>With Clay</span><span><i style="background:var(--self)"></i>Exercise · walk</span><span><i style="background:var(--work)"></i>Work</span>
+    <span><i style="background:var(--duty)"></i>On duty</span><span><i style="background:var(--dog)"></i>Dogs</span><span><i style="background:var(--fam)"></i>Family house</span>
+    <span><i style="box-shadow:inset 0 0 0 1.5px var(--sug-e)"></i>Suggestion</span><span><i style="box-shadow:inset 0 0 0 2px var(--coral)"></i>Logged</span>
+    <span id="tlSub" style="margin-left:auto"></span>
+  </div>
+</section>
+
+<div class="cards">
+  <section class="card">
+    <h3>Log it <span class="hint" id="logDate"></span></h3>
+    <div class="logbtns">
+      <button class="btn primary" data-log="feed"><span>🍼</span>Clay fed</button>
+      <button class="btn sky" data-log="nap"><span>💤</span>Nap start</button>
+      <button class="btn sky" data-log="wake"><span>🌤️</span>Clay awake</button>
+      <button class="btn plum" data-log="bed"><span>🌙</span>Down for night</button>
+      <button class="btn leaf" data-log="in"><span>⏱️</span>Nanny in</button>
+      <button class="btn leaf" data-log="out"><span>🏁</span>Nanny out</button>
+      <button class="btn" data-log="walk"><span>🐾</span>Dogs walked</button>
+      <button class="btn" data-log="sleep"><span>🛌</span>I'm asleep</button>
+    </div>
+    <ul class="loglist" id="loglist"></ul>
+    <p class="note">Tap when it happens. Today re-flows from the last real feed, and everyone with the page open sees it.</p>
+  </section>
+
+  <section class="card">
+    <h3>Adjustments <span class="hint">what moved &amp; why</span></h3>
+    <ul class="adj" id="adjList"></ul>
+    <h3 style="margin-top:14px">What Clay is teaching us <span class="hint">last 14 days</span></h3>
+    <ul class="adj" id="learnList"></ul>
+  </section>
+
+  <section class="card">
+    <h3>Clay's feeds <span class="hint" id="feedHint"></span></h3>
+    <div class="chips" id="chips"></div>
+    <div class="row" style="margin-top:8px"><button class="btn" id="addFeed">+ Add feed</button><span class="hint" style="font-size:11px;color:var(--ink-soft)">Hollow = only if he wakes</span></div>
+  </section>
+
+  <section class="card">
+    <h3>Anchors</h3>
+    <div class="anch">
+      <div class="field">Nanny shift<div class="seg sm" data-set="nannyShift"><button data-v="9-19">09 – 19</button><button data-v="8-18">08 – 18</button></div></div>
+      <div class="field">Nanny day off<div class="seg sm" data-set="nannyOff"><button data-v="6">Sat</button><button data-v="0">Sun</button></div></div>
+      <div class="field">Dog walk<div class="seg sm" data-set="walkSlot"><button data-v="8">08:00</button><button data-v="17">17:00</button></div></div>
+      <div class="field" id="wwField">Weekend walk<div class="seg sm" data-set="weekendWalk"><button data-v="6">Sat</button><button data-v="0">Sun</button></div></div>
+      <div class="field">Nights<div class="seg sm" id="nightSeg"></div></div>
+      <div class="field">Driver days · 10 – 19<div class="daysel" id="driverDays"></div></div>
+    </div>
+    <p class="note" id="nightNote"></p>
+    <div class="row" style="margin-top:8px"><button class="btn" id="resetBtn">Reset to defaults</button></div>
+  </section>
+</div>
+<p class="foot" id="foot"></p>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ================= constants ================= */
+const TZ="Asia/Bangkok";
+const DAY_START=6, PX=44;
+const DAYS=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"], DAYL=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+const PHASES=[{id:"m1",label:"Month 1"},{id:"m2",label:"Month 2"},{id:"m25",label:"Month 2½"},{id:"m3",label:"Month 3"},{id:"m46",label:"Months 4–6"}];
+const PI=id=>PHASES.findIndex(p=>p.id===id);
+const DEFAULT_FEEDS={
+  m1 :[{t:"08:00"},{t:"11:00"},{t:"14:00"},{t:"17:00"},{t:"20:00"},{t:"23:00"},{t:"02:00"},{t:"05:00"}],
+  m2 :[{t:"08:00"},{t:"11:00"},{t:"14:00"},{t:"17:00"},{t:"20:00"},{t:"23:00"},{t:"02:00"},{t:"05:00",opt:true}],
+  m25:[{t:"08:00"},{t:"11:00"},{t:"14:00"},{t:"17:00"},{t:"20:00"},{t:"23:00"},{t:"02:00"},{t:"05:00",opt:true}],
+  m3 :[{t:"08:00"},{t:"11:00"},{t:"14:00"},{t:"17:00"},{t:"20:00"},{t:"23:00"},{t:"02:00",opt:true}],
+  m46:[{t:"08:00"},{t:"11:00"},{t:"14:00"},{t:"18:00"},{t:"20:00"},{t:"23:00"}]
+};
+const DEFAULTS={phase:"m1",nannyShift:"9-19",nannyOff:"6",driverDays:[1,2,3,4,5],walkSlot:"8",weekendWalk:"6",nightMode:"together",feeds:JSON.parse(JSON.stringify(DEFAULT_FEEDS))};
+const WX={sun:{ico:"☀️",label:"Sunny",good:true},cloud:{ico:"⛅",label:"Cloudy",good:true},rain:{ico:"🌧️",label:"Raining",good:false},storm:{ico:"⛈️",label:"Thunderstorm",good:false}};
+const PEOPLE={chet:{n:"Chet",c:"#F06051"},prowe:{n:"Prowe",c:"#44C5E6"},view:{n:"View",c:"#70BE54"}};
+const COLS=[{id:"clay",label:"Clay",sub:"the anchor",c:"#FFC527"},{id:"prowe",label:"Prowe",sub:"",c:"#44C5E6"},{id:"chet",label:"Chet",sub:"",c:"#F06051"},{id:"nanny",label:"View",sub:"nanny · 6 days",c:"#70BE54"},{id:"driver",label:"Driver",sub:"5 days",c:"#92788D"},{id:"maids",label:"Maids",sub:"Mon & Thu",c:"#A48AA0"},{id:"dogs",label:"Bee & Bug",sub:"dogs",c:"#C9A25C"}];
+
+/* ================= state ================= */
+const clone=o=>JSON.parse(JSON.stringify(o));
+let S=clone(DEFAULTS);           // shared settings
+let W={cond:"sun",source:"manual"}; // weather
+let L={};                         // logs by date: {date:{entries:[]}}
+let U={who:"chet",day:null,person:"all"};      // local ui
+let db=null, subs=[];
+
+/* ================= time helpers ================= */
+function bkkNow(){ const p=new Intl.DateTimeFormat("en-GB",{timeZone:TZ,year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",weekday:"short",hour12:false}).formatToParts(new Date());
+  const g=t=>p.find(x=>x.type===t).value; const h=+g("hour")%24, m=+g("minute");
+  return {date:`${g("year")}-${g("month")}-${g("day")}`,h,m,hf:h+m/60,dow:DAYS.indexOf(g("weekday"))}; }
+function scheduleDate(now){ // schedule day runs 06:00→06:00: before 06:00 belongs to previous date
+  if(now.h>=DAY_START) return now.date; const d=new Date(now.date+"T12:00:00Z"); d.setUTCDate(d.getUTCDate()-1); return d.toISOString().slice(0,10); }
+function dateOfDow(dow){ const n=bkkNow(); const base=scheduleDate(n); const bd=new Date(base+"T12:00:00Z"); const cur=bd.getUTCDay(); const d=new Date(bd); d.setUTCDate(bd.getUTCDate()+((dow-cur+7)%7)); return d.toISOString().slice(0,10); }
+const pad=n=>String(n).padStart(2,"0");
+function toH(t){ const [h,m]=t.split(":").map(Number); let x=h+m/60; if(x<DAY_START) x+=24; return x; }    // absolute 6..30
+function fmt(h){ h=((h%24)+24)%24; const H=Math.floor(h), M=Math.round((h-H)*60); return pad(H)+":"+pad(M%60); }
+function rel(h){ return h-DAY_START; }
+function nowAbs(){ const n=bkkNow(); return n.hf<DAY_START?n.hf+24:n.hf; }
+
+/* ================= derived ================= */
+const pi=()=>PI(S.phase), m2=()=>pi()>=1, m25=()=>pi()>=2, m3=()=>pi()>=3, m46=()=>pi()>=4;
+const nannyHrs=()=>S.nannyShift==="8-18"?[8,18]:[9,19];
+const isDogsAway=d=>d===1||d===4;
+const famHouse=d=>m3()?(d===6?"Chet's family house":d===0?"Prowe's family house":null):null;
+const isWalkDay=d=>{ if(famHouse(d)||isDogsAway(d)) return false; if(d===3||d===5) return true; if(!m3()&&(d===6||d===0)) return String(d)===S.weekendWalk; return false; };
+const wxGood=()=>WX[W.cond].good;
+function sortedFeeds(){ return [...S.feeds[S.phase]].sort((a,b)=>toH(a.t)-toH(b.t)); }
+
+/* ================= reflow engine ================= */
+function build(dow,date){
+  const E=[], adj=[]; const isToday=date===scheduleDate(bkkNow());
+  const log=(L[date]&&L[date].entries||[]).slice().sort((a,b)=>toH(a.t)-toH(b.t));
+  const add=(col,s,e,label,sub,cls,key)=>E.push({col,s,e,label,sub:sub||"",cls,key});
+  const skips=new Set(log.filter(x=>x.type==="skip").map(x=>x.key));
+  const done=k=>log.some(x=>x.type==="done"&&x.key===k);
+  const shiftMode=m2()&&S.nightMode==="shift";
+  const feedsPlan=sortedFeeds().map(f=>({h:toH(f.t),opt:!!f.opt,key:"feed@"+f.t})).filter(f=>{ if(isToday&&skips.has(f.key)){ adj.push({k:"info",t:`${f.key.slice(5)} feed skipped — Clay slept through; the next feed stays on plan.`}); return false; } return true; });
+  const hasNightFeed=feedsPlan.some(f=>f.h>=24&&f.h<=28);
+  let shift=shiftMode&&hasNightFeed;
+  if(shiftMode&&!hasNightFeed) adj.push({k:"info",t:"No 02:00 feed this phase — shift nights aren't needed, so both of you sleep 00:00–08:00."});
+  const fam=famHouse(dow), dogsAway=isDogsAway(dow), nannyOff=String(dow)===S.nannyOff, driverOn=S.driverDays.includes(dow);
+  const [nS,nE]=nannyHrs();
+
+  /* ---- live re-anchor from the log (today only) ---- */
+  const actualFeeds=log.filter(x=>x.type==="feed").map(x=>toH(x.t));
+  let feeds=feedsPlan.map(f=>({...f}));
+  let delta=0;
+  if(isToday&&actualFeeds.length){
+    const last=actualFeeds[actualFeeds.length-1];
+    const near=feedsPlan.reduce((a,f)=>Math.abs(f.h-last)<Math.abs(a.h-last)?f:a,feedsPlan[0]);
+    delta=Math.max(-1.5,Math.min(1.5,last-near.h));
+    const first=actualFeeds[0];
+    feeds=feedsPlan.filter(f=>f.h<first-0.75).map(f=>({...f}));                       // before the first log: plan as-is
+    feedsPlan.filter(f=>f.h>last+0.75&&f.h+delta>last+1.75).forEach(f=>feeds.push({...f,h:f.h+delta,pred:true})); // after the last log: shifted
+    actualFeeds.forEach(h=>feeds.push({h,actual:true}));
+    feeds.sort((a,b)=>a.h-b.h);
+    if(Math.abs(delta)>=0.2) adj.push({k:"info",t:`Last real feed ${fmt(last)} was ${Math.round(Math.abs(delta)*60)} min ${delta>0?"late":"early"} — the rest of today shifts ${delta>0?"later":"earlier"} to match.`});
+  }
+  const feedAt=h=>feeds.some(f=>Math.abs(f.h-h)<0.5);
+
+  /* ---- Clay ---- */
+  const naps=log.filter(x=>x.type==="nap"||x.type==="wake"||x.type==="bed");
+  const marks=feeds.map(f=>f.h).sort((a,b)=>a-b);
+  for(let i=0;i<marks.length;i++){
+    const a=marks[i]+((m46()&&Math.abs(marks[i]-(23+delta))<0.5)?0.5:1), b=(i+1<marks.length)?marks[i+1]:marks[0]+24;
+    if(b-a<=0.3) continue;
+    const ab=a%24, night=ab>=20.5||ab<7;
+    let label=night?"Night sleep":"Nap", sub="";
+    if(!m46()&&Math.abs(ab-18)<0.6){ label="Bath + wind-down"; sub=m3()?"bath 2–3×/wk":"cluster feeds · fussy window"; }
+    if(m46()&&Math.abs(ab-15)<0.6){ label="Tummy time · play"; sub="with Prowe & Chet"; }
+    if(m46()&&Math.abs(ab-19)<0.6){ label="Bath + wind-down"; }
+    add("clay",a,b,label,sub,night?"night":"nap");
+  }
+  feeds.forEach(f=>{
+    const dur=(m46()&&Math.abs(f.h-23-delta)<0.5)?0.5:1;
+    let label=f.actual?"Fed ✓":f.opt?"Feed · if he wakes":"Feed · change · burp";
+    if(m46()&&Math.abs(f.h-(23+delta))<0.5&&!f.actual) label="Dream feed";
+    if(m2()&&f.h>=24&&f.h<=28&&!f.actual&&shift) label="Bottle · pumped milk";
+    add("clay",f.h,f.h+dur,label,(Math.abs(f.h-8)<0.5?"Vit D · tummy time":f.pred?"predicted":""),"feed"+(f.actual?" actual":""),f.actual?null:f.key);
+  });
+  naps.forEach(n=>{ if(!isToday) return; const h=toH(n.t); add("clay",h,h+0.25,n.type==="nap"?"Nap started ✓":n.type==="wake"?"Awake ✓":"Down for night ✓","logged","nap actual"); });
+
+  /* ---- walk / weather ---- */
+  let walkH=+S.walkSlot, walk=isWalkDay(dow), walkNote="near condo";
+  if(walk&&shift&&walkH===8){ walkH=17; adj.push({k:"info",t:"Shift nights: Chet is asleep at 08:00, so the dog walk moves to 17:00."}); }
+  if(walk&&fam) walk=false;
+  let walkCancel=false;
+  if(walk&&isToday&&skips.has("walk")){ walkCancel=true; adj.push({k:"info",t:"Today's dog walk was skipped by hand."}); }
+  if(walk&&m3()) walkNote="stroller walk · Clay + Prowe + dogs";
+  if(!walk&&!fam&&!dogsAway&&m3()){ add("chet",17,17.75,"Stroller stroll?","optional","sug"); }
+  const walked=isToday&&(log.some(x=>x.type==="walk")||done("walk"));
+  const exSkip=isToday&&skips.has("ex"), exDone=isToday&&done("ex");
+  if(exSkip) adj.push({k:"info",t:"Today's 12–14 exercise slot is skipped — freed up for rest or work."});
+
+  /* ---- Prowe ---- */
+  const proweWake=8;
+  feeds.filter(f=>f.h>=8&&f.h<=20.5).forEach(f=>{ if(fam&&f.h>=11&&f.h<19) return; if(f.actual) return; add("prowe",f.h,f.h+0.75,"Feed / pump","","feed"); });
+  add("prowe",9,11,m46()?"Own time":"Nap","with Chet","nap");
+  if(m2()&&(dow===1||dow===3||dow===5)){ if(nannyOff) adj.push({k:"warn",t:"Base + yoga day but View is off — no one to cover Clay 12–14."}); else if(!exSkip) add("prowe",12,14,"Base + yoga","with Chet · View has Clay","self"+(exDone?" actual":""),"ex"); }
+  if(fam) add("prowe",11,19,fam,"feeds continue there","fam");
+  if(walk&&m3()&&!walkCancel) add("prowe",walkH,walkH+1,"Family stroller walk","Clay + dogs","self"+(walked?" actual":""));
+  if(m46()) add("prowe",15,16,"Tummy time · play","","care");
+  add("prowe",21,23,"Movie & relax","with Chet · Bee & Bug","night");
+  if(feedAt(23)) add("prowe",23,23.75,m46()?"Pump · 23:00 dream feed":"23:00 feed","","feed");
+  if(shift){ add("prowe",24,29,"Protected sleep","00:00 – 05:00 · Chet has the bottle","night"); if(feedAt(29)) add("prowe",29,29.75,"05:00 feed","","feed"); add("prowe",29.75,32,"Sleep to 08:00","","night"); }
+  else{ let c=24; feeds.filter(f=>f.h>=24&&f.h<32).forEach(f=>{ add("prowe",c,f.h,"Night sleep","","night"); add("prowe",f.h,f.h+0.75,"Wakes · feed"+(f.opt?" (if he wakes)":""),"","feed"); c=f.h+0.75; }); add("prowe",c,32,"Night sleep","wake 08:00","night"); }
+
+  /* ---- Chet ---- */
+  if(shift){ add("chet",27,34.5,"Sleep 03:00 – 10:30","protected","night"); }
+  else{ if(!(walk&&walkH===8)) add("chet",8,9,"Wakes · supports 08:00 feed","","care"); add("chet",9,11,m46()?"Own time · work":"Nap","with Prowe","nap"); }
+  add("chet",11,12,dogsAway?"Play with Clay":"Feed dogs · play Bee & Bug + Clay","","care");
+  if(dow>=1&&dow<=5){
+    if(m2()&&(dow===1||dow===3||dow===5)&&!nannyOff){ if(!exSkip) add("chet",12,14,"Base + yoga","with Prowe","self"+(exDone?" actual":""),"ex"); }
+    else if(m25()&&(dow===2||dow===4)){ if(nannyOff) adj.push({k:"warn",t:"BJJ day but View is off — Clay needs cover 12–14."}); else if(!exSkip) add("chet",12,14,"BJJ","View has Clay","self"+(exDone?" actual":""),"ex"); }
+    else add("chet",12,14,"Work","","work");
+    add("chet",14,17,"Work block","flexible","work");
+  }
+  if(fam) add("chet",11,19,fam,"whole family + dogs","fam");
+  if(walk) add("chet",walkH,walkH+1,walkCancel?"Walk cancelled · indoor play":(m3()?"Family stroller walk":"Walk Bee & Bug"),walkCancel?"skipped":walkNote,"self"+(walkCancel?" cancel":"")+(walked?" actual":""),walkCancel||walked?null:"walk");
+  if(m46()&&!fam) add("chet",15,16,"Tummy time · play","with Clay & Prowe","care");
+  add("chet",18,20,"Evening · dinner","feed dogs 18:00"+(dogsAway?" · dogs back 19:00":""),"care");
+  add("chet",20,20.75,"Supports 20:00 feed","","care");
+  add("chet",21,23,"Movie & relax","with Prowe · Bee & Bug","night");
+  if(feedAt(23)) add("chet",23,23.75,m46()?"23:00 dream feed · bottle":"Supports 23:00 feed","","care");
+  if(shift){ add("chet",23.75,26,"On duty · awake","quiet work · Clay if he stirs","care"); const nf=feeds.find(f=>f.h>=25&&f.h<=28); if(nf) add("chet",nf.h,nf.h+1,"02:00 bottle feed","pumped milk","feed"); }
+  else{ add("chet",24,32,"Night sleep","up if Clay needs a hand · wake 08:00","night"); }
+
+  /* ---- Nanny ---- */
+  const ins=log.filter(x=>x.type==="in"), outs=log.filter(x=>x.type==="out");
+  if(nannyOff||(isToday&&skips.has("nanny"))){ add("nanny",10,16,nannyOff?"Day off":"Not in today","","off"); if(!nannyOff) adj.push({k:"warn",t:"View isn't in today — Clay's midday cover and the 12–14 slots need a rethink."}); }
+  else{
+    let s=nS,e=nE,act=false;
+    if(isToday&&ins.length){ s=toH(ins[ins.length-1].t); act=true; if(s-nS>0.25) adj.push({k:"info",t:`View clocked in at ${fmt(s)} (${Math.round((s-nS)*60)} min after ${pad(nS)}:00).`}); }
+    if(isToday&&outs.length){ e=toH(outs[outs.length-1].t); }
+    add("nanny",s,e,"On duty "+fmt(s)+" – "+fmt(e),"Clay care · feeds · laundry"+((m2()&&(dow===1||dow===3||dow===5))||(m25()&&(dow===2||dow===4))?" · covers 12–14":""),"duty"+(act?" actual":""),act?null:"nanny");
+  }
+  /* ---- Driver ---- */
+  if(driverOn){ add("driver",10,19,"On duty 10:00 – 19:00","errands · runs","duty"); if(dogsAway) add("driver",19,19.75,"Brings Bee & Bug home","from Chet's family house","dog"); }
+  else{ add("driver",10,16,"Off","","off"); if(dogsAway) adj.push({k:"warn",t:`Driver is off on ${DAYL[dow]} but the dogs are at the family house — someone else brings them home at 19:00.`}); }
+  /* ---- Maids ---- */
+  if(dogsAway) add("maids",10,16,"Clean 10:00 – 16:00","take Bee & Bug to Chet's family house","duty"); else add("maids",10,16,"Not today","Mon & Thu","off");
+  /* ---- Dogs ---- */
+  if(dogsAway){ add("dogs",10,18,"Family house · run + shower","with the maids · done 18:00","dog"); add("dogs",19,20,"Home 19:00","driver","dog"); add("dogs",20,32,"Home · sleep","","night"); }
+  else if(fam){ add("dogs",11,19,"At "+fam,"run with the family","fam"); add("dogs",20,32,"Home · sleep","","night"); }
+  else{ if(walk) add("dogs",walkH,walkH+1,walkCancel?"Indoor play":"Walk with Chet"+(m3()?" & Clay":""),walkCancel?"walk skipped":"near condo","dog"+(walkCancel?" cancel":"")); add("dogs",11,18,"Home · play","fed 11:00 & 18:00","dog"); add("dogs",20,32,"Home · sleep","","night"); }
+  if(!walk&&!fam&&!dogsAway&&!m3()) adj.push({k:"info",t:"No condo walk today — dogs stay home; next run is at the family house."});
+
+  /* wrap past 06:00 */
+  const out=[]; E.forEach(e=>{ let s=rel(e.s),en=rel(e.e); if(s>=24){s-=24;en-=24;} if(en<=24) out.push({...e,s,e:en}); else { out.push({...e,s,e:24}); out.push({...e,s:0,e:en-24}); } });
+  return {events:out,adj,feeds,shift,delta};
+}
+
+/* ================= learning ================= */
+function learn(){
+  const dates=Object.keys(L).sort().slice(-14); const gaps=[], byAnchor={}; let nightWakes=[], days=0;
+  dates.forEach(d=>{ const fs=(L[d].entries||[]).filter(x=>x.type==="feed").map(x=>toH(x.t)).sort((a,b)=>a-b); if(!fs.length) return; days++;
+    for(let i=1;i<fs.length;i++) gaps.push(fs[i]-fs[i-1]);
+    nightWakes.push(fs.filter(h=>h>=24&&h<=29.5).length);
+    const plan=sortedFeeds().map(f=>toH(f.t));
+    fs.forEach(h=>{ const near=plan.reduce((a,p)=>Math.abs(p-h)<Math.abs(a-h)?p:a,plan[0]); if(Math.abs(near-h)<=1.5){ (byAnchor[near]=byAnchor[near]||[]).push(h-near); } });
+  });
+  const out=[];
+  if(!days){ out.push({k:"info",t:"Nothing logged yet. Once feeds are logged for a few days, real gaps and drift show up here with one-tap fixes."}); return out; }
+  if(gaps.length){ const avg=gaps.reduce((a,b)=>a+b,0)/gaps.length; out.push({k:"info",t:`Real feed gap: <b>${Math.floor(avg)}h ${pad(Math.round((avg%1)*60))}</b> average over ${days} day${days>1?"s":""} (plan ≈ 3h).`}); }
+  const nw=nightWakes.length?nightWakes.reduce((a,b)=>a+b,0)/nightWakes.length:0;
+  out.push({k:nw<0.5?"good":"info",t:`Night feeds (00–05): <b>${nw.toFixed(1)}</b> per night${nw<0.5&&pi()<3?" — Clay may be ready to drop the 02:00 feed":""}.`});
+  Object.entries(byAnchor).forEach(([h,ds])=>{ if(ds.length<3) return; const m=ds.reduce((a,b)=>a+b,0)/ds.length; if(Math.abs(m)>=0.33){ const nh=+h+Math.round(m*4)/4; out.push({k:"good",t:`The ${fmt(+h)} feed really lands around <b>${fmt(nh)}</b> (${ds.length} logs).`,act:{label:"Move it",fn:()=>{ const f=S.feeds[S.phase].find(x=>toH(x.t)===+h); if(f){ f.t=fmt(nh); saveSettings(); toast("Feed moved to "+fmt(nh)); } }}}); } });
+  return out;
+}
+
+/* ================= render ================= */
+const $=id=>document.getElementById(id);
+function render(){
+  const now=bkkNow(); const today=scheduleDate(now); const tdow=new Date(today+"T12:00:00Z").getUTCDay();
+  if(U.day===null) U.day=tdow;
+  const dow=U.day, date=dateOfDow(dow), isToday=date===today;
+  const R=build(dow,date);
+
+  $("phaseSeg").innerHTML=PHASES.map(p=>`<button role="tab" aria-selected="${S.phase===p.id}" class="${S.phase===p.id?"on":""}" data-p="${p.id}">${p.label}</button>`).join("");
+  $("whoAv").textContent=PEOPLE[U.who].n[0]; $("whoAv").style.background=PEOPLE[U.who].c; $("whoName").textContent=PEOPLE[U.who].n;
+
+  /* glance */
+  const nowA=nowAbs(); const T=build(tdow,today);
+  const nextFeed=T.feeds.find(f=>f.h>nowA&&!f.actual); const lastFeed=[...T.feeds].reverse().find(f=>f.actual);
+  const at=(col)=>T.events.find(e=>e.col===col&&rel(nowA)>=e.s&&rel(nowA)<e.e&&!/off|sug/.test(e.cls));
+  const clayNow=at("clay"), nannyNow=at("nanny"), dogsNow=at("dogs");
+  const mins=nextFeed?Math.round((nextFeed.h-nowA)*60):null;
+  $("glance").innerHTML=`
+    <div class="tile accent"><div class="eyebrow">Next feed · ${fmt(nowA)} now</div><div class="big">${nextFeed?fmt(nextFeed.h):"—"}</div><div class="sub">${nextFeed?(mins>60?`in ${Math.floor(mins/60)}h ${pad(mins%60)}m`:`in ${mins} min`)+(nextFeed.pred?" · predicted":""):"no more feeds before 06:00"}${lastFeed?` · last fed ${fmt(lastFeed.h)}`:""}</div>${nextFeed?`<div class="tacts"><button class="ok" data-log="feed">Fed now ✓</button><button data-skip="${nextFeed.key}">Skip</button></div>`:""}<div class="blob" style="background:var(--sun)"></div></div>
+    <div class="tile"><div class="eyebrow">Clay right now</div><div class="big">${clayNow?clayNow.label.replace(" ✓",""):"Free"}</div><div class="sub">${clayNow&&clayNow.sub?clayNow.sub:PHASES[pi()].label}</div><div class="blob" style="background:var(--sky)"></div></div>
+    <div class="tile"><div class="eyebrow">View · nanny</div><div class="big">${nannyNow?"On duty":"Off"}</div><div class="sub">${String(tdow)===S.nannyOff?"day off today":`${pad(nannyHrs()[0])}:00 – ${pad(nannyHrs()[1])}:00`}</div><div class="blob" style="background:var(--leaf)"></div></div>
+    <div class="tile"><div class="eyebrow">Bee &amp; Bug</div><div class="big">${dogsNow?dogsNow.label.split(" · ")[0]:"Home"}</div><div class="sub">${dogsNow&&dogsNow.sub?dogsNow.sub:"resting"}</div><div class="blob" style="background:var(--dog-e)"></div></div>
+`;
+
+  /* log */
+  $("logDate").textContent=isToday?"today":DAYL[dow]+" "+date.slice(5);
+  const entries=(L[date]&&L[date].entries||[]).slice().sort((a,b)=>toH(a.t)-toH(b.t));
+  const TL={feed:"🍼 Fed",nap:"💤 Nap",wake:"🌤️ Awake",bed:"🌙 Night",in:"⏱️ Nanny in",out:"🏁 Nanny out",walk:"🐾 Walked",sleep:"🛌 Asleep",skip:"⏭ Skipped",done:"✓ Done"};
+  const KL=k=>!k?"":k.startsWith("feed@")?k.slice(5)+" feed":({walk:"dog walk",ex:"exercise",nanny:"nanny"}[k]||k);
+  $("loglist").innerHTML=entries.map(e=>`<li><time>${e.t}</time>${TL[e.type]||e.type} ${KL(e.key)}<span class="w">${PEOPLE[e.who]?PEOPLE[e.who].n:e.who}</span><button data-del="${e.id}" aria-label="Remove">×</button></li>`).join("")||`<li style="color:var(--ink-soft)">Nothing logged ${isToday?"yet today":"this day"}.</li>`;
+
+  /* feeds */
+  $("feedHint").textContent=PHASES[pi()].label;
+  $("chips").innerHTML=""; sortedFeeds().forEach(f=>{ const idx=S.feeds[S.phase].indexOf(f); const c=document.createElement("span"); c.className="chip"+(f.opt?" opt":"");
+    c.innerHTML=`<input type="time" lang="en-GB" id="feed-${S.phase}-${idx}" value="${f.t}" aria-label="Feed time"><button class="tog" title="Only if he wakes">${f.opt?"OPT":"SET"}</button><button class="x" aria-label="Remove feed">×</button>`;
+    c.querySelector("input").addEventListener("change",e=>{ S.feeds[S.phase][idx].t=e.target.value||f.t; saveSettings(); });
+    c.querySelector(".tog").addEventListener("click",()=>{ S.feeds[S.phase][idx].opt=!f.opt; saveSettings(); });
+    c.querySelector(".x").addEventListener("click",()=>{ S.feeds[S.phase].splice(idx,1); saveSettings(); });
+    $("chips").appendChild(c); });
+
+  /* anchors (toggles) */
+  document.querySelectorAll(".seg[data-set]").forEach(seg=>{ const k=seg.dataset.set; seg.querySelectorAll("button").forEach(b=>{ b.classList.toggle("on",String(S[k])===b.dataset.v); b.setAttribute("aria-pressed",String(S[k])===b.dataset.v); }); });
+  $("wwField").style.display=m3()?"none":"";
+  $("driverDays").innerHTML=[1,2,3,4,5,6,0].map(d=>`<button data-dd="${d}" class="${S.driverDays.includes(d)?"on":""}" aria-pressed="${S.driverDays.includes(d)}">${DAYS[d][0]}</button>`).join("");
+  $("nightSeg").innerHTML=`<button data-n="together" class="${S.nightMode==="together"?"on":""}">Together</button><button data-n="shift" class="${S.nightMode==="shift"?"on":""}" ${m2()?"":"disabled"}>Shift</button>`;
+  $("nightNote").textContent=!m2()?"Month 1: same sleep, same wake — 02:00 is a breast feed, so Shift unlocks from Month 2.":S.nightMode==="shift"?"Prowe sleeps 00:00 → 05:00 straight; Chet does the 02:00 bottle and sleeps 03:00 → 10:30.":"Both sleep after the 23:00 feed and wake 08:00; Prowe takes night feeds with Chet on hand.";
+
+  /* adjustments + learning */
+  const adjs=R.adj.length?R.adj:[{k:"good",t:"Nothing needed moving — the day runs on plan."}];
+  $("adjList").innerHTML=adjs.map(a=>`<li class="${a.k}">${a.t}</li>`).join("");
+  const ls=learn(); $("learnList").innerHTML=ls.map((a,i)=>`<li class="${a.k}">${a.t}${a.act?`<button class="act" data-learn="${i}">${a.act.label}</button>`:""}</li>`).join("");
+  $("learnList").querySelectorAll("[data-learn]").forEach(b=>b.addEventListener("click",()=>ls[+b.dataset.learn].act.fn()));
+
+  /* week */
+  $("week").innerHTML=[1,2,3,4,5,6,0].map(d=>{ const dd=dateOfDow(d); const r=build(d,dd); const dots=[]; const fam=famHouse(d);
+    if(String(d)!==S.nannyOff) dots.push("var(--leaf)"); if(S.driverDays.includes(d)) dots.push("var(--ink-faint)"); if(isDogsAway(d)) dots.push("var(--dog-e)"); if(isWalkDay(d)) dots.push("var(--self-e)");
+    if(m2()&&(d===1||d===3||d===5)) dots.push("var(--sky)"); if(m25()&&(d===2||d===4)) dots.push("var(--coral)"); if(fam) dots.push("var(--fam-e)");
+    const wev=r.events.find(e=>e.col==="dogs"&&/Walk|Indoor/.test(e.label));
+    const tag=fam?fam.replace(" family house","'s"):isDogsAway(d)?"maids · dogs away":isWalkDay(d)?(wev&&/Indoor/.test(wev.label)?"walk cancelled":"dog walk "+fmt((wev?wev.s:+S.walkSlot-DAY_START)+DAY_START)):String(d)===S.nannyOff?"View off":"home day";
+    return `<button class="wd ${d===dow?"on":""} ${dd===today?"today":""}" data-day="${d}"><div class="dn">${DAYS[d]}<span style="font-family:var(--body);font-weight:500;color:var(--ink-soft);font-size:11px;margin-left:4px">${+dd.slice(8)}</span></div><div class="dots">${dots.map(c=>`<i style="background:${c}"></i>`).join("")}</div><div class="tag">${tag}</div></button>`; }).join("");
+
+  /* timeline */
+  $("tlTitle").innerHTML=`${isToday?"Today":DAYL[dow]}<small>${DAYL[dow].slice(0,3)} ${+date.slice(8)}/${+date.slice(5,7)} · ${PHASES[pi()].label}</small>`;
+  $("tlSub").textContent=`06:00 → 06:00 · ${R.shift?"shift nights":"together nights"}`;
+  $("peopleSeg").innerHTML=`<button data-person="all" class="${U.person==="all"?"on":""}">Everyone</button>`+COLS.map(c=>`<button data-person="${c.id}" class="${U.person===c.id?"on":""}"><i style="background:${c.c}"></i>${c.label}</button>`).join("");
+  const VC=U.person==="all"?COLS:COLS.filter(c=>c.id===U.person);
+  const H=24*PX, grid=$("grid"); grid.style.gridTemplateColumns="60px repeat("+VC.length+",minmax("+(VC.length===1?"200px":"118px")+",1fr))"; grid.style.minWidth=VC.length===1?"0":"920px";
+  let html=`<div class="ch railh"></div>`+VC.map(c=>`<div class="ch"><span class="av" style="background:${c.c}">${c.label[0]}</span><span>${c.label}<small>${c.sub||"&nbsp;"}</small></span></div>`).join("");
+  const bg=`linear-gradient(to bottom,var(--rail-day) 0%,var(--rail-day) ${rel(17)/24*100}%,var(--rail-eve) ${rel(19)/24*100}%,var(--rail-night) ${rel(21)/24*100}%,var(--rail-night) ${rel(29)/24*100}%,var(--rail-eve) ${rel(30)/24*100}%,var(--rail-day) 100%)`;
+  html+=`<div class="rail" style="height:${H}px;background:${bg}">`; for(let i=0;i<24;i++){ const ab=(DAY_START+i)%24; html+=`<div class="hr" style="top:${i*PX}px;color:${(ab>=21||ab<5)?"var(--rail-night-ink)":"var(--ink)"}">${pad(ab)}:00</div>`; } html+=`</div>`;
+  VC.forEach(c=>{ html+=`<div class="col" style="height:${H}px">`; for(let i=1;i<24;i++) html+=`<div class="hl" style="top:${i*PX}px"></div>`;
+    R.events.filter(e=>e.col===c.id).forEach(e=>{ const top=e.s*PX, h=Math.max((e.e-e.s)*PX-4,18); const acts=isToday&&e.key&&!/actual|cancel/.test(e.cls)?`<span class="acts"><button class="ok" data-ok="${e.key}" title="Done">✓</button><button class="no" data-skip="${e.key}" title="Skip today">✕</button></span>`:""; html+=`<div class="ev ${e.cls}${acts?" hasacts":""}" style="top:${top}px;height:${h}px" title="${fmt(e.s+DAY_START)} – ${fmt(e.e+DAY_START)}">${e.label}${e.sub?`<small>${e.sub}</small>`:""}${acts}</div>`; });
+    if(isToday) html+=`<div class="nowline" style="top:${rel(nowA)*PX}px"></div>`; html+=`</div>`; });
+  grid.innerHTML=html;
+
+  $("foot").textContent=`Anchors: View 6 days (${S.nannyShift.replace("-",":00–")}:00, ${S.nannyOff==="6"?"Sat":"Sun"} off) · driver ${S.driverDays.length} days 10–19 · maids Mon & Thu 10–16 take the dogs to Chet's family house, driver brings them back 19:00 · base + yoga Mon/Wed/Fri 12–14 from Month 2 · BJJ Tue/Thu 12–14 from Month 2½ · family houses Sat (Chet) / Sun (Prowe) from Month 3. Clay's cues always win over the clock.`;
+}
+
+/* ================= persistence ================= */
+function lsGet(k,d){ try{ const v=localStorage.getItem(k); return v?JSON.parse(v):d; }catch(e){ return d; } }
+function lsSet(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} }
+let saveT=null;
+function saveSettings(){ lsSet("clay.settings",S); render(); if(db){ clearTimeout(saveT); saveT=setTimeout(()=>db.doc("household/settings").set(S).catch(()=>toast("Couldn't sync settings")),400); } }
+function saveWeather(){ lsSet("clay.weather",W); render(); if(db) db.doc("household/weather").set(W).catch(()=>{}); }
+function saveDay(date){ lsSet("clay.log."+date,L[date]); render(); if(db) db.doc("days/"+date).set(L[date]).catch(()=>toast("Couldn't sync the log")); }
+function addLog(type,key){ const n=bkkNow(); const date=scheduleDate(n); const t=pad(n.h)+":"+pad(n.m); L[date]=L[date]||{date,entries:[]}; L[date].date=date; const e={id:Date.now().toString(36),t,type,who:U.who}; if(key) e.key=key; L[date].entries=[...L[date].entries,e]; U.day=new Date(date+"T12:00:00Z").getUTCDay(); saveDay(date); toast(({feed:"Feed logged",nap:"Nap started",wake:"Clay's awake",bed:"Night started",in:"View clocked in",out:"View clocked out",walk:"Dogs walked",sleep:"Sleep well",skip:"Skipped — plan re-flowed",done:"Done"}[type])+" · "+t); }
+function toast(m){ const t=$("toast"); t.textContent=m; t.classList.add("show"); clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove("show"),1800); }
+
+/* ================= wiring ================= */
+S=Object.assign(clone(DEFAULTS),lsGet("clay.settings",{})); S.feeds=Object.assign(clone(DEFAULT_FEEDS),S.feeds||{});
+W=Object.assign({cond:"sun",source:"manual"},lsGet("clay.weather",{}));
+U.who=lsGet("clay.who","chet"); U.person=lsGet("clay.person",window.innerWidth<700?"clay":"all");
+try{ for(let i=0;i<localStorage.length;i++){ const k=localStorage.key(i); if(k.startsWith("clay.log.")) L[k.slice(9)]=JSON.parse(localStorage.getItem(k)); } }catch(e){}
+document.body.addEventListener("click",e=>{
+  const b=e.target.closest("button"); if(!b) return;
+  if(b.dataset.p){ S.phase=b.dataset.p; if(!m2()) S.nightMode="together"; saveSettings(); }
+  else if(b.dataset.day){ U.day=+b.dataset.day; render(); }
+  else if(b.dataset.person){ U.person=b.dataset.person; lsSet("clay.person",U.person); render(); }
+  else if(b.dataset.v&&b.closest(".seg[data-set]")){ S[b.closest(".seg[data-set]").dataset.set]=b.dataset.v; saveSettings(); }
+  else if(b.dataset.dd){ const d=+b.dataset.dd; S.driverDays=S.driverDays.includes(d)?S.driverDays.filter(x=>x!==d):[...S.driverDays,d]; saveSettings(); }
+  else if(b.dataset.n){ if(b.disabled) return; S.nightMode=b.dataset.n; saveSettings(); }
+  else if(b.dataset.wx){ W={cond:b.dataset.wx,source:"manual",at:new Date().toISOString()}; saveWeather(); }
+  else if(b.dataset.log){ addLog(b.dataset.log); }
+  else if(b.dataset.ok){ const k=b.dataset.ok; if(k.startsWith("feed@")) addLog("feed"); else if(k==="walk") addLog("walk"); else if(k==="nanny") addLog("in"); else addLog("done",k); }
+  else if(b.dataset.skip){ addLog("skip",b.dataset.skip); }
+  else if(b.dataset.del){ const date=dateOfDow(U.day); if(L[date]){ L[date].entries=L[date].entries.filter(x=>x.id!==b.dataset.del); saveDay(date); } }
+  else if(b.id==="whoBtn"){ const ks=Object.keys(PEOPLE); U.who=ks[(ks.indexOf(U.who)+1)%ks.length]; lsSet("clay.who",U.who); render(); }
+  else if(b.id==="addFeed"){ S.feeds[S.phase].push({t:"12:00"}); saveSettings(); }
+  else if(b.id==="resetBtn"){ S=clone(DEFAULTS); saveSettings(); toast("Back to defaults"); }
+});
+render();
+setInterval(render,60000);
+
+/* ---- Monument Valley-style backdrop: flat-shaded isometric architecture ---- */
+(function(){
+  const cv=$("bg"), ctx=cv.getContext("2d");
+  const dark=()=>document.documentElement.dataset.theme==="dark"||(document.documentElement.dataset.theme!=="light"&&matchMedia("(prefers-color-scheme:dark)").matches);
+  const L={plum:["#D9C9D8","#C3ACC2","#A98FA8"],rose:["#F7DCD6","#EDC2BA","#DFA59B"],leaf:["#E4F2DA","#CBE3BB","#B0D39E"],sky:["#DDF2F8","#BFE4EF","#9FD5E6"],sun:["#FFF0C6","#F4DF9F","#E7CB78"],sand:["#F2EADA","#E3D6BD","#D2C19F"],terra:["#F3C9B9","#E7AD98","#D89179"]};
+  const D={plum:["#4E3D53","#403146","#33273A"],rose:["#573A3A","#4A3131","#3C2727"],leaf:["#35472F","#2C3B28","#242F20"],sky:["#2E4149","#26373E","#1E2C32"],sun:["#4B4229","#3E3722","#312C1B"],sand:["#3F3731","#352E29","#2B2521"],terra:["#553B33","#48312A","#3A2721"]};
+  let S=36;
+  const P=(x,y,z)=>[(x-y)*S*0.866,(x+y)*S*0.5-z*S];
+  const poly=(pts,c)=>{ ctx.beginPath(); pts.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1])); ctx.closePath(); ctx.fillStyle=c; ctx.fill(); };
+  function box(x,y,z,w,d,hg,c){ poly([P(x,y,z+hg),P(x+w,y,z+hg),P(x+w,y+d,z+hg),P(x,y+d,z+hg)],c[0]); poly([P(x,y+d,z),P(x+w,y+d,z),P(x+w,y+d,z+hg),P(x,y+d,z+hg)],c[1]); poly([P(x+w,y,z),P(x+w,y+d,z),P(x+w,y+d,z+hg),P(x+w,y,z+hg)],c[2]); }
+  function arch(x,y,z,w,d,hg,c){ box(x,y,z,w,d,hg,c); // opening on the front-left face
+    const a=P(x+w*0.25,y+d,z), b=P(x+w*0.75,y+d,z), t=P(x+w*0.5,y+d,z+hg*0.62); const r=(b[0]-a[0])/2;
+    ctx.beginPath(); ctx.moveTo(a[0],a[1]); ctx.lineTo(a[0],t[1]+r*0.15); ctx.arc((a[0]+b[0])/2,t[1]+r*0.15,r,Math.PI,0); ctx.lineTo(b[0],b[1]); ctx.closePath(); ctx.fillStyle=c[2]; ctx.fill(); }
+  function dome(x,y,z,w,d,c){ const cpt=P(x+w/2,y+d/2,z); const rx=w*S*0.866*0.5, ry=w*S*0.5; ctx.beginPath(); ctx.ellipse(cpt[0],cpt[1],rx*0.92,ry*0.55,0,0,Math.PI*2); ctx.fillStyle=c[1]; ctx.fill(); ctx.beginPath(); ctx.ellipse(cpt[0],cpt[1]-ry*0.5,rx*0.92,ry*0.85,0,Math.PI,0); ctx.fillStyle=c[0]; ctx.fill(); ctx.beginPath(); ctx.ellipse(cpt[0],cpt[1]-ry*0.5,rx*0.92,ry*0.85,0,0,Math.PI); ctx.fillStyle=c[1]; ctx.fill(); }
+  function stairs(x,y,z,n,c,dir){ for(let i=0;i<n;i++){ if(dir==="x") box(x+i*0.5,y,z,0.5,1,(i+1)*0.28,c); else box(x,y+i*0.5,z,1,0.5,(i+1)*0.28,c); } }
+  function flag(x,y,z,c){ const a=P(x,y,z), b=P(x,y,z+1.1); ctx.strokeStyle=c[2]; ctx.lineWidth=1.2; ctx.beginPath(); ctx.moveTo(a[0],a[1]); ctx.lineTo(b[0],b[1]); ctx.stroke(); ctx.beginPath(); ctx.moveTo(b[0],b[1]); ctx.lineTo(b[0]+S*0.45,b[1]+S*0.16); ctx.lineTo(b[0],b[1]+S*0.34); ctx.closePath(); ctx.fillStyle=c[0]; ctx.fill(); }
+  function towerScene(pal){ // tall temple on a plinth
+    box(-1,-1,-0.6,7,7,0.6,pal.sand);
+    stairs(0,4.4,0,5,pal.sand,"x");
+    arch(0,0,0,3,3,2.2,pal.rose); box(0,0,2.2,3,3,0.35,pal.plum);
+    box(3.4,0.4,0,2.2,2.2,3.4,pal.plum); box(3.2,0.2,3.4,2.6,2.6,0.3,pal.rose); dome(3.4,0.4,3.7,2.2,2.2,pal.terra);
+    box(0.6,3.6,0,1.6,1.2,1.1,pal.leaf); box(2.6,3.4,0,1,1,0.7,pal.sky); box(3.8,3.2,0,0.6,0.6,1.8,pal.sun);
+    box(0.2,0.2,2.55,0.9,0.9,1.3,pal.sky); dome(0.2,0.2,3.85,0.9,0.9,pal.sun);
+    flag(5.3,2.4,3.7,pal.terra); }
+  function gardenScene(pal){ // low walls, stair spiral, small pavilion
+    box(-0.5,-0.5,-0.5,6,6,0.5,pal.sand);
+    box(0,0,0,4,0.6,1.4,pal.plum); box(0,0.6,0,0.6,3.4,1.4,pal.plum);
+    stairs(1,1.2,0,5,pal.leaf,"y"); box(1,3.9,0,1.2,1.2,1.5,pal.leaf);
+    arch(2.6,2.4,0,2.4,2.2,1.9,pal.sky); box(2.5,2.3,1.9,2.6,2.4,0.3,pal.rose); dome(3.2,2.9,2.2,1.2,1.2,pal.sun);
+    box(4.6,0.2,0,1,1,0.9,pal.terra); flag(5.1,0.7,0.9,pal.rose); }
+  function draw(){ const W=innerWidth,H=innerHeight,dpr=Math.min(devicePixelRatio||1,2); cv.width=W*dpr; cv.height=H*dpr; ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,W,H);
+    const pal=dark()?D:L; ctx.globalAlpha=dark()?0.45:0.62;
+    S=Math.max(22,Math.min(40,W/32));
+    ctx.save(); ctx.translate(W-S*5.6,S*4.6); towerScene(pal); ctx.restore();
+    ctx.save(); ctx.translate(S*3.4,H-S*2.2); gardenScene(pal); ctx.restore();
+    if(W>1300){ ctx.save(); ctx.translate(S*1.6,H*0.42); ctx.globalAlpha*=0.7; S*=0.6; gardenScene(pal); S/=0.6; ctx.restore(); }
+  }
+  draw(); addEventListener("resize",draw); matchMedia("(prefers-color-scheme:dark)").addEventListener("change",draw); new MutationObserver(draw).observe(document.documentElement,{attributes:true,attributeFilter:["data-theme"]});
+})();
+
+/* ---- shared sync (db capability) ---- */
+(async()=>{
+  try{
+    const d=await (window.claude&&window.claude.use?window.claude.use("db"):null); if(!d) return; db=d;
+    $("syncPill").textContent="Synced · household"; $("syncPill").style.background="var(--self)"; $("syncPill").style.color="var(--self-i)"; $("syncPill").style.borderColor="transparent";
+    const sdoc=await db.doc("household/settings").get();
+    if(sdoc.exists){ S=Object.assign(clone(DEFAULTS),sdoc.data()); S.feeds=Object.assign(clone(DEFAULT_FEEDS),S.feeds||{}); lsSet("clay.settings",S); render(); }
+    else await db.doc("household/settings").set(S);
+    subs.push(db.doc("household/settings").onSnapshot(s=>{ if(!s.exists||s.metadata.hasPendingWrites) return; S=Object.assign(clone(DEFAULTS),s.data()); S.feeds=Object.assign(clone(DEFAULT_FEEDS),S.feeds||{}); lsSet("clay.settings",S); render(); },()=>{}));
+    subs.push(db.doc("household/weather").onSnapshot(s=>{ if(!s.exists||s.metadata.hasPendingWrites) return; W=Object.assign({cond:"sun",source:"manual"},s.data()); if(!WX[W.cond]) W.cond="sun"; lsSet("clay.weather",W); render(); },()=>{}));
+    const cut=new Date(Date.now()-21*864e5).toISOString().slice(0,10);
+    subs.push(db.collection("days").where("date",">=",cut).limit(60).onSnapshot(q=>{ let changed=false; q.docs.forEach(doc=>{ if(doc.metadata.hasPendingWrites) return; L[doc.id]=doc.data(); lsSet("clay.log."+doc.id,L[doc.id]); changed=true; }); if(changed) render(); },()=>{}));
+  }catch(e){}
+})();
+</script>
+</body></html>
