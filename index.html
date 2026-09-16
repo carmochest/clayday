@@ -69,15 +69,35 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline
 .intake .bar i{display:block;height:100%;background:var(--accent);border-radius:999px;transition:width .3s}
 
 .rows{display:flex;flex-direction:column}
-.row{display:grid;grid-template-columns:28px 92px 1fr auto;align-items:center;gap:8px;padding:10px 0;border-bottom:1px solid var(--line);font-size:14.5px}
+.row{display:grid;grid-template-columns:30px 82px 1fr;align-items:start;gap:8px;padding:10px 0;border-bottom:1px solid var(--line);font-size:14.5px}
 .row:last-child{border-bottom:0}
-.row .e{font-size:18px;line-height:1;text-align:center}
-.row .n{font-weight:600}
-.row .s{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.row .s small{color:var(--ink-2);margin-left:6px}
-.row .t{color:var(--ink-3);font-size:12.5px;font-variant-numeric:tabular-nums;white-space:nowrap}
-.row.sec .n,.row.sec .s{color:var(--ink-2);font-weight:500}
-@media (max-width:440px){.row{grid-template-columns:26px 74px 1fr auto;font-size:13.5px}.big{font-size:34px}}
+.row .e{font-size:20px;line-height:1.2;text-align:center}
+.row .n{font-weight:600;padding-top:1px}
+.row .s{min-width:0}
+.row .s .cur{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+.row .s .cur b{font-weight:600}
+.row .s .cur .t{color:var(--ink-3);font-size:12px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.row .s .nx{color:var(--ink-2);font-size:12.5px;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row .s .nx b{color:var(--ink);font-weight:600}
+.row.sec .n,.row.sec .s .cur b{color:var(--ink-2);font-weight:500}
+.row .act{margin-left:8px;border-radius:999px;padding:3px 10px;font-size:12px;font-weight:600;background:var(--chip-2);white-space:nowrap;vertical-align:1px}
+.pick input.tm{width:auto;text-align:left;min-width:82px}
+.pick input.tm::-webkit-calendar-picker-indicator{display:none}
+@media (max-width:440px){.row{grid-template-columns:28px 66px 1fr;font-size:13.5px}.big{font-size:34px}}
+.feedlog{margin-top:2px}
+.feedlog summary{list-style:none;cursor:pointer;display:block}
+.feedlog summary::-webkit-details-marker{display:none}
+.feedlog .intake{margin-top:14px}
+.feedlog .arr{display:inline-block;transform:rotate(90deg);color:var(--ink-3);font-size:16px;line-height:1}
+.feedlog[open] .arr{transform:rotate(-90deg)}
+.feedlog>div{margin-top:6px;border-top:1px solid var(--line);padding-top:4px}
+.fl{display:grid;grid-template-columns:52px 24px 1fr auto auto;align-items:center;gap:8px;padding:7px 0;font-size:13.5px;border-bottom:1px solid var(--line)}
+.fl:last-child{border-bottom:0}
+.fl .t{font-variant-numeric:tabular-nums;color:var(--ink-2);font-weight:600}
+.fl .who{color:var(--ink-3);font-size:12px}
+.fl button{color:var(--ink-3);width:26px;height:26px;border-radius:50%;display:grid;place-items:center;text-align:center;font-size:13px}
+.fl button:hover{background:var(--chip-2);color:var(--ink)}
+.fl .tot{grid-column:1/-1;display:flex;justify-content:space-between;color:var(--ink-2);font-size:12.5px;padding-top:6px}
 
 .week{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
 .wd{display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 2px;border-radius:14px;color:var(--sky-ink-2);font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
@@ -86,12 +106,19 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline
 .wd.today:not(.on) b{color:var(--accent)}
 
 .agenda{padding:8px 8px}
-.agenda .head{display:flex;justify-content:space-between;align-items:center;padding:8px 12px 6px}
+.agenda .head{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 12px 8px;flex-wrap:wrap}
 .agenda .head h2{margin:0}
 .agenda .head .hint{font-size:12.5px;color:var(--ink-3)}
 .list{max-height:min(560px,64vh);overflow-y:auto;scrollbar-width:none;-webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 6%,#000 92%,transparent 100%);mask-image:linear-gradient(to bottom,transparent 0,#000 6%,#000 92%,transparent 100%);padding:6px 0 30px}
 .list::-webkit-scrollbar{display:none}
-.it{display:grid;grid-template-columns:52px 26px 1fr 34px;align-items:center;gap:8px;padding:11px 12px;border-radius:14px;font-size:14.5px;position:relative}
+.it{display:grid;grid-template-columns:52px 26px 1fr auto;align-items:center;gap:8px;padding:9px 12px;border-radius:14px;font-size:14.5px;position:relative}
+.it .yn{display:flex;gap:6px;z-index:1}
+.it .yn button{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;text-align:center;font-size:14px;font-weight:700;background:var(--chip-2);color:var(--ink-2)}
+.it .yn button.ok{background:var(--panel-solid);color:var(--good);box-shadow:inset 0 0 0 1.5px var(--good)}
+.it .yn button.ok:hover,.it.done .yn button.ok{background:var(--good);color:#fff}
+.it .yn button.no:hover{background:var(--accent);color:#fff}
+.it.done .yn button.no,.it.past .yn{opacity:.45}
+.it .who{font-size:11px;color:var(--ink-3);font-weight:600;letter-spacing:.04em;text-transform:uppercase;margin-right:6px}
 .it .tm{font-variant-numeric:tabular-nums;color:var(--ink-2);font-size:13px;font-weight:600}
 .it .em{font-size:17px;text-align:center;line-height:1}
 .it .lb{font-weight:600;min-width:0}
@@ -107,7 +134,7 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline
 .it button.hit{position:absolute;inset:0;border-radius:14px}
 .it .more{justify-self:end;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;color:var(--ink-3);font-size:16px;z-index:1;text-align:center}
 .it .more:hover{background:var(--chip-2)}
-.it.hasx{grid-template-columns:52px 26px 1fr 34px 30px}
+
 .inl{grid-column:1/-1;position:relative;z-index:1}
 .gapmark{display:flex;align-items:center;gap:8px;padding:2px 12px;color:var(--accent);font-size:11.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase}
 .gapmark::before,.gapmark::after{content:"";flex:1;border-top:1.5px solid var(--accent);opacity:.5}
@@ -159,17 +186,21 @@ input.num{width:90px;font:inherit;font-weight:600;font-size:13.5px;background:va
 
 <canvas id="sky" aria-hidden="true"></canvas>
 <div class="wrap">
-  <header class="top"><h1>Clay Day<small id="dateline"></small></h1><div class="seg" id="meSeg" role="tablist" aria-label="Whose day"></div></header>
+  <header class="top"><h1>Clay Day<small id="dateline"></small></h1><div class="seg sm" id="langSeg" role="tablist" aria-label="Language"></div></header>
   <section class="card" id="now"></section>
   <section class="card" id="who"></section>
   <div class="week" id="week"></div>
-  <section class="card agenda"><div class="head"><h2 id="agTitle"></h2><span class="hint">tap a row to tick it off</span></div><div class="list" id="list"></div></section>
+  <section class="card agenda"><div class="head"><h2 id="agTitle"></h2><div class="seg sm" id="meSeg" role="tablist" aria-label="Whose day"></div></div><div class="list" id="list"></div></section>
   <section class="card" id="notesCard" hidden><h2>Suggestions</h2><ul class="notes" id="notes"></ul></section>
   <details class="card" id="settings"><summary>Settings</summary><div class="set" id="set"></div></details>
 </div>
 <div class="toast" id="toast"></div>
 
 <script>
+/* ---------- shared sync (GitHub Pages) ----------
+   To sync between phones on carmochest.github.io, paste your Firebase web config here
+   (Firebase console → Project settings → Your apps → SDK setup → Config). Leave null for local-only. */
+const FIREBASE_CONFIG=null;
 /* ---------- constants ---------- */
 const TZ="Asia/Bangkok", DAY_START=6;
 const DAYS=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"], DAYL=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"], MONTHS=["January","February","March","April","May","June","July","August","September","October","November","December"];
@@ -184,11 +215,22 @@ const DEFAULT_FEEDS={
 const DUE="2026-11-07";
 const clone=o=>JSON.parse(JSON.stringify(o));
 const DEFAULTS={birth:null,weight:null,nannyShift:"9-19",nannyOff:"6",walkDays:[3,5,6],walkSlot:"8",driverDays:[1,2,3,4,5],nightMode:"together",feeds:clone(DEFAULT_FEEDS)};
-const PEOPLE={chet:{n:"Chet",col:"chet",e:"🧔"},prowe:{n:"Prowe",col:"prowe",e:"👩"},view:{n:"View",col:"nanny",e:"🧑‍🍼"}};
-const EMO={clay:"👶",chet:"🧔",prowe:"👩",dogs:"🐶",nanny:"🧑‍🍼",driver:"🚗",maids:"🧹"};
+const PEOPLE={chet:{n:"Chet",col:"chet",e:"🧔🏻"},prowe:{n:"Prowe",col:"prowe",e:"👩🏻"},view:{n:"View",col:"nanny",e:"🧑🏻‍🍼"}};
+const EMO={clay:"👶🏻",chet:"🧔🏻",prowe:"👩🏻",dogs:"🐶",nanny:"🧑🏻‍🍼",driver:"🚗",maids:"🧹"};
+const bfEst=age=>age===null?90:age<7?45:age<14?60:age<30?75:age<60?100:120; // rough ml equivalent of one breastfeed, by age
 const KEMO={feed:"🍼",nap:"💤",sleep:"🌙",bath:"🛁",play:"🧸",walk:"🐾",ex:"🧘",work:"💻",care:"👶",fam:"🏡",duty:"⏱️",evening:"🎬",dog:"🐶",off:"—"};
 
-let S=clone(DEFAULTS), L={}, U={me:"chet",day:null,pick:null,ml:90,min:15,cal:null}, db=null;
+let S=clone(DEFAULTS), L={}, U={me:"all",day:null,pick:null,ml:90,min:15,cal:null,edit:null,lang:"en"}, db=null;
+const TH=[["Feed when he wakes","ให้นมเมื่อตื่น"],["Feed · due now","ถึงเวลาให้นม"],["Dream feed · bottle","มื้อดึก · ขวด"],["Dream feed","มื้อดึก"],["Feed the dogs · play","ให้อาหารหมา · เล่น"],["Feed · pump","ให้นม · ปั๊มนม"],["Pump · dream feed","ปั๊มนม · มื้อดึก"],["Night feed","มื้อกลางคืน"],["Up · 08:00 feed","ตื่น · มื้อ 08:00"],["Breastfed","นมแม่"],["Breastfeed","นมแม่"],["Bottle feed","ให้นมขวด"],["Bottle","ขวดนม"],["Breast","นมแม่"],["Feed","ให้นม"],["feed","ให้นม"],
+["Bath · wind-down","อาบน้ำ · เตรียมนอน"],["Play · tummy time","เล่น · นอนคว่ำ"],["Play with Clay","เล่นกับเคลย์"],["Nap started","เริ่มงีบ"],["Nap","งีบ"],["Sleeping","กำลังหลับ"],["Sleep","นอน"],["Awake","ตื่น"],["Own time","เวลาส่วนตัว"],
+["On duty","เข้างาน"],["Not in today","วันนี้ไม่มา"],["Day off","วันหยุด"],["Off","หยุด"],["Free","ว่าง"],["Home","อยู่บ้าน"],["Cleaning","ทำความสะอาด"],["Bringing the dogs home","พาหมากลับบ้าน"],["Family house","บ้านครอบครัว"],["Chet's family house","บ้านครอบครัวพ่อ"],["Prowe's family house","บ้านครอบครัวแม่"],["At Chet's family house","อยู่บ้านครอบครัวพ่อ"],["At Prowe's family house","อยู่บ้านครอบครัวแม่"],
+["Stroller walk","เดินเล่นรถเข็น"],["Walk Bee & Bug","พาหมาเดินเล่น"],["Walk","เดินเล่น"],["Base + yoga","ออกกำลังกาย"],["BJJ","ยิวยิตสู"],["Work","ทำงาน"],["Dinner","อาหารเย็น"],["Evening","ช่วงค่ำ"],["Awake · on duty","ตื่นเฝ้า"],
+["Clay care · feeds · laundry","ดูแลเคลย์ · ให้นม · ซักผ้า"],["covers 12–14","ดูแลช่วง 12–14"],["with Prowe & Chet","กับแม่และพ่อ"],["with Prowe · View has Clay","กับแม่ · วิวดูแลเคลย์"],["with Chet · View has Clay","กับพ่อ · วิวดูแลเคลย์"],["View has Clay","วิวดูแลเคลย์"],["with Prowe","กับแม่"],["with Chet","กับพ่อ"],["Bee & Bug + Clay","บี บั๊ก + เคลย์"],["Clay + dogs · near the condo","เคลย์ + หมา · ใกล้คอนโด"],["Clay + dogs","เคลย์ + หมา"],["near the condo","ใกล้คอนโด"],["movie · Bee & Bug","ดูหนัง · บี บั๊ก"],["tummy time · with Prowe","นอนคว่ำ · กับแม่"],["tummy time","นอนคว่ำ"],["feed dogs 18:00","ให้อาหารหมา 18:00"],["dogs home 19:00","หมากลับบ้าน 19:00"],["cluster feeds · fussy window","ให้นมถี่ · ช่วงงอแง"],["Vit D · tummy time","วิตามินดี · นอนคว่ำ"],["predicted · Clay's usual gap","คาดการณ์ · ตามช่วงห่างของเคลย์"],["predicted · 3 h after the last feed","คาดการณ์ · 3 ชม. หลังมื้อล่าสุด"],["run + shower","วิ่ง + อาบน้ำ"],["back with the driver","กลับมากับคนขับ"],["fed 11:00 & 18:00","ให้อาหาร 11:00 และ 18:00"],["errands · runs","ธุระ · รับส่ง"],["dogs to Chet's family house","พาหมาไปบ้านครอบครัวพ่อ"],["protected 00:00 – 05:00 · Chet has the bottle","นอนยาว 00:00 – 05:00 · พ่อให้ขวด"],["up for night feeds · wake 08:00","ตื่นให้นมกลางคืน · ตื่น 08:00"],["up if needed · wake 08:00","ตื่นถ้าจำเป็น · ตื่น 08:00"],["quiet work · Clay if he stirs","ทำงานเงียบๆ · ดูเคลย์"],["pumped milk","นมปั๊ม"],["feeds continue there","ให้นมต่อที่นั่น"],["whole family + dogs","ทั้งครอบครัว + หมา"],["since","ตั้งแต่"],["then","ต่อไป"],["in ","อีก "],[" min"," นาที"],[" h "," ชม. "],[" ml"," มล."]];
+const T_UI={en:{next:"Next feed",clayIs:"Clay is",awake:"👀 Awake",sleep:"😴 Sleeping",bottle:"🍼 Bottle",breast:"🤱 Breast",skip:"Skip next",now:"Now",today:"Today",all:"All",of:"of",todayW:"today",feeds:n=>`${n} feed${n===1?"":"s"} today · tap to see, edit or delete`,again:v=>`${v} again`,inBtn:"In",outBtn:"Out",time:"Time",notLogged:"not logged",log:"Log",save:"Save",edit:"Edit",cancel:"Cancel",del:"Delete",last:"last",none:"nothing more before 06:00",nothing:"Nothing logged yet today.",bf:"breastfeed",each:"each",optional:"optional",nomore:"—",due:"due around",born:"born today",day:"day",clay:"Clay",chet:"Chet",prowe:"Prowe",view:"View",dogs:"Bee & Bug",driver:"Driver",maids:"Maids",days:["Sun","Mon","Tue","Wed","Thu","Fri","Sat"]},
+ th:{next:"มื้อถัดไป",clayIs:"เคลย์กำลัง",awake:"👀 ตื่น",sleep:"😴 หลับ",bottle:"🍼 ขวดนม",breast:"🤱 นมแม่",skip:"ข้ามมื้อถัดไป",now:"ตอนนี้",today:"วันนี้",all:"ทุกคน",of:"จาก",todayW:"วันนี้",feeds:n=>`${n} มื้อวันนี้ · แตะเพื่อดู แก้ไข หรือลบ`,again:v=>`${v} อีกครั้ง`,inBtn:"เข้างาน",outBtn:"เลิกงาน",time:"เวลา",notLogged:"ไม่ได้บันทึก",log:"บันทึก",save:"บันทึก",edit:"แก้ไข",cancel:"ยกเลิก",del:"ลบ",last:"ล่าสุด",none:"ไม่มีมื้อก่อน 06:00",nothing:"ยังไม่มีบันทึกวันนี้",bf:"นมแม่",each:"ต่อครั้ง",optional:"ไม่บังคับ",nomore:"—",due:"กำหนดคลอดประมาณ",born:"เกิดวันนี้",day:"วันที่",clay:"เคลย์",chet:"พ่อ",prowe:"แม่",view:"วิว",dogs:"บี & บั๊ก",driver:"คนขับรถ",maids:"แม่บ้าน",days:["อา","จ","อ","พ","พฤ","ศ","ส"]}};
+const ui=k=>T_UI[U.lang][k];
+TH.sort((a,b)=>b[0].length-a[0].length);
+function tr(s){ if(U.lang==="en"||!s) return s; let out=s; TH.forEach(([a,b])=>{ out=out.split(a).join(b); }); return out; }
 
 /* ---------- time ---------- */
 function bkkNow(){ const p=new Intl.DateTimeFormat("en-GB",{timeZone:TZ,year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",weekday:"short",hour12:false}).formatToParts(new Date()); const g=t=>p.find(x=>x.type===t).value; const h=+g("hour")%24, m=+g("minute"); return {date:`${g("year")}-${g("month")}-${g("day")}`,h,m,hf:h+m/60,dow:DAYS.indexOf(g("weekday"))}; }
@@ -196,6 +238,7 @@ function addDays(iso,k){ const d=new Date(iso+"T12:00:00Z"); d.setUTCDate(d.getU
 function scheduleDate(n){ return n.h>=DAY_START?n.date:addDays(n.date,-1); }
 function dateOfDow(dow){ const base=scheduleDate(bkkNow()); const bd=new Date(base+"T12:00:00Z"); return addDays(base,(dow-bd.getUTCDay()+7)%7); }
 const pad=n=>String(n).padStart(2,"0");
+const nowHM=()=>{ const n=bkkNow(); return pad(n.h)+":"+pad(n.m); };
 function toH(t){ const [h,m]=t.split(":").map(Number); let x=h+m/60; if(x<DAY_START) x+=24; return x; }
 function fmt(h){ h=((h%24)+24)%24; const H=Math.floor(h), M=Math.round((h-H)*60); return pad(H)+":"+pad(M%60); }
 function nowAbs(){ const n=bkkNow(); return n.hf<DAY_START?n.hf+24:n.hf; }
@@ -210,6 +253,7 @@ const isDogsAway=d=>d===1||d===4;
 const famHouse=d=>m3()?(d===6?"Chet's family":d===0?"Prowe's family":null):null;
 const isWalkDay=d=>S.walkDays.includes(d)&&!famHouse(d)&&!isDogsAway(d);
 const sortedFeeds=()=>[...S.feeds[PH]].sort((a,b)=>toH(a.t)-toH(b.t));
+function tidyFeeds(){ Object.keys(S.feeds).forEach(k=>{ const seen=new Set(); S.feeds[k]=(S.feeds[k]||[]).filter(f=>{ if(!f||!f.t||seen.has(f.t)) return false; seen.add(f.t); if(f.opt!==undefined){ f.off=!!f.opt; delete f.opt; } return true; }); }); }
 function mlTarget(age){ if(S.weight) return Math.min(1000,Math.round(S.weight*150/10)*10); if(age===null||age<0) return 0; return age<7?400:age<14?500:age<30?650:age<60?800:age<120?950:1000; }
 const isFeed=x=>x.type==="bottle"||x.type==="breast";
 function typicalGap(){ const dates=Object.keys(L).sort().slice(-7); const gaps=[]; dates.forEach(d=>{ const fs=(L[d].entries||[]).filter(isFeed).map(x=>toH(x.t)).sort((a,b)=>a-b); for(let i=1;i<fs.length;i++){ const g=fs[i]-fs[i-1]; if(g>=1.5&&g<=5.5) gaps.push(g); } }); if(gaps.length<4) return {gap:3,learned:false}; return {gap:Math.round(gaps.reduce((a,b)=>a+b,0)/gaps.length*4)/4,learned:true}; }
@@ -227,25 +271,31 @@ function build(dow,date){
   /* Clay's feeds: the plan, then a live prediction from the last real feed */
   const plan=sortedFeeds().filter(f=>!f.off).map(f=>({h:toH(f.t),key:"feed@"+f.t}));
   const real=log.filter(isFeed); const {gap,learned}=typicalGap();
-  let feeds=[];
+  let feeds=[]; const nowA=nowAbs();
+  const sw=[...log].reverse().find(x=>x.type==="sleep"||x.type==="wake"); const sleeping=isToday&&!!(sw&&sw.type==="sleep");
   if(isToday&&real.length){ const last=toH(real[real.length-1].t), first=toH(real[0].t);
     plan.filter(f=>f.h<first-0.75).forEach(f=>feeds.push({...f}));
     real.forEach(x=>feeds.push({h:toH(x.t),actual:x}));
-    const noFeed=m46()?[23.6,31.5]:null; let t=last+gap;
-    while(t<32){ if(!(noFeed&&t>noFeed[0]&&t<noFeed[1])) feeds.push({h:t,key:"feed@"+fmt(t),pred:true}); t+=gap; }
-  } else plan.forEach(f=>feeds.push({...f}));
+    const noFeed=m46()?[23.6,31.5]:null; let t=last+gap; let due=false;
+    if(t<nowA){ t=nowA+0.05; due=true; }                       // overdue → due now (or when he wakes)
+    while(t<32){ if(!(noFeed&&t>noFeed[0]&&t<noFeed[1])) feeds.push({h:t,key:"feed@"+fmt(t),pred:true,due:due&&feeds.every(f=>!f.pred),whenWakes:due&&sleeping&&feeds.every(f=>!f.pred)}); t+=gap; }
+  } else if(isToday){ plan.forEach(f=>{ if(f.h<nowA-0.75) feeds.push({...f}); }); let t=Math.max(nowA+0.05,(plan.find(f=>f.h>=nowA-0.75)||{h:nowA}).h); const overdue=t<=nowA+0.06; const noFeed=m46()?[23.6,31.5]:null; let firstP=true;
+    while(t<32){ if(!(noFeed&&t>noFeed[0]&&t<noFeed[1])) feeds.push({h:t,key:"feed@"+fmt(t),pred:!firstP||overdue,due:firstP&&overdue,whenWakes:firstP&&overdue&&sleeping}); t+=gap; firstP=false; } }
+  else plan.forEach(f=>feeds.push({...f}));
   feeds=feeds.filter(f=>!(f.key&&isToday&&skips.has(f.key))); feeds.sort((a,b)=>a.h-b.h);
   const feedAt=h=>feeds.some(f=>Math.abs(f.h-h)<0.6);
 
   /* Clay's day: feed · nap · sleep · bath · play */
-  feeds.forEach(f=>{ const a=f.actual; const lbl=a?(a.type==="breast"?"Breastfed"+(a.min?" · "+a.min+" min":""):"Bottle · "+(a.ml||0)+" ml"):(m46()&&Math.abs(f.h%24-23)<0.5?"Dream feed":"Feed");
-    add("clay",f.h,lbl,a?"":(f.pred?(learned?"predicted · Clay's usual gap":"predicted · 3 h after the last feed"):(Math.abs(f.h-8)<0.5?"Vit D · tummy time":"")),"feed",a?"undo:"+a.id:f.key,0.75); });
+  feeds.forEach(f=>{ const a=f.actual; const lbl=a?(a.type==="breast"?"Breastfed"+(a.min?" · "+a.min+" min":""):"Bottle · "+(a.ml||0)+" ml"):f.whenWakes?"Feed when he wakes":f.due?"Feed · due now":(m46()&&Math.abs(f.h%24-23)<0.5?"Dream feed":"Feed");
+    add("clay",f.h,lbl,a?"":(f.due?"":(f.pred?(learned?"predicted · Clay's usual gap":"predicted · 3 h after the last feed"):(Math.abs(f.h-8)<0.5?"Vit D · tummy time":""))),"feed",a?"undo:"+a.id:f.key,0.75); });
   for(let i=0;i<feeds.length;i++){ const a=feeds[i].h+0.75, b=i+1<feeds.length?feeds[i+1].h:feeds[0].h+24; if(b-a<0.6) continue; const ab=a%24;
     if(!m46()&&ab>=17.5&&ab<19.6) add("clay",a,"Bath · wind-down",m3()?"":"cluster feeds · fussy window","bath","bath@"+fmt(a),b-a);
     else if(m46()&&ab>=14.6&&ab<16.5) add("clay",a,"Play · tummy time","with Prowe & Chet","play","play@"+fmt(a),b-a);
     else if(m46()&&ab>=18.6&&ab<19.9) add("clay",a,"Bath · wind-down","","bath","bath@"+fmt(a),b-a);
     else if(ab>=20.5||ab<7) add("clay",a,"Sleep","","sleep",null,b-a);
     else add("clay",a,"Nap","","nap",null,b-a); }
+  if(sleeping){ const s=toH(sw.t); I.forEach(it=>{ if(it.col==="clay"&&(it.kind==="nap"||it.kind==="sleep")&&s>=it.h-0.5&&s<it.h+it.dur){ it.dur=it.h+it.dur-s; it.h=s; it.sub="since "+sw.t; it.live=true; } }); }
+  else if(isToday&&sw&&sw.type==="wake"){ const w=toH(sw.t); I.forEach(it=>{ if(it.col==="clay"&&(it.kind==="nap"||it.kind==="sleep")&&w>it.h&&w<it.h+it.dur){ it.dur=w-it.h; } }); }
 
   /* Chet · Prowe · View */
   let walkH=+S.walkSlot, walk=isWalkDay(dow); if(walk&&shift&&walkH===8){ walkH=17; adj.push({k:"info",t:"Shift nights: you're asleep at 08:00, so the dog walk moves to 17:00."}); }
@@ -275,8 +325,9 @@ function build(dow,date){
   else { add("prowe",24,"Sleep","up for night feeds · wake 08:00","sleep",null,8); feeds.filter(f=>f.h>=24&&f.h<31).forEach(f=>add("prowe",f.h,"Night feed","","feed",null,0.75)); }
 
   if(nannyOff||(isToday&&skips.has("nanny"))){ add("nanny",10,nannyOff?"Day off":"Not in today","","off",null,6); if(!nannyOff) adj.push({k:"warn",t:"View isn't in today — the 12–14 cover needs a rethink."}); }
-  else { const inn=log.filter(x=>x.type==="in").pop(), out=log.filter(x=>x.type==="out").pop(); const s=isToday&&inn?toH(inn.t):nS, e=isToday&&out?toH(out.t):nE;
-    add("nanny",s,"On duty"+(inn&&isToday?" · in "+fmt(s):""),"Clay care · feeds · laundry"+((exDay||bjjDay)?" · covers 12–14":""),"duty",inn&&isToday?"undo:"+inn.id:"nanny",e-s); }
+  else { const inn=log.filter(x=>x.type==="in").pop(), out=log.filter(x=>x.type==="out").pop(); const s=isToday&&inn?toH(inn.t):nS; let e=isToday&&out&&(!inn||toH(out.t)>=toH(inn.t))?toH(out.t):nE; if(e<=s) e=s+0.5;
+    const nk=!isToday?null:(!inn?"nanny":(!out||toH(out.t)<toH(inn.t))?"nannyout":"undo:"+out.id);
+    const it={col:"nanny",h:s,label:"On duty"+(inn&&isToday?" · in "+fmt(s):"")+(out&&isToday&&toH(out.t)>=toH(inn?inn.t:"00:00")?" · out "+fmt(e):""),sub:"Clay care · feeds · laundry"+((exDay||bjjDay)?" · covers 12–14":""),kind:"duty",key:nk,dur:e-s}; if(nk&&nk.startsWith("undo:")) it.done=true; if(nk==="nannyout") it.clockedIn=true; I.push(it); }
 
   /* household, for the status rows */
   if(driverOn){ add("driver",10,"On duty","errands · runs","duty",null,9); if(dogsAway) add("driver",19,"Bringing the dogs home","","dog",null,0.75); }
@@ -286,9 +337,9 @@ function build(dow,date){
   else if(fam){ add("dogs",11,"At "+fam+" house","","fam",null,8); add("dogs",20,"Sleep","","sleep",null,12); }
   else { if(walk) add("dogs",walkH,"Walk","with Chet","walk",null); add("dogs",11,"Home","fed 11:00 & 18:00","dog",null,7); add("dogs",20,"Sleep","","sleep",null,12); }
 
-  I.forEach(it=>{ if(!it.key) return; if(it.key.startsWith("undo:")){ it.done=true; return; } if(isToday&&(it.key==="ex"||it.key==="walk"||it.key.startsWith("bath@")||it.key.startsWith("play@"))){ const d=doneOf(it.key); if(d){ it.done=true; it.key="undo:"+d.id; } } if(isToday&&skips.has(it.key)) it.skipped=true; });
+  I.forEach(it=>{ if(!it.key||it.col==="nanny") return; if(it.key.startsWith("undo:")){ it.done=true; return; } if(isToday&&(it.key==="ex"||it.key==="walk"||it.key.startsWith("bath@")||it.key.startsWith("play@"))){ const d=doneOf(it.key); if(d){ it.done=true; it.key="undo:"+d.id; } } if(isToday&&skips.has(it.key)) it.skipped=true; });
   I.sort((a,b)=>a.h-b.h);
-  return {items:I,adj:adj.filter(a=>!acked.has(a.k+":"+a.t.slice(0,40))),feeds,gap,learned,shift};
+  return {items:I,adj:adj.filter(a=>!acked.has(a.k+":"+a.t.slice(0,40))),feeds,gap,learned,shift,sleeping,sw,nannyState:nannyOff?"off":(()=>{ const inn=log.filter(x=>x.type==="in").pop(), out=log.filter(x=>x.type==="out").pop(); return !inn?"out":(!out||toH(out.t)<toH(inn.t))?"in":"done"; })()};
 }
 
 function learn(){ const dates=Object.keys(L).sort().slice(-14); const byAnchor={}, nights=[]; let days=0;
@@ -301,58 +352,67 @@ function learn(){ const dates=Object.keys(L).sort().slice(-14); const byAnchor={
 
 /* ---------- render ---------- */
 const $=id=>document.getElementById(id);
-function picker(key){ const bottle=U.pick.mode==="bottle"; return `<div class="pick">
-  <div class="state" style="align-self:flex-start"><button data-mode="bottle" class="${bottle?"on":""}">🍼 Bottle</button><button data-mode="breast" class="${bottle?"":"on"}">🤱 Breast</button></div>
-  ${bottle?`<div class="pre">${[60,90,120,150,180].map(m=>`<button data-ml="${m}" class="${U.ml===m?"on":""}">${m} ml</button>`).join("")}</div><div class="cust"><input type="number" id="mlIn" value="${U.ml}" min="5" max="400" step="5" inputmode="numeric" aria-label="ml"> ml</div>`
-    :`<div class="pre">${[5,10,15,20,30].map(m=>`<button data-min="${m}" class="${U.min===m?"on":""}">${m} min</button>`).join("")}</div><div class="cust"><input type="number" id="minIn" value="${U.min}" min="1" max="90" inputmode="numeric" aria-label="minutes"> min · optional</div>`}
-  <div class="go"><button class="btn quiet sm" data-pickclose>Cancel</button><button class="btn primary sm" data-picksave="${key}">Log ${bottle?"bottle":"breastfeed"}</button></div></div>`; }
+function picker(key){ const bottle=U.pick.mode==="bottle"; const ed=U.pick.edit; return `<div class="pick">
+  <div class="lab">${ed?ui("edit"):ui("log")} · ${bottle?tr("Bottle"):tr("Breastfeed")}</div>
+  ${bottle?`<div class="pre">${[60,90,120,150,180].map(m=>`<button data-ml="${m}" class="${U.ml===m?"on":""}">${m}${tr(" ml")}</button>`).join("")}</div><div class="cust"><input type="number" id="mlIn" value="${U.ml}" min="5" max="400" step="5" inputmode="numeric" aria-label="ml">${tr(" ml")}</div>`
+    :`<div class="pre">${[5,10,15,20,30].map(m=>`<button data-min="${m}" class="${U.min===m?"on":""}">${m}${tr(" min")}</button>`).join("")}</div><div class="cust"><input type="number" id="minIn" value="${U.min}" min="1" max="90" inputmode="numeric" aria-label="minutes">${tr(" min")} · ${ui("optional")}</div>`}
+  <div class="cust">${ui("time")} <input type="time" lang="en-GB" class="tm" id="tmIn" value="${ed?ed.t:nowHM()}" aria-label="time"></div>
+  <div class="go">${ed?`<button class="btn quiet sm" data-delfeed="${ed.id}">${ui("del")}</button>`:""}<button class="btn quiet sm" data-pickclose>${ui("cancel")}</button><button class="btn primary sm" data-picksave="${key}">${ed?ui("save"):ui("log")}</button></div></div>`; }
 
 function render(){
-  const now=bkkNow(), today=scheduleDate(now), tdow=new Date(today+"T12:00:00Z").getUTCDay(); if(U.day===null) U.day=tdow;
-  const dow=U.day, date=dateOfDow(dow), isToday=date===today, nowA=nowAbs(); const me=PEOPLE[U.me];
+  const now=bkkNow(), today=scheduleDate(now), tdow=new Date(today+"T12:00:00Z").getUTCDay(); if(U.day===null||U.today!==today){ U.day=tdow; U.today=today; U.scrollKey=null; }
+  const dow=U.day, date=dateOfDow(dow), isToday=date===today, nowA=nowAbs(); const me=PEOPLE[U.me]||{n:"Everyone",col:"all",e:"🏠"};
   const T=build(tdow,today), tPH=PH; const R=build(dow,date); const age=ageDays(today);
-  $("dateline").textContent=`${DAYL[now.dow]} ${niceDate(now.date)} · ${S.birth?(age<=0?"born today":`day ${age} · ${PHASES.find(p=>p.id===tPH).label}`):"due around "+niceDate(DUE)}`;
-  $("meSeg").innerHTML=Object.entries(PEOPLE).map(([k,p])=>`<button role="tab" aria-selected="${U.me===k}" class="${U.me===k?"on":""}" data-me="${k}">${p.n}</button>`).join("");
+  $("dateline").textContent=`${U.lang==="th"?"วัน"+ui("days")[now.dow]+" "+now.date.slice(8)+"/"+now.date.slice(5,7):DAYL[now.dow]+" "+niceDate(now.date)} · ${S.birth?(age<=0?ui("born"):`${ui("day")} ${age} · ${PHASES.find(p=>p.id===tPH).label}`):ui("due")+" "+niceDate(DUE)}`;
+  $("langSeg").innerHTML=`<button data-lang="en" class="${U.lang==="en"?"on":""}">EN</button><button data-lang="th" class="${U.lang==="th"?"on":""}">ไทย</button>`;
+  $("meSeg").innerHTML=`<button role="tab" aria-selected="${U.me==="all"}" class="${U.me==="all"?"on":""}" data-me="all">${ui("all")}</button>`+Object.entries(PEOPLE).map(([k,p])=>`<button role="tab" aria-selected="${U.me===k}" class="${U.me===k?"on":""}" data-me="${k}">${ui(k)}</button>`).join("");
 
   /* NOW */
-  const tlog=(L[today]&&L[today].entries)||[]; const real=tlog.filter(isFeed); const last=real[real.length-1];
+  const tlog=(L[today]&&L[today].entries)||[]; const real=tlog.filter(isFeed).sort((a,b)=>toH(a.t)-toH(b.t)); const last=real[real.length-1];
   const next=T.feeds.find(f=>f.h>nowA&&!f.actual); const mins=next?Math.round((next.h-nowA)*60):null;
-  const sw=[...tlog].reverse().find(x=>x.type==="sleep"||x.type==="wake"); const sleeping=!!(sw&&sw.type==="sleep");
-  const ml=real.reduce((a,x)=>a+(+x.ml||0),0), bf=real.filter(x=>x.type==="breast").length, tg=mlTarget(age), pc=tg?Math.min(100,Math.round(ml/tg*100)):0;
+  const sw=T.sw, sleeping=T.sleeping;
+  const bfml=bfEst(age); const ml=real.reduce((a,x)=>a+(x.type==="breast"?bfml:(+x.ml||0)),0), bml=real.reduce((a,x)=>a+(x.type==="bottle"?(+x.ml||0):0),0), bf=real.filter(x=>x.type==="breast").length, tg=mlTarget(age), pc=tg?Math.min(100,Math.round(ml/tg*100)):0;
   $("now").innerHTML=S.birth?`
-    <div class="nowgrid"><div><div class="lab">Next feed</div><div class="big">${next?fmt(next.h):"—"}</div>
-      <div class="sub">${next?(mins>60?`in ${Math.floor(mins/60)} h ${pad(mins%60)} min`:`in ${mins} min`):"nothing more before 06:00"}${last?` · last ${fmt(toH(last.t))}${last.type==="bottle"?" · "+last.ml+" ml":" · breast"}`:""}${T.learned?` · Clay's gap ≈ ${T.gap} h`:""}</div></div>
-      <div><div class="lab" style="margin-bottom:6px">Clay is</div><div class="state"><button data-state="wake" class="${sleeping?"":"on"}">👀 Awake</button><button data-state="sleep" class="${sleeping?"on":""}">😴 Sleeping</button></div></div></div>
-    <div class="acts"><button class="btn primary" data-pickopen="now:bottle">🍼 Bottle</button><button class="btn" data-pickopen="now:breast">🤱 Breast</button>${next&&next.key?`<button class="btn quiet" data-skip="${next.key}">Skip next</button>`:""}</div>
+    <div class="nowgrid"><div><div class="lab">${ui("next")}</div><div class="big">${next?fmt(next.h):"—"}</div>
+      <div class="sub">${next?(next.whenWakes?tr("Feed when he wakes"):tr(mins>60?`in ${Math.floor(mins/60)} h ${pad(mins%60)} min`:`in ${mins} min`)):ui("none")}${last?` · ${ui("last")} ${fmt(toH(last.t))}${last.type==="bottle"?tr(" · "+last.ml+" ml"):" · "+ui("bf")}`:""}${T.learned&&U.lang==="en"?` · Clay's gap ≈ ${T.gap} h`:""}</div></div>
+      <div><div class="lab" style="margin-bottom:6px">${ui("clayIs")}</div><div class="state"><button data-state="wake" class="${sleeping?"":"on"}">${ui("awake")}</button><button data-state="sleep" class="${sleeping?"on":""}">${ui("sleep")}</button></div></div></div>
+    <div class="acts">${last?`<button class="btn primary" data-again='${JSON.stringify({type:last.type,ml:last.ml||0,min:last.min||0})}'>${last.type==="bottle"?"🍼 "+ui("again")(last.ml+tr(" ml")):"🤱 "+ui("again")(tr("Breast"))}</button>`:""}<button class="btn" data-pickopen="now:bottle">${ui("bottle")}</button><button class="btn" data-pickopen="now:breast">${ui("breast")}</button>${next&&next.key?`<button class="btn quiet" data-skip="${next.key}">${ui("skip")}</button>`:""}</div>
     ${U.pick&&U.pick.where==="now"?picker("now"):""}
-    <div class="intake"><div class="l"><span><b>${ml} ml</b>${bf?` + ${bf} breastfeed${bf>1?"s":""}`:""} today</span><span>target ~${tg} ml${S.weight?"":" · age guide"}</span></div><div class="bar"><i style="width:${pc}%"></i></div></div>`
-  :`<div class="lab">Before Clay arrives</div><div class="big">${niceDate(DUE)}</div><div class="sub">the plan below is Month 1 — tap the button the moment he's here</div><div class="acts"><button class="btn primary" data-born>Clay is here</button></div>`;
+    <details class="feedlog" ${U.logOpen?"open":""} id="feedlog"><summary><div class="intake"><div class="l"><span><b>~${ml} ${tr(" ml").trim()}</b> ${ui("of")} ${tg} ${ui("todayW")}${bf?tr(` · ${bml} ml`)+" "+tr("Bottle").toLowerCase()+` + ${bf} ${ui("bf")} (≈${bfml}${tr(" ml")} ${ui("each")})`:""}</span><span>${pc}%${S.weight||U.lang==="th"?"":" · age guide"}</span></div><div class="bar"><i style="width:${pc}%"></i></div><div class="l" style="margin-top:6px"><span>${ui("feeds")(real.length)}</span><span class="arr">›</span></div></div></summary><div>
+      ${real.map(x=>`<div class="fl"><span class="t">${x.t}</span><span>${x.type==="breast"?"🤱":"🍼"}</span><span>${x.type==="breast"?tr("Breastfeed")+(x.min?tr(" · "+x.min+" min"):"")+" · ≈"+bfml+tr(" ml"):tr("Bottle")+tr(" · "+(x.ml||0)+" ml")}<span class="who"> · ${PEOPLE[x.who]?ui(x.who):"🏠"}</span></span><button data-editfeed="${x.id}" title="${ui("edit")}">✎</button><button data-delfeed="${x.id}" title="${ui("del")}">×</button></div>`).join("")||`<p class="hint" style="padding:6px 0">${ui("nothing")}</p>`}
+      ${real.length?`<div class="fl"><span class="tot"><span>${real.length} · ${bml}${tr(" ml")} ${tr("Bottle").toLowerCase()}${bf?` · ${bf} ${ui("bf")}`:""}</span><span>≈ ${ml}${tr(" ml")}</span></span></div>`:""}
+    </div></details>`
+  :`<div class="lab">${U.lang==="th"?"ก่อนเคลย์เกิด":"Before Clay arrives"}</div><div class="big">${niceDate(DUE)}</div><div class="sub">the plan below is Month 1 — tap the button the moment he's here</div><div class="acts"><button class="btn primary" data-born>Clay is here</button></div>`;
 
   /* WHO */
   const at=col=>T.items.find(i=>i.col===col&&nowA>=i.h&&nowA<i.h+i.dur&&i.kind!=="off");
-  const row=(id,name,it,sec)=>{ let st=it?it.label:(id==="dogs"?"Home":id==="nanny"?"Off":"Free"); let sub=it&&it.sub?`<small>${it.sub}</small>`:""; let t=it?`${fmt(it.h)} – ${fmt(it.h+it.dur)}`:"";
-    if(id==="clay"&&S.birth){ if(sleeping){ st="Sleeping"; sub=`<small>since ${sw.t}</small>`; t=""; } else if(it&&/Sleep|Nap/.test(it.label)){ st="Awake"; sub=""; t=sw?`since ${sw.t}`:""; } }
-    return `<div class="row${sec?" sec":""}"><span class="e">${EMO[id]}</span><span class="n">${name}</span><span class="s">${st}${sub}</span><span class="t">${t}</span></div>`; };
+  const after=col=>T.items.find(i=>i.col===col&&i.h>nowA&&!i.done&&!i.skipped&&i.kind!=="off"&&!(col==="clay"&&(i.kind==="sleep"||i.kind==="nap")));
+  const inN=h=>{ const m=Math.round((h-nowA)*60); return m<60?`in ${m} min`:`in ${Math.floor(m/60)} h ${pad(m%60)}`; };
+  const row=(id,name,it,sec)=>{ let st=it?it.label:(id==="dogs"?"Home":id==="nanny"?"Off":"Free"); let t=it?`${fmt(it.h)} – ${fmt(it.h+it.dur)}`:"";
+    if(id==="clay"&&S.birth){ if(sleeping){ st="Sleeping"; t="since "+sw.t; } else if(it&&/Sleep|Nap/.test(it.label)){ st="Awake"; t=sw?"since "+sw.t:""; } }
+    const nx=after(id); const nxl=nx?`${tr("then")} <b>${tr(nx.label.replace(/ · .*$/,""))}</b> · ${fmt(nx.h)} · ${tr(inN(nx.h))}`:"";
+    let btn=""; if(id==="nanny"&&S.birth&&T.nannyState!=="off"){ btn=T.nannyState==="in"?`<button class="act" data-log="out">${ui("outBtn")}</button>`:T.nannyState==="out"?`<button class="act" data-log="in">${ui("inBtn")}</button>`:""; }
+    return `<div class="row${sec?" sec":""}"><span class="e">${EMO[id]}</span><span class="n">${name}</span><span class="s"><div class="cur"><b>${tr(st)}${btn}</b><span class="t">${tr(t)}</span></div>${nxl?`<div class="nx">${nxl}</div>`:""}</span></div>`; };
   const drv=at("driver"), mds=at("maids");
-  $("who").innerHTML=`<h2>Right now · ${fmt(nowA)}</h2><div class="rows">${row("clay","Clay",at("clay"))}${row("chet","Chet",at("chet"))}${row("prowe","Prowe",at("prowe"))}${row("dogs","Bee & Bug",at("dogs"))}${row("nanny","View",at("nanny"))}${drv?row("driver","Driver",drv,true):""}${mds?row("maids","Maids",mds,true):""}</div>`;
+  $("who").innerHTML=`<h2>${ui("now")} · ${fmt(nowA)}</h2><div class="rows">${row("clay",ui("clay"),at("clay"))}${row("chet",ui("chet"),at("chet"))}${row("prowe",ui("prowe"),at("prowe"))}${row("dogs",ui("dogs"),at("dogs"))}${row("nanny",ui("view"),at("nanny"))}${drv?row("driver",ui("driver"),drv,true):""}${mds?row("maids",ui("maids"),mds,true):""}</div>`;
 
   /* week */
-  $("week").innerHTML=[1,2,3,4,5,6,0].map(d=>{ const dd=dateOfDow(d); return `<button class="wd ${d===dow?"on":""} ${dd===today?"today":""}" data-day="${d}">${DAYS[d]}<b>${+dd.slice(8)}</b></button>`; }).join("");
+  $("week").innerHTML=[1,2,3,4,5,6,0].map(d=>{ const dd=dateOfDow(d); return `<button class="wd ${d===dow?"on":""} ${dd===today?"today":""}" data-day="${d}">${ui("days")[d]}<b>${+dd.slice(8)}</b></button>`; }).join("");
 
   /* AGENDA */
-  $("agTitle").textContent=(isToday?"Today":DAYL[dow])+" · "+me.n;
-  const items=R.items.filter(i=>i.col==="clay"||i.col===me.col).filter(i=>!(i.col===me.col&&i.kind==="sleep"&&i.h>=24)).sort((a,b)=>a.h-b.h||(a.col==="clay"?-1:1));
+  $("agTitle").textContent=isToday?ui("today"):(U.lang==="th"?"วัน"+ui("days")[dow]:DAYL[dow]);
+  const cols=me.col==="all"?["clay","chet","prowe","nanny"]:["clay",me.col]; const ORD={clay:0,chet:1,prowe:2,nanny:3};
+  const items=R.items.filter(i=>cols.includes(i.col)).filter(i=>!(i.col!=="clay"&&i.kind==="sleep"&&i.h>=24)).filter(i=>!(me.col==="all"&&i.col!=="clay"&&/^(Sleep|Nap|Own time|Evening|Work)$/.test(i.label))).sort((a,b)=>a.h-b.h||ORD[a.col]-ORD[b.col]);
   const nextIdx=isToday?items.findIndex(i=>i.h+i.dur>nowA&&!i.done&&!i.skipped):-1;
   let html="", marked=false;
-  items.forEach((i,idx)=>{ const past=isToday&&i.h+i.dur<=nowA&&!i.done; const isNext=idx===nextIdx; const tappable=isToday&&i.key&&!i.skipped; const cl=i.kind==="sleep"||i.kind==="nap";
-    if(isToday&&!marked&&i.h>nowA){ html+=`<div class="gapmark">now · ${fmt(nowA)}</div>`; marked=true; }
-    const em=i.col==="clay"?(KEMO[i.kind]||"👶"):(KEMO[i.kind]||me.e); const canSkip=tappable&&!i.done&&i.key!=="nanny"&&!i.key.startsWith("undo");
-    html+=`<div class="it ${i.done?"done":""} ${past?"past":""} ${isNext?"next":""} ${i.skipped?"skip":""} ${cl?"sleepy":""} ${canSkip?"hasx":""}">
-      <span class="tm">${fmt(i.h)}</span><span class="em">${em}</span><span class="lb">${i.col==="clay"&&i.kind!=="feed"?"Clay · ":""}${i.label}${i.sub?`<small>${i.sub}</small>`:""}</span>
-      ${tappable?`<span class="cb">${i.done?"✓":""}</span><button class="hit" data-item="${i.key}" aria-label="${i.done?"Undo":"Mark done"} ${i.label}"></button>`:(i.skipped?`<button class="more" data-unskip="${i.key}" title="Bring back">↺</button>`:`<span></span>`)}
-      ${canSkip?`<button class="more" data-skip="${i.key}" title="Skip today">✕</button>`:""}
+  items.forEach((i,idx)=>{ const past=isToday&&i.h+i.dur<=nowA&&!i.done; const isNext=idx===nextIdx; const missed=past&&i.kind==="feed"&&!i.done&&i.col==="clay"; const tappable=isToday&&i.key&&!i.skipped&&!missed; if(missed) i.sub=ui("notLogged"); const cl=i.kind==="sleep"||i.kind==="nap";
+    if(isToday&&!marked&&i.h>nowA){ html+=`<div class="gapmark">${ui("now")} · ${fmt(nowA)}</div>`; marked=true; }
+    const owner=ui(i.col==="clay"?"clay":i.col==="nanny"?"view":i.col==="chet"?"chet":"prowe"); const em=i.col==="clay"?(KEMO[i.kind]||"👶🏻"):(KEMO[i.kind]||EMO[i.col]); const canSkip=tappable&&!i.done&&i.key!=="nanny"&&!i.key.startsWith("undo");
+    html+=`<div class="it ${i.done?"done":""} ${past?"past":""} ${isNext?"next":""} ${i.skipped?"skip":""} ${cl?"sleepy":""}">
+      <span class="tm">${fmt(i.h)}</span><span class="em">${em}</span><span class="lb">${me.col==="all"||i.col==="clay"?`<span class="who">${owner}</span>`:""}${tr(i.label)}${i.sub?`<small>${tr(i.sub)}</small>`:""}</span>
+      ${tappable?`<span class="yn"><button class="ok" data-item="${i.key}" title="${i.done?"Undo":"Done"}">${i.done?"✓":"✓"}</button>${canSkip?`<button class="no" data-skip="${i.key}" title="Didn't happen">✕</button>`:""}</span>`:(i.skipped?`<span class="yn"><button data-unskip="${i.key}" title="Bring back">↺</button></span>`:`<span></span>`)}
       ${U.pick&&U.pick.where===i.key?`<div class="inl">${picker(i.key)}</div>`:""}</div>`; });
-  if(isToday&&!marked) html+=`<div class="gapmark">now · ${fmt(nowA)}</div>`;
+  if(isToday&&!marked) html+=`<div class="gapmark">${ui("now")} · ${fmt(nowA)}</div>`;
   $("list").innerHTML=html;
   const list=$("list"); const nx=list.querySelector(".it.next")||list.querySelector(".gapmark"); if(nx&&U.scrollKey!==date+U.me){ U.scrollKey=date+U.me; list.scrollTop=Math.max(0,nx.offsetTop-list.clientHeight*0.3); }
 
@@ -379,7 +439,7 @@ function renderSettings(age){
       <div class="frow"><button class="btn sm" data-addfeed>+ Add feed</button><p class="hint">Off = only if he wakes for it. − / + moves a feed by 15 min.</p></div></div>
     <div class="frow">
       <div class="field"><span>View's shift</span><div class="seg sm" data-set="nannyShift"><button data-v="9-19" class="${S.nannyShift==="9-19"?"on":""}">09 – 19</button><button data-v="8-18" class="${S.nannyShift==="8-18"?"on":""}">08 – 18</button></div></div>
-      <div class="field"><span>View's day off</span><div class="seg sm" data-set="nannyOff"><button data-v="6" class="${S.nannyOff==="6"?"on":""}">Sat</button><button data-v="0" class="${S.nannyOff==="0"?"on":""}">Sun</button></div></div>
+      <div class="field"><span>View's day off · 6 days on</span><div class="days">${[1,2,3,4,5,6,0].map(d=>`<button data-noff="${d}" class="${String(d)===S.nannyOff?"on":""}" title="${DAYL[d]} off">${DAYS[d][0]}</button>`).join("")}</div></div>
       <div class="field"><span>Nights</span><div class="seg sm"><button data-n="together" class="${S.nightMode==="together"?"on":""}">Together</button><button data-n="shift" class="${S.nightMode==="shift"?"on":""}" ${m2()?"":"disabled"}>Shift</button></div></div>
     </div>
     <p class="hint">${!m2()?"Month 1: same sleep, same wake. Shift unlocks from Month 2, once the 02:00 feed can be a bottle.":S.nightMode==="shift"?"Prowe sleeps 00:00 → 05:00 straight; Chet does the 02:00 bottle and sleeps 03:00 → 10:30.":"Both sleep after the 23:00 feed and wake 08:00; Prowe takes night feeds with Chet on hand."}</p>
@@ -396,26 +456,30 @@ function renderSettings(age){
 function lsGet(k,d){ try{ const v=localStorage.getItem(k); return v?JSON.parse(v):d; }catch(e){ return d; } }
 function lsSet(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} }
 let saveT=null;
-function saveSettings(){ lsSet("clay.settings",S); render(); if(db){ clearTimeout(saveT); saveT=setTimeout(()=>db.doc("household/settings").set(S).catch(()=>{}),400); } }
-function saveDay(date){ lsSet("clay.log."+date,L[date]); render(); if(db) db.doc("days/"+date).set(L[date]).catch(()=>{}); }
-function addLog(type,extra,quiet){ const n=bkkNow(), date=scheduleDate(n), t=pad(n.h)+":"+pad(n.m); L[date]=L[date]||{date,entries:[]}; L[date].date=date; const e=Object.assign({id:Date.now().toString(36),t,type,who:U.me},extra||{}); L[date].entries=[...L[date].entries,e]; U.day=new Date(date+"T12:00:00Z").getUTCDay(); U.pick=null; saveDay(date);
-  if(!quiet) toast(({bottle:"Bottle logged · "+(e.ml||0)+" ml",breast:"Breastfeed logged",sleep:"Clay's asleep",wake:"Clay's awake",in:"View clocked in",out:"View clocked out",skip:"Skipped — plan updated",done:"Done"}[type]||"Saved")+" · "+t); }
+function saveSettings(){ lsSet("clay.settings",S); render(); if(db){ clearTimeout(saveT); saveT=setTimeout(()=>db.set("household/settings",S),400); } }
+function saveDay(date){ lsSet("clay.log."+date,L[date]); render(); if(db) db.set("days/"+date,L[date]); }
+function applySettings(data){ S=Object.assign(clone(DEFAULTS),data); S.feeds=Object.assign(clone(DEFAULT_FEEDS),S.feeds||{}); tidyFeeds(); if(!Array.isArray(S.walkDays)) S.walkDays=[3,5,6]; lsSet("clay.settings",S); render(); }
+function addLog(type,extra,quiet){ const n=bkkNow(), date=scheduleDate(n), t=pad(n.h)+":"+pad(n.m); L[date]=L[date]||{date,entries:[]}; L[date].date=date; const e=Object.assign({id:Date.now().toString(36),t,type,who:PEOPLE[U.me]?U.me:"household"},extra||{}); if(!/^\d\d:\d\d$/.test(e.t)) e.t=t; L[date].entries=[...L[date].entries,e]; U.day=new Date(date+"T12:00:00Z").getUTCDay(); U.pick=null; saveDay(date);
+  if(!quiet) toast((U.lang==="th"?({bottle:"บันทึกขวดนม · "+(e.ml||0)+" มล.",breast:"บันทึกนมแม่",sleep:"เคลย์หลับ",wake:"เคลย์ตื่น",in:"วิวเข้างาน",out:"วิวเลิกงาน",skip:"ข้ามแล้ว",done:"เรียบร้อย"}[type]||"บันทึกแล้ว"):({bottle:"Bottle logged · "+(e.ml||0)+" ml",breast:"Breastfeed logged",sleep:"Clay's asleep",wake:"Clay's awake",in:"View clocked in",out:"View clocked out",skip:"Skipped — plan updated",done:"Done"}[type]||"Saved"))+" · "+e.t); }
 function removeLog(id){ const date=scheduleDate(bkkNow()); if(!L[date]) return; L[date].entries=L[date].entries.filter(x=>x.id!==id); saveDay(date); toast("Undone"); }
 function toast(m){ const t=$("toast"); t.textContent=m; t.classList.add("show"); clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove("show"),1800); }
 
 /* ---------- wiring ---------- */
-S=Object.assign(clone(DEFAULTS),lsGet("clay.settings",{})); S.feeds=Object.assign(clone(DEFAULT_FEEDS),S.feeds||{}); if(!Array.isArray(S.walkDays)) S.walkDays=[3,5,6]; U.me=lsGet("clay.me","chet");
+S=Object.assign(clone(DEFAULTS),lsGet("clay.settings",{})); S.feeds=Object.assign(clone(DEFAULT_FEEDS),S.feeds||{}); tidyFeeds(); if(!Array.isArray(S.walkDays)) S.walkDays=[3,5,6]; U.me=lsGet("clay.me","all"); U.lang=lsGet("clay.lang","en"); if(!PEOPLE[U.me]&&U.me!=="all") U.me="all";
 try{ for(let i=0;i<localStorage.length;i++){ const k=localStorage.key(i); if(k.startsWith("clay.log.")) L[k.slice(9)]=JSON.parse(localStorage.getItem(k)); } }catch(e){}
 document.body.addEventListener("click",e=>{ const b=e.target.closest("button"); if(!b) return; const d=b.dataset;
-  if(d.me){ U.me=d.me; lsSet("clay.me",U.me); render(); }
+  if(d.me){ U.me=d.me; lsSet("clay.me",U.me); U.scrollKey=null; render(); }
   else if(d.day){ U.day=+d.day; render(); }
   else if(d.state){ addLog(d.state); }
+  else if(d.log){ addLog(d.log); }
+  else if(d.again!==undefined){ const l=JSON.parse(d.again); addLog(l.type,l.type==="bottle"?{ml:l.ml}:(l.min?{min:l.min}:{})); }
   else if(d.pickopen){ const [where,mode]=d.pickopen.split(":"); U.pick={where,mode}; render(); }
-  else if(d.mode){ U.pick.mode=d.mode; render(); }
+  else if(d.editfeed){ const date=scheduleDate(bkkNow()); const x=(L[date]&&L[date].entries||[]).find(e=>e.id===d.editfeed); if(!x) return; U.logOpen=true; if(x.type==="bottle") U.ml=x.ml||U.ml; else if(x.min) U.min=x.min; U.pick={where:"now",mode:x.type,edit:x}; render(); }
+  else if(d.delfeed){ U.pick=null; U.logOpen=true; removeLog(d.delfeed); }
   else if(d.ml){ U.ml=+d.ml; render(); } else if(d.min){ U.min=+d.min; render(); }
   else if(b.hasAttribute("data-pickclose")){ U.pick=null; render(); }
-  else if(d.picksave!==undefined){ if(U.pick.mode==="bottle"){ const v=+($("mlIn")&&$("mlIn").value)||U.ml; U.ml=v; addLog("bottle",{ml:v}); } else { const v=+($("minIn")&&$("minIn").value)||0; addLog("breast",v?{min:v}:{}); } }
-  else if(d.item){ const k=d.item; if(k.startsWith("undo:")) removeLog(k.slice(5)); else if(k.startsWith("feed@")){ U.pick={where:k,mode:"bottle"}; render(); } else if(k==="nanny") addLog("in"); else addLog("done",{key:k}); }
+  else if(d.picksave!==undefined){ const ed=U.pick.edit; const tm=($("tmIn")&&/^\d\d:\d\d$/.test($("tmIn").value))?$("tmIn").value:null; if(U.pick.mode==="bottle"){ const v=+($("mlIn")&&$("mlIn").value)||U.ml; U.ml=v; if(ed){ ed.ml=v; delete ed.min; ed.type="bottle"; if(tm) ed.t=tm; U.pick=null; saveDay(scheduleDate(bkkNow())); toast("Feed updated"); } else addLog("bottle",Object.assign({ml:v},tm?{t:tm}:{})); } else { const v=+($("minIn")&&$("minIn").value)||0; if(ed){ ed.type="breast"; delete ed.ml; if(v) ed.min=v; else delete ed.min; if(tm) ed.t=tm; U.pick=null; saveDay(scheduleDate(bkkNow())); toast("Feed updated"); } else addLog("breast",Object.assign(v?{min:v}:{},tm?{t:tm}:{})); } }
+  else if(d.item){ const k=d.item; if(k.startsWith("undo:")) removeLog(k.slice(5)); else if(k.startsWith("feed@")){ U.pick={where:k,mode:"bottle"}; render(); } else if(k==="nanny") addLog("in"); else if(k==="nannyout") addLog("out"); else addLog("done",{key:k}); }
   else if(d.skip){ addLog("skip",{key:d.skip}); }
   else if(d.unskip){ const date=scheduleDate(bkkNow()); if(L[date]){ L[date].entries=L[date].entries.filter(x=>!(x.type==="skip"&&x.key===d.unskip)); saveDay(date); } }
   else if(b.hasAttribute("data-born")){ S.birth=scheduleDate(bkkNow()); saveSettings(); toast("Welcome, Clay"); }
@@ -425,7 +489,9 @@ document.body.addEventListener("click",e=>{ const b=e.target.closest("button"); 
   else if(d.nudge){ const [i,dm]=d.nudge.split(":").map(Number); const f=S.feeds[PH][i]; f.t=fmt(toH(f.t)+dm/60); saveSettings(); }
   else if(d.feedon!==undefined){ const f=S.feeds[PH][+d.feedon]; f.off=!f.off; saveSettings(); }
   else if(d.feeddel!==undefined){ S.feeds[PH].splice(+d.feeddel,1); saveSettings(); }
-  else if(b.hasAttribute("data-addfeed")){ S.feeds[PH].push({t:"12:00"}); saveSettings(); }
+  else if(b.hasAttribute("data-addfeed")){ const have=new Set(S.feeds[PH].map(f=>f.t)); let t=12; while(have.has(pad(t%24)+":00")&&t<36) t++; S.feeds[PH].push({t:pad(t%24)+":00"}); saveSettings(); }
+  else if(d.noff){ S.nannyOff=d.noff; saveSettings(); }
+  else if(d.lang){ U.lang=d.lang; lsSet("clay.lang",U.lang); render(); }
   else if(d.wd){ const x=+d.wd; S.walkDays=S.walkDays.includes(x)?S.walkDays.filter(y=>y!==x):[...S.walkDays,x]; saveSettings(); }
   else if(d.dd){ const x=+d.dd; S.driverDays=S.driverDays.includes(x)?S.driverDays.filter(y=>y!==x):[...S.driverDays,x]; saveSettings(); }
   else if(d.n){ if(b.disabled) return; S.nightMode=d.n; saveSettings(); }
@@ -434,16 +500,29 @@ document.body.addEventListener("click",e=>{ const b=e.target.closest("button"); 
 document.body.addEventListener("change",e=>{ if(e.target.id==="weightIn"){ S.weight=+e.target.value||null; saveSettings(); } });
 document.body.addEventListener("input",e=>{ if(e.target.id==="mlIn") U.ml=+e.target.value||U.ml; if(e.target.id==="minIn") U.min=+e.target.value||U.min; });
 $("settings").addEventListener("toggle",()=>{ if(!$("settings").open) U.calOpen=false; });
+document.body.addEventListener("toggle",e=>{ if(e.target.id==="feedlog") U.logOpen=e.target.open; },true);
 render(); setInterval(()=>{ if(!U.pick&&document.activeElement.tagName!=="INPUT") render(); },60000);
 
-/* ---------- shared sync ---------- */
-(async()=>{ try{ const d=await (window.claude&&window.claude.use?window.claude.use("db"):null); if(!d) return; db=d;
-  const sdoc=await db.doc("household/settings").get();
-  if(sdoc.exists){ S=Object.assign(clone(DEFAULTS),sdoc.data()); S.feeds=Object.assign(clone(DEFAULT_FEEDS),S.feeds||{}); if(!Array.isArray(S.walkDays)) S.walkDays=[3,5,6]; lsSet("clay.settings",S); render(); } else await db.doc("household/settings").set(S);
-  db.doc("household/settings").onSnapshot(s=>{ if(!s.exists||s.metadata.hasPendingWrites) return; S=Object.assign(clone(DEFAULTS),s.data()); S.feeds=Object.assign(clone(DEFAULT_FEEDS),S.feeds||{}); if(!Array.isArray(S.walkDays)) S.walkDays=[3,5,6]; lsSet("clay.settings",S); render(); },()=>{});
-  const cut=addDays(bkkNow().date,-21);
-  db.collection("days").where("date",">=",cut).limit(60).onSnapshot(q=>{ let ch=false; q.docs.forEach(doc=>{ if(doc.metadata.hasPendingWrites) return; L[doc.id]=doc.data(); lsSet("clay.log."+doc.id,L[doc.id]); ch=true; }); if(ch) render(); },()=>{});
-}catch(e){} })();
+/* ---------- shared sync: claude.ai database, or Firebase on GitHub Pages ---------- */
+(async()=>{
+  try{ const d=await (window.claude&&window.claude.use?window.claude.use("db"):null);
+    if(d){ db={set:(p,v)=>d.doc(p).set(clone(v)).catch(()=>{})};
+      const sdoc=await d.doc("household/settings").get(); if(sdoc.exists) applySettings(sdoc.data()); else await d.doc("household/settings").set(S);
+      d.doc("household/settings").onSnapshot(s=>{ if(s.exists&&!s.metadata.hasPendingWrites) applySettings(s.data()); },()=>{});
+      const cut=addDays(bkkNow().date,-21);
+      d.collection("days").where("date",">=",cut).limit(60).onSnapshot(q=>{ let ch=false; q.docs.forEach(doc=>{ if(doc.metadata.hasPendingWrites) return; L[doc.id]=doc.data(); lsSet("clay.log."+doc.id,L[doc.id]); ch=true; }); if(ch) render(); },()=>{});
+      return; } }catch(e){}
+  if(!FIREBASE_CONFIG) return;
+  try{ const load=src=>new Promise((res,rej)=>{ const s=document.createElement("script"); s.src=src; s.onload=res; s.onerror=rej; document.head.appendChild(s); });
+    await load("https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"); await load("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js");
+    if(!window.firebase) return; firebase.initializeApp(FIREBASE_CONFIG); const fs=firebase.firestore();
+    db={set:(p,v)=>fs.doc(p).set(clone(v)).catch(()=>{})};
+    const sdoc=await fs.doc("household/settings").get(); if(sdoc.exists) applySettings(sdoc.data()); else await fs.doc("household/settings").set(clone(S));
+    fs.doc("household/settings").onSnapshot(s=>{ if(s.exists&&!s.metadata.hasPendingWrites) applySettings(s.data()); });
+    const cut=addDays(bkkNow().date,-21);
+    fs.collection("days").where("date",">=",cut).onSnapshot(q=>{ let ch=false; q.docs.forEach(doc=>{ if(doc.metadata.hasPendingWrites) return; L[doc.id]=doc.data(); lsSet("clay.log."+doc.id,L[doc.id]); ch=true; }); if(ch) render(); });
+  }catch(e){}
+})();
 
 /* ---------- sky ---------- */
 (function(){
