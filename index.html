@@ -24,7 +24,7 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline
 
 .top{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:2px 4px 4px}
 .top h1{font-size:34px;font-weight:600;letter-spacing:-.02em;margin:0;line-height:1;color:var(--sky-ink);font-variant-numeric:tabular-nums}
-.top small{display:block;font-size:12.5px;font-weight:400;color:var(--sky-ink-2);margin-top:4px}
+.top small{display:block;font-size:12.5px;font-weight:400;color:var(--sky-ink-2);margin-top:4px;white-space:nowrap}
 .top small button{color:var(--sky-ink-2);text-decoration:underline;text-underline-offset:3px;font-size:12.5px;margin-left:6px}
 .wknav{display:flex;gap:2px}
 .wknav button{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;text-align:center;color:var(--ink-2);font-size:18px}
@@ -361,7 +361,7 @@ function render(){
   const dow=U.day, date=dateOfDow(dow,U.wk), isToday=date===today, nowA=nowAbs(); const me=PEOPLE[U.me]||PEOPLE.chet;
   const T=build(tdow,today), tPH=PH; const R=build(dow,date); const age=ageDays(today);
   $("clock").textContent=fmt(nowA);
-  $("dateline").innerHTML=`${U.lang==="th"?"วัน"+ui("days")[now.dow]+" "+now.date.slice(8)+"/"+now.date.slice(5,7):DAYL[now.dow]+" "+niceDate(now.date)} · ${S.birth?(age<=0?ui("born"):`${ui("day")} ${age} · ${tr(PHASES.find(p=>p.id===tPH).label)}`):ui("due")+" "+niceDate(DUE)}<button data-lang="${U.lang==="en"?"th":"en"}">${U.lang==="en"?"ไทย":"EN"}</button>`;
+  $("dateline").innerHTML=`${U.lang==="th"?ui("days")[now.dow]+" "+(+now.date.slice(8))+"/"+(+now.date.slice(5,7)):DAYS[now.dow]+" "+niceDate(now.date)} · ${S.birth?(age<=0?ui("born"):`${ui("day")} ${age} · ${U.lang==="th"?"ด."+PHASES.find(p=>p.id===tPH).label.replace(/Months? /,""):PHASES.find(p=>p.id===tPH).label.replace("Month","M").replace("Months","M")}`):ui("due")+" "+niceDate(DUE)}<button data-lang="${U.lang==="en"?"th":"en"}">${U.lang==="en"?"ไทย":"EN"}</button>`;
   $("meSeg").innerHTML=Object.entries(PEOPLE).map(([k,p])=>`<button role="tab" aria-selected="${U.me===k}" class="${U.me===k?"on":""}" data-me="${k}">${ui(k)}</button>`).join("");
 
   /* NEXT FEED */
