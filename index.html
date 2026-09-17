@@ -115,8 +115,10 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline
 .it .lb{font-weight:600;min-width:0}
 .it .lb small{display:block;font-weight:400;color:var(--ink-2);font-size:13px;margin-top:1px}
 .it.past{opacity:.45}
-.it.next{background:var(--chip)}
-.it.next .tm{color:var(--accent)}
+.it.cur{background:#E4F3DF}
+.it.cur .tm{color:#2F7A2A}
+.it.cur .lb{color:#1F4D1B}
+.it.next{box-shadow:inset 0 0 0 1.5px var(--line)}
 .it.rest{color:var(--ink-2)} .it.rest .lb{font-weight:500}
 .mk{display:grid;grid-template-columns:54px 1fr;align-items:center;gap:8px;padding:5px 12px;font-size:12.5px;color:var(--ink-2)}
 .mk .tm{font-variant-numeric:tabular-nums;font-size:12px;font-weight:600;color:var(--ink-3)}
@@ -428,14 +430,14 @@ function render(){
   $("agTitle").textContent=(isToday?ui("today"):(U.lang==="th"?"วัน"+ui("days")[dow]:DAYL[dow])+" "+niceDate(date))+" · "+ui(U.me);
   const mine=R.items.filter(i=>i.col===me.col);
   const items=R.items.filter(i=>i.col===me.col||(i.mark&&(!i.cols||i.cols.includes(me.col))&&!(i.kind==="feed"&&mine.some(m=>Math.abs(m.h-i.h)<0.1)))).sort((a,b)=>a.h-b.h||(a.mark?1:-1));
-  let html="", marked=false; const nextIdx=isToday?items.findIndex(i=>!i.mark&&i.h+i.dur>nowA):-1;
+  let html="", marked=false; const curIdx=isToday?items.findIndex(i=>!i.mark&&nowA>=i.h&&nowA<i.h+i.dur):-1; const nextIdx=isToday&&curIdx<0?items.findIndex(i=>!i.mark&&i.h>nowA):-1;
   items.forEach((i,idx)=>{ const past=isToday&&(i.mark?i.h<nowA-0.05:i.h+i.dur<=nowA);
     if(isToday&&!marked&&i.h>nowA){ html+=`<div class="gapmark">${ui("now")} · ${fmt(nowA)}</div>`; marked=true; }
     if(i.mark){ html+=`<div class="mk ${i.kind} ${past?"past":""}"><span class="tm">${fmt(i.h)}</span><span class="lb">${tr(i.label)}</span></div>`; return; }
-    html+=`<div class="it ${past?"past":""} ${idx===nextIdx?"next":""} ${i.kind==="rest"?"rest":""}"><span class="tm">${fmt(i.h)}</span><span class="lb">${tr(i.label)}${i.sub?`<small>${tr(i.sub)}</small>`:""}</span></div>`; });
+    html+=`<div class="it ${past?"past":""} ${idx===curIdx?"cur":""} ${idx===nextIdx?"next":""} ${i.kind==="rest"?"rest":""}"><span class="tm">${fmt(i.h)}</span><span class="lb">${tr(i.label)}${i.sub?`<small>${tr(i.sub)}</small>`:""}</span></div>`; });
   if(isToday&&!marked) html+=`<div class="gapmark">${ui("now")} · ${fmt(nowA)}</div>`;
   $("list").innerHTML=html;
-  const list=$("list"); const nx=list.querySelector(".it.next")||list.querySelector(".gapmark"); if(nx&&U.scrollKey!==date+U.me){ U.scrollKey=date+U.me; list.scrollTop=Math.max(0,nx.offsetTop-list.clientHeight*0.3); }
+  const list=$("list"); const nx=list.querySelector(".it.cur")||list.querySelector(".it.next")||list.querySelector(".gapmark"); if(nx&&U.scrollKey!==date+U.me){ U.scrollKey=date+U.me; list.scrollTop=Math.max(0,nx.offsetTop-list.clientHeight*0.3); }
 
   PH=tPH; renderSettings(age,today);
   if(Math.abs(window.scrollY-sy)>2) window.scrollTo(0,sy);
