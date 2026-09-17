@@ -191,12 +191,6 @@ input.num{width:100px;font:inherit;font-weight:600;font-size:15px;background:var
 @keyframes zz{0%{opacity:0;transform:translate(0,3px) scale(.8)}25%{opacity:1}70%{opacity:1}100%{opacity:0;transform:translate(3px,-6px) scale(1.15)}}
 .state button .face{margin-right:4px}
 .row .e .face{display:block;margin:0 auto}
-.who{position:fixed;inset:0;z-index:40;background:rgba(42,31,46,.55);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:24px}
-.who .box{background:var(--panel-solid);border-radius:24px;padding:22px 20px;width:100%;max-width:360px;box-shadow:var(--shadow);animation:rise .3s var(--ease) both}
-.who h2{margin:0 0 14px;font-size:20px;font-weight:600;text-align:center}
-.who .opts{display:flex;flex-direction:column;gap:8px}
-.who .opts .btn{padding:16px;font-size:17px;display:flex;align-items:center;justify-content:center;gap:10px}
-.who .opts .btn span{font-size:22px}
 #feedcard.due .big{color:var(--accent)}
 #feedcard.due .lab::after{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--accent);margin-left:8px;vertical-align:1px;animation:pulse 1.6s ease-in-out infinite}
 @keyframes pulse{0%,100%{opacity:.35;transform:scale(.8)}50%{opacity:1;transform:scale(1.15)}}
@@ -214,7 +208,7 @@ input.num{width:100px;font:inherit;font-weight:600;font-size:15px;background:var
   <section class="card agenda"><div class="head"><h2 id="agTitle"></h2><div class="wknav"><button data-wk="-1" aria-label="Previous week">‹</button><button data-wk="0" id="wkToday">●</button><button data-wk="1" aria-label="Next week">›</button></div></div><div class="list" id="list"></div></section>
   <details class="card" id="settings" hidden><summary>Settings</summary><div class="set" id="set"></div></details>
 </div>
-<div class="who" id="who" hidden></div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -408,10 +402,9 @@ function render(){
   const dow=U.day, date=dateOfDow(dow,U.wk), isToday=date===today, nowA=nowAbs(); const me=PEOPLE[U.me]||PEOPLE.chet;
   const T=build(tdow,today), tPH=PH; const R=build(dow,date); const age=ageDays(today);
   $("clock").textContent=fmt(nowA);
-  $("dateline").innerHTML=`${U.lang==="th"?ui("days")[now.dow]+" "+(+now.date.slice(8))+"/"+(+now.date.slice(5,7)):DAYS[now.dow]+" "+niceDate(now.date)} · ${S.birth?(age<=0?ui("born"):`${ui("day")} ${age} · ${U.lang==="th"?"ด."+PHASES.find(p=>p.id===tPH).label.replace(/Months? /,""):PHASES.find(p=>p.id===tPH).label.replace("Month","M").replace("Months","M")}`):ui("due")+" "+niceDate(DUE)}<button data-lang="${U.lang==="en"?"th":"en"}">${U.lang==="en"?"ไทย":"EN"}</button>`;
+  $("dateline").innerHTML=`${U.lang==="th"?ui("days")[now.dow]+" "+(+now.date.slice(8))+"/"+(+now.date.slice(5,7)):DAYS[now.dow]+" "+niceDate(now.date)} · ${S.birth?(age<=0?ui("born"):`${ui("day")} ${age} · ${U.lang==="th"?"ด."+PHASES.find(p=>p.id===tPH).label.replace(/Months? /,""):PHASES.find(p=>p.id===tPH).label.replace("Month","M").replace("Months","M")}`):ui("due")+" "+niceDate(DUE)}`;
   $("meSeg").innerHTML=Object.entries(PEOPLE).map(([k,p])=>`<button role="tab" aria-selected="${U.me===k}" class="${U.me===k?"on":""}" data-me="${k}">${ui(k)}</button>`).join("");
-  $("meSeg").hidden=!!U.locked||!U.showSettings;
-  $("who").hidden=!U.choose; if(U.choose) $("who").innerHTML=`<div class="box"><h2>Who are you? · คุณคือใคร</h2><div class="opts"><button class="btn" data-choose="chet"><span>🧔🏻</span>Chet</button><button class="btn" data-choose="prowe"><span>👩🏻</span>Prowe</button><button class="btn" data-choose="view"><span>🧑🏻‍🍼</span>View · วิว</button></div></div>`;
+  $("meSeg").hidden=!!U.locked;
   $("settings").hidden=!U.showSettings; $("now").hidden=U.me==="view";
 
   /* NEXT FEED */
@@ -475,7 +468,6 @@ function renderSettings(age,today){
   const feeds=sortedFeeds(); const ph=PHASES.find(p=>p.id===PH).label; const offNow=nannyOffOn(today);
   const person=(emo,name,body)=>`<section class="person"><h4><span>${emo}</span>${name}</h4>${body}</section>`;
   $("set").innerHTML=
-    person("📱","This phone",`<div class="field"><span>I am</span><div class="seg sm">${Object.keys(PEOPLE).map(k=>`<button data-me="${k}" class="${U.me===k?"on":""}">${PEOPLE[k].n}</button>`).join("")}</div></div><div class="field"><span>Language</span><div class="seg sm"><button data-lang="en" class="${U.lang==="en"?"on":""}">EN</button><button data-lang="th" class="${U.lang==="th"?"on":""}">ไทย</button></div></div>`)+
     person(EMO.clay,"Clay",`
       <div class="field"><span>Arrival</span>${S.birth?`<div class="frow"><b>Born ${niceDate(S.birth)}</b><button class="btn quiet sm" data-calopen>${U.calOpen?"Done":"Change"}</button></div>${U.calOpen?calendar():""}`:`<div class="frow"><button class="btn primary sm" data-born>Clay is here</button></div>${calendar()}`}</div>
       <div class="field"><span>Weight · kg</span><div class="frow"><input class="num" type="number" id="weightIn" step="0.1" min="1" max="15" placeholder="kg" value="${S.weight||""}"></div></div>
@@ -514,10 +506,11 @@ U.me=lsGet("clay.me",null); U.lang=lsGet("clay.lang","en");
 if(Q.get("me")&&PEOPLE[Q.get("me")]){ U.me=Q.get("me"); U.locked=true; lsSet("clay.me",U.me); }
 if(Q.get("lang")==="th"||Q.get("lang")==="en"){ U.lang=Q.get("lang"); lsSet("clay.lang",U.lang); }
 if(Q.get("settings")) U.showSettings=true;
-if(!U.me||!PEOPLE[U.me]){ U.me="chet"; U.choose=true; }
+if(!U.me||!PEOPLE[U.me]) U.me="chet";
+if(!Q.get("lang")) U.lang=U.me==="view"?"th":"en";
 try{ for(let i=0;i<localStorage.length;i++){ const k=localStorage.key(i); if(k.startsWith("clay.log.")) L[k.slice(9)]=JSON.parse(localStorage.getItem(k)); } }catch(e){}
 document.body.addEventListener("click",e=>{ const b=e.target.closest("button"); if(!b) return; const d=b.dataset;
-  if(d.me){ U.me=d.me; lsSet("clay.me",U.me); U.scrollKey=null; render(); }
+  if(d.me){ U.me=d.me; lsSet("clay.me",U.me); U.lang=U.me==="view"?"th":"en"; lsSet("clay.lang",U.lang); U.scrollKey=null; render(); }
   else if(d.lang){ U.lang=d.lang; lsSet("clay.lang",U.lang); lsSet("clay.langSet",true); render(); }
   else if(d.day){ U.day=+d.day; render(); }
   else if(d.wk!==undefined){ if(d.wk==="0"){ U.wk=0; U.day=null; } else U.wk+=+d.wk; render(); }
@@ -528,7 +521,7 @@ document.body.addEventListener("click",e=>{ const b=e.target.closest("button"); 
   else if(d.delfeed){ U.pick=null; U.logOpen=true; removeLog(d.delfeed); }
   else if(d.ml){ U.ml=+d.ml; if(U.pick&&!U.pick.edit){ addLog("bottle",{ml:U.ml}); } else render(); }
   else if(d.min){ U.min=+d.min; if(U.pick&&!U.pick.edit){ addLog("breast",{min:U.min}); } else render(); }
-  else if(d.choose){ U.me=d.choose; lsSet("clay.me",U.me); U.choose=false; if(U.me==="view"&&!lsGet("clay.langSet",false)){ U.lang="th"; lsSet("clay.lang","th"); } lsSet("clay.langSet",true); render(); }
+
   else if(b.hasAttribute("data-pickclose")){ U.pick=null; render(); }
   else if(b.hasAttribute("data-picksave")){ const ed=U.pick.edit; const tm=($("tmIn")&&/^\d\d:\d\d$/.test($("tmIn").value))?$("tmIn").value:null;
     if(U.pick.mode==="bottle"){ const v=+($("mlIn")&&$("mlIn").value)||U.ml; U.ml=v; if(ed){ ed.ml=v; delete ed.min; ed.type="bottle"; if(tm) ed.t=tm; U.pick=null; saveDay(scheduleDate(bkkNow())); } else addLog("bottle",Object.assign({ml:v},tm?{t:tm}:{})); }
