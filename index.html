@@ -354,6 +354,8 @@ function build(dow,date){
     driver:driverOn&&nowA>=10&&nowA<19?"On duty":null, maids:dogsAway&&nowA>=10&&nowA<16?"Cleaning":null,
     view:nannyOff?"Day off":(nowA>=nS&&nowA<nE)?"On duty":"Off"};
   I.sort((a,b)=>a.h-b.h);
+  /* merge back-to-back rows that say the same thing (e.g. Work 12–14 + Work 14–17 → Work 12–17) */
+  ["chet","prowe","nanny"].forEach(col=>{ const rows=I.filter(x=>x.col===col&&!x.mark); for(let i=rows.length-1;i>0;i--){ const a=rows[i-1], b=rows[i]; if(a.label===b.label&&a.sub===b.sub&&Math.abs(a.h+a.dur-b.h)<0.05){ a.dur+=b.dur; I.splice(I.indexOf(b),1); } } });
   return {items:I,adj,feeds,gap,learned,shift,sleeping,sw,clayNow,CL,S2};
 }
 
