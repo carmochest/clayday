@@ -83,11 +83,12 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline
 .feedlog .arr{width:26px;height:26px;border-radius:50%;background:var(--panel-solid);display:grid;place-items:center;color:var(--ink-2);font-size:14px;transition:transform .25s var(--ease)}
 .feedlog[open] .arr{transform:rotate(180deg)}
 .feedlog>div{margin-top:8px;border-top:1px solid var(--line);padding-top:4px}
-.fl{display:grid;grid-template-columns:50px 1fr auto auto;column-gap:2px;align-items:center;gap:8px;padding:9px 0;font-size:14.5px;border-bottom:1px solid var(--line)}
+.fl{display:grid;grid-template-columns:46px 1fr auto auto;column-gap:0;align-items:center;gap:8px;padding:9px 0;font-size:14.5px;border-bottom:1px solid var(--line)}
 .fl:last-child{border-bottom:0}
 .fl .t{font-variant-numeric:tabular-nums;color:var(--ink-2);font-weight:600}
-.fl .who{display:block;color:var(--ink-3);font-size:11.5px;margin-top:1px}
-.fl button{color:var(--ink-2);width:44px;height:44px;border-radius:50%;display:grid;place-items:center;text-align:center;font-size:19px;margin:-4px 0}
+.fl .who{color:var(--ink-3);font-size:12px;white-space:nowrap}
+.fl>span:nth-child(2){min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fl button{color:var(--ink-2);width:38px;height:44px;border-radius:50%;display:grid;place-items:center;text-align:center;font-size:19px;margin:-4px 0}
 .fl button:active{background:var(--chip-2)}
 .fl .tot{grid-column:1/-1;display:flex;justify-content:space-between;color:var(--ink-2);font-size:12.5px;padding-top:6px}
 
@@ -113,8 +114,8 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline
 .list::-webkit-scrollbar{display:none}
 .it{display:grid;grid-template-columns:54px 1fr;align-items:baseline;gap:8px;padding:10px 12px;border-radius:14px;font-size:15.5px}
 .it .tm{font-variant-numeric:tabular-nums;color:var(--ink-2);font-size:13.5px;font-weight:600}
-.it .lb{font-weight:600;min-width:0}
-.it .lb small{display:block;font-weight:400;color:var(--ink-2);font-size:13px;margin-top:1px}
+.it .lb{font-weight:600;min-width:0;font-size:16px}
+.it .lb small{display:block;font-weight:400;color:var(--ink-3);font-size:12.5px;margin-top:2px;letter-spacing:.01em}
 .it.past{opacity:.45}
 .it.cur{background:linear-gradient(90deg,rgba(200,232,190,0) 0%,#DCF0D5 12%,#DCF0D5 88%,rgba(200,232,190,0) 100%);position:relative}
 .it.cur::before{content:"";position:absolute;left:4px;top:10px;bottom:10px;width:3px;border-radius:3px;background:#5FAE55}
@@ -126,8 +127,10 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline
 .mk .tm{font-variant-numeric:tabular-nums;font-size:12px;font-weight:600;color:var(--ink-3)}
 .mk .lb{display:flex;align-items:center;gap:7px;font-weight:600;letter-spacing:.02em}
 .mk .lb::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--ink-3);flex:none}
-.mk.feed .lb::before{background:#E9B949} .mk.maid .lb::before{background:#9C7FC4} .mk.dog .lb::before{background:#C9A25C} .mk.drv .lb::before{background:#8E8296}
-.mk.maid{background:var(--maid);color:var(--maid-i);border-radius:10px;margin:2px 6px;padding:6px 6px}
+.mk.feed .lb::before{background:#E9B949} .mk.maid .lb::before{background:#9C7FC4} .mk.dog .lb::before{background:#C9A25C} .mk.drv .lb::before{background:#7C8AA6} .mk.nanny .lb::before{background:#4FA36E} .mk.clay .lb::before{background:#B79BC0}
+.mk.maid,.mk.feed,.mk.drv,.mk.nanny{border-radius:10px;margin:2px 6px;padding:6px 6px}
+.mk.maid{background:var(--maid);color:var(--maid-i)} .mk.feed{background:#FCEFD2;color:#7A5A1E} .mk.drv{background:#E6EAF2;color:#3F4B66} .mk.nanny{background:#DDF0E3;color:#25603C}
+.mk.maid .tm,.mk.feed .tm,.mk.drv .tm,.mk.nanny .tm{color:inherit;opacity:.75}
 .mk.past{opacity:.45}
 .gapmark{display:flex;align-items:center;gap:8px;padding:2px 12px;color:var(--accent);font-size:11.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase}
 .gapmark::before,.gapmark::after{content:"";flex:1;border-top:1.5px solid var(--accent);opacity:.5}
@@ -168,6 +171,7 @@ details[open].card summary::after{content:"–"}
 .sw2 i{width:44px;height:26px;border-radius:999px;background:var(--chip-2);position:relative;display:inline-block;transition:background .2s var(--ease)}
 .sw2 i::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.2);transition:left .2s var(--ease)}
 .sw2.on i{background:var(--good)} .sw2.on i::after{left:21px}
+.hrs{display:grid;grid-template-columns:auto auto auto 1fr auto auto auto;align-items:center;gap:6px;background:var(--panel-solid);border-radius:12px;padding:6px 10px} .hrs b{font-variant-numeric:tabular-nums;font-size:15px;min-width:48px} .hrs span{color:var(--ink-3);text-align:center} .hrs .st{width:36px;height:34px;border-radius:9px;background:var(--chip);display:grid;place-items:center;font-weight:600;font-size:17px;color:var(--ink-2);text-align:center}
 input.num{width:100px;font:inherit;font-weight:600;font-size:15px;background:var(--panel-solid);border:0;border-radius:10px;padding:9px 10px;color:var(--ink)}
 .cal{background:var(--panel-solid);border-radius:14px;padding:10px;width:100%;max-width:320px}
 .cal .ch{display:flex;justify-content:space-between;align-items:center;font-weight:600;font-size:14px;padding:2px 4px 8px}
@@ -230,7 +234,7 @@ const DEFAULT_FEEDS={
 };
 const DUE="2026-11-07";
 const clone=o=>JSON.parse(JSON.stringify(o));
-const DEFAULTS={birth:null,weight:null,nannyShift:"9-19",nannyOff:"6",nannyOffFrom:null,nannyOffPrev:null,walkDays:[3,5,6],walkSlot:"8",driverDays:[1,2,3,4,5],maidDays:[1,4],exFrom:null,bjjFrom:null,snooze:{},feeds:clone(DEFAULT_FEEDS)};
+const DEFAULTS={birth:null,weight:null,nannyShift:"9-19",nannyHrs:null,driverHrs:"10:00-19:00",maidHrs:"10:00-16:00",maidDogs:true,nannyOff:"6",nannyOffFrom:null,nannyOffPrev:null,walkDays:[3,5,6],walkSlot:"8",driverDays:[1,2,3,4,5],maidDays:[1,4],exFrom:null,bjjFrom:null,snooze:{},feeds:clone(DEFAULT_FEEDS)};
 const PEOPLE={chet:{n:"Chet",col:"chet"},prowe:{n:"Prowe",col:"prowe"},view:{n:"View",col:"nanny"}};
 const EMO={clay:"👶🏻",chet:"🧔🏻",prowe:"👩🏻",dogs:"🐶",nanny:"🧑🏻‍🍼",driver:"🚗",maids:"🧹"};
 const bfEst=age=>age===null?90:age<7?45:age<14?60:age<30?75:age<60?100:120;
@@ -239,9 +243,9 @@ let S=clone(DEFAULTS), L={}, U={me:"chet",day:null,wk:0,pick:null,ml:90,min:15,c
 
 /* ---------- i18n ---------- */
 const TH=[["Feed when he wakes","ให้นมเมื่อตื่น"],["Feed · due now","ถึงเวลาให้นม"],["Dream feed","มื้อดึก"],["Support feed","ช่วยให้นม"],["Feed Clay","ให้นมเคลย์"],["Night feed","มื้อกลางคืน"],["Feed · pump","ให้นม · ปั๊มนม"],["Breastfed","นมแม่"],["Breastfeed","นมแม่"],["Bottle feed","ให้นมขวด"],["Bottle","ขวดนม"],["Breast","นมแม่"],["Clay feeds","เคลย์กินนม"],["Feeding","กำลังกินนม"],["Feed","ให้นม"],
-["Bath · wind-down","อาบน้ำ · เตรียมนอน"],["Play · tummy time","เล่น · นอนคว่ำ"],["Play with Clay","เล่นกับเคลย์"],["Nap with Clay","งีบพร้อมเคลย์"],["Clay naps","เคลย์งีบ"],["Nap","งีบ"],["Sleeping","กำลังหลับ"],["Sleep","นอน"],["Awake","ตื่น"],["Own time","เวลาส่วนตัว"],
+["Bath · wind-down","อาบน้ำ · เตรียมนอน"],["Play · tummy time","เล่น · นอนคว่ำ"],["Play with Clay","เล่นกับเคลย์"],["Nap with Clay","งีบพร้อมเคลย์"],["Clay naps","เคลย์งีบ"],["Clay sleeps","เคลย์นอน"],["fed ","กินนมเมื่อ "],["Nap","งีบ"],["Sleeping","กำลังหลับ"],["Sleep","นอน"],["Awake","ตื่น"],["Own time","เวลาส่วนตัว"],
 ["On duty","เข้างาน"],["Off duty","เลิกงาน"],["Clay sleeping","เคลย์หลับ"],["Clay feeding","เคลย์กินนม"],["Clay nap","เคลย์งีบ"],["Clay awake","เคลย์ตื่น"],["Clay bath · wind-down","เคลย์อาบน้ำ"],["Clay play · tummy time","เคลย์เล่น"],["Day off","วันหยุด"],["Off","หยุด"],["Free","ว่าง"],["Home","อยู่บ้าน"],["Maids in · cleaning · dogs to family house","แม่บ้านมา · ทำความสะอาด · พาหมาไปบ้านครอบครัว"],["Maids leave","แม่บ้านกลับ"],["Cleaning","ทำความสะอาด"],["Driver brings the dogs home","คนขับพาหมากลับบ้าน"],["Dogs home · someone brings them (driver off)","หมากลับบ้าน · ต้องมีคนไปรับ (คนขับหยุด)"],["Feed Bee & Bug · play with Clay","ให้อาหารบี บั๊ก · เล่นกับเคลย์"],["Feed Bee & Bug","ให้อาหารบี บั๊ก"],["Chet's family house","บ้านครอบครัวพ่อ"],["Prowe's family house","บ้านครอบครัวแม่"],["At family house","อยู่บ้านครอบครัว"],["Dogs at family house","หมาอยู่บ้านครอบครัว"],["Dogs home","หมากลับบ้าน"],["whole family + dogs · until 19:00","ทั้งครอบครัว + หมา · ถึง 19:00"],
-["Stroller walk","เดินเล่นรถเข็น"],["Walk Bee & Bug","พาหมาเดินเล่น"],["Walk","เดินเล่น"],["Base + yoga","ออกกำลังกาย"],["BJJ","ยิวยิตสู"],["Work","ทำงาน"],["Dinner","อาหารเย็น"],["Evening","ช่วงค่ำ"],["Awake · on duty","ตื่นเฝ้า"],["Laundry · tidy","ซักผ้า · เก็บของ"],["Up","ตื่น"],["View has Clay","วิวดูแลเคลย์"],
+["Stroller walk","เดินเล่นรถเข็น"],["Walk Bee & Bug","พาหมาเดินเล่น"],["Walk","เดินเล่น"],["Base + yoga","ออกกำลังกาย"],["BJJ","ยิวยิตสู"],["Work","ทำงาน"],["Dinner","อาหารเย็น"],["Evening","ช่วงค่ำ"],["Awake · on duty","ตื่นเฝ้า"],["Laundry · tidy","ซักผ้า · เก็บของ"],["Up","ตื่น"],["View has Clay","วิวดูแลเคลย์"],["night feed","มื้อกลางคืน"],["Clay at ","เคลย์อยู่ที่"],
 ["with Prowe","กับแม่"],["with Chet","กับพ่อ"],["feed Bee & Bug first","ให้อาหารบี บั๊กก่อน"],["Clay + dogs","เคลย์ + หมา"],["near the condo","ใกล้คอนโด"],["up if needed · wake 08:00","ตื่นถ้าจำเป็น · ตื่น 08:00"],["to 08:00","ถึง 08:00"],["00:00 – 05:00 · Chet has the bottle","00:00 – 05:00 · พ่อให้ขวด"],["Clay if he stirs","ดูเคลย์ถ้าตื่น"],["Feeding Clay","กำลังให้นมเคลย์"],["Maids in · cleaning","แม่บ้านมา · ทำความสะอาด"],["Maids leave · take Bee & Bug to the family house","แม่บ้านกลับ · พาบี บั๊กไปบ้านครอบครัว"],["at the family house","ที่บ้านครอบครัว"],["Month 1","เดือนที่ 1"],["Month 2½","เดือนที่ 2½"],["Month 2","เดือนที่ 2"],["Month 3","เดือนที่ 3"],["Months 4–6","เดือนที่ 4–6"],["Asleep","หลับ"],["Pump","ปั๊มนม"],["Support feed","ช่วยให้นม"],["· Prowe","· แม่"],["· Chet","· พ่อ"],["· View","· วิว"],["Vit D · tummy time","วิตามินดี · นอนคว่ำ"],["predicted","คาดการณ์"],["pumped milk","นมปั๊ม"],["when he wakes","เมื่อตื่น"],["due now","ถึงเวลา"],["until","ถึง"],["since","ตั้งแต่"],["in ","อีก "],[" min"," นาที"],[" h "," ชม. "],[" ml"," มล."]];
 TH.sort((a,b)=>b[0].length-a[0].length);
 const T_UI={en:{next:"Next feed",clayIs:"Clay is",awake:"Awake",sleep:"Sleeping",bottle:"🍼 Bottle",breast:"🤱 Breast",skip:"skip",now:"Now",today:"Today",of:"of",todayW:"today",feeds:(n,s)=>`Today's log · ${n} feed${n===1?"":"s"} · ${s} sleep`,log:"Log",save:"Save",edit:"Edit",cancel:"Cancel",del:"Delete",last:"last",none:"nothing more before 06:00",nothing:"Nothing logged yet today.",bf:"breastfeed",each:"each",again:v=>`${v} again`,time:"Time",ml:"ml",minutes:"min",due:"due around",born:"born today",day:"Day",clay:"Clay",chet:"Chet",prowe:"Prowe",view:"View",dogs:"Bee & Bug",driver:"Driver",maids:"Maids",yes:"Yes",later:"Not yet",days:["Sun","Mon","Tue","Wed","Thu","Fri","Sat"]},
@@ -265,9 +269,12 @@ function niceDate(iso){ return new Date(iso+"T12:00:00Z").toLocaleDateString("en
 function ageDays(date){ if(!S.birth) return null; return Math.round((new Date(date+"T12:00:00Z")-new Date(S.birth+"T12:00:00Z"))/864e5); }
 function phaseFor(date){ const a=ageDays(date); if(a===null||a<0) return "m1"; const mo=a/30.44; return mo<1?"m1":mo<1.5?"m2":mo<2?"m25":mo<3?"m3":"m46"; }
 let PH="m1"; const pi=()=>PHASES.findIndex(p=>p.id===PH), m3=()=>pi()>=3, m46=()=>pi()>=4;
-const nannyHrs=()=>S.nannyShift==="8-18"?[8,18]:[9,19];
+const hrsOf=(str,def)=>{ const m=/^(\d\d):(\d\d)-(\d\d):(\d\d)$/.exec(str||""); if(!m) return def; const a=+m[1]+m[2]/60, b=+m[3]+m[4]/60; return b>a?[a,b]:def; };
+const nannyHrs=()=>hrsOf(S.nannyHrs,S.nannyShift==="8-18"?[8,18]:[9,19]);
+const driverHrs=()=>hrsOf(S.driverHrs,[10,19]); const maidHrs=()=>hrsOf(S.maidHrs,[10,16]);
+const hm=h=>pad(Math.floor(h%24))+":"+pad(Math.round((h%1)*60));
 const nannyOffOn=date=>String(S.nannyOffFrom&&date<S.nannyOffFrom&&S.nannyOffPrev!==null?S.nannyOffPrev:S.nannyOff);
-const isDogsAway=d=>S.maidDays.includes(d);
+const isMaidDay=d=>S.maidDays.includes(d); const isDogsAway=d=>isMaidDay(d)&&S.maidDogs!==false;
 const famHouse=d=>m3()?(d===6?"Chet's family house":d===0?"Prowe's family house":null):null;
 const isWalkDay=d=>S.walkDays.includes(d);
 const sortedFeeds=()=>[...S.feeds[PH]].sort((a,b)=>toH(a.t)-toH(b.t));
@@ -283,7 +290,7 @@ function build(dow,date){
   const log=(L[date]&&L[date].entries||[]).slice().sort((a,b)=>toH(a.t)-toH(b.t));
   const I=[], adj=[]; const add=(col,h,dur,label,sub,kind)=>I.push({col,h,dur,label,sub:sub||"",kind}); const mark=(h,label,kind,cols)=>I.push({col:"all",h,dur:0,label,kind,mark:true,cols});
   const shift=age!==null&&age>=25&&sortedFeeds().some(f=>!f.off&&toH(f.t)>=24&&toH(f.t)<=28);   // nights: together in month 1, shift once the 02:00 can be a bottle
-  const fam=famHouse(dow), dogsAway=isDogsAway(dow), nannyOff=String(dow)===nannyOffOn(date), driverOn=S.driverDays.includes(dow), [nS,nE]=nannyHrs();
+  const fam=famHouse(dow), maidsIn=isMaidDay(dow), dogsAway=isDogsAway(dow), nannyOff=String(dow)===nannyOffOn(date), driverOn=S.driverDays.includes(dow), [nS,nE]=nannyHrs(), [dS,dE]=driverHrs(), [mS,mE]=maidHrs();
   const skips=new Set(log.filter(x=>x.type==="skip").map(x=>x.key));
 
   /* Clay's feeds: plan, then live prediction from the last real feed */
@@ -301,7 +308,7 @@ function build(dow,date){
   else plan.forEach(f=>feeds.push({...f}));
   feeds=feeds.filter(f=>!(f.key&&isToday&&skips.has(f.key))); feeds.sort((a,b)=>a.h-b.h);
   const raw=(L[date]&&L[date].entries)||[];   // insertion order: a toggle tapped after a feed ends that feed, even in the same minute
-  feeds.forEach(f=>{ f.dur=0.75; if(f.actual){ const i=raw.indexOf(f.actual); const nx=raw.slice(i+1).find(x=>x.type==="sleep"||x.type==="wake"); if(nx) f.dur=Math.max(0,Math.min(0.75,toH(nx.t)-f.h)); } });
+  feeds.forEach(f=>{ f.dur=0.75; if(f.actual){ f.dur=f.actual.type==="bottle"?1/3:Math.max(5,Math.min(60,f.actual.min||15))/60; const i=raw.indexOf(f.actual); const nx=raw.slice(i+1).find(x=>x.type==="sleep"||x.type==="wake"); if(nx) f.dur=Math.max(0,Math.min(f.dur,toH(nx.t)-f.h)); } });
 
   /* Clay's own timeline */
   const C=[]; feeds.forEach(f=>C.push({h:f.h,dur:f.dur,kind:"feed",f}));
@@ -317,47 +324,46 @@ function build(dow,date){
   feeds.forEach(f=>{ f.by=f.actual&&PEOPLE[f.actual.who]?PEOPLE[f.actual.who].col:(dutyAt(f.h)?"nanny":(shift&&f.h>=25&&f.h<=28)?"chet":"prowe"); });
   const NM={chet:"Chet",prowe:"Prowe",nanny:"View"};
   feeds.forEach(f=>{ const lbl=f.actual?(f.actual.type==="breast"?"Breastfed":"Bottle · "+(f.actual.ml||0)+" ml"):(f.whenWakes?"Feed when he wakes":f.due?"Feed · due now":m46()&&Math.abs(f.h%24-23)<0.5?"Dream feed":"Clay feeds"); mark(f.h,lbl+" · "+NM[f.by],"feed",["chet","prowe","nanny"].filter(c=>c!==f.by)); });
-  if(!fam){ mark(11,"Feed Bee & Bug","dog"); mark(18,"Feed Bee & Bug"+(dogsAway?" · at the family house":""),"dog"); }
-  if(dogsAway){ mark(10,"Maids in · cleaning","maid"); mark(16,"Maids leave · take Bee & Bug to the family house","maid"); mark(19,driverOn?"Driver brings the dogs home":"Dogs home · someone brings them (driver off)","drv"); if(!driverOn) adj.push({k:"warn",key:"drv"+dow,t:`Driver is off ${DAYL[dow]} but the dogs are at the family house — someone else brings them home at 19:00.`}); }
-  if(fam) mark(11,fam+" · whole family + dogs · until 19:00","dog");
+  if(!fam){ mark(11,"Feed Bee & Bug","dog",["prowe"]); if(!dogsAway) mark(18,"Feed Bee & Bug","dog",["prowe"]); else mark(18,"Feed Bee & Bug · at the family house","dog",["chet","prowe"]); }
+  if(maidsIn){ mark(mS,"Maids in · cleaning · until "+hm(mE),"maid",["chet","prowe"]); mark(mE,dogsAway?"Maids leave · take Bee & Bug to the family house":"Maids leave","maid",["chet","prowe"]); }
+  if(dogsAway){ mark(19,driverOn?"Driver brings the dogs home":"Dogs home · someone brings them (driver off)","drv",["chet","prowe"]); if(!driverOn) adj.push({k:"warn",key:"drv"+dow,t:`Driver is off ${DAYL[dow]} but the dogs are at the family house — someone else brings them home at 19:00.`}); }
+  if(driverOn){ mark(dS,"Driver on duty · until "+hm(dE),"drv",["chet","prowe"]); if(!dogsAway) mark(dE,"Driver leaves","drv",["chet","prowe"]); }
+  if(fam) mark(11,"Clay at "+fam+" · 11:00 – 19:00","dog",["nanny"]);
+  if(nannyOff) mark(nS,"View's day off","nanny",["chet","prowe"]); else { mark(nS,"View on duty · until "+hm(nE),"nanny",["chet","prowe"]); mark(nE,"View leaves","nanny",["chet","prowe"]); }
 
   /* walk / exercise */
   let walkH=+S.walkSlot, walk=isWalkDay(dow); if(walk&&shift&&walkH===8) walkH=17; if(walk&&m3()&&feeds.some(f=>Math.abs(f.h-walkH)<0.5)) walkH=Math.max(walkH,feeds.filter(f=>Math.abs(f.h-walkH)<0.5)[0].h+0.75);
   const exDay=exOn(date)&&(dow===1||dow===3||dow===5), bjjDay=bjjOn(date)&&(dow===2||dow===4);
-  if(exDay&&nannyOff) adj.push({k:"warn",key:"exoff"+dow,t:"Base + yoga day but View is off — no cover for Clay 12–14."});
-  if(bjjDay&&nannyOff) adj.push({k:"warn",key:"bjjoff"+dow,t:"BJJ day but View is off — Clay needs cover 12–14."});
+  if(exDay&&nannyOff) adj.push({k:"warn",key:"exoff"+dow,t:"Base + yoga day but View is off — no cover for Clay 12:00 – 14:00."});
+  if(bjjDay&&nannyOff) adj.push({k:"warn",key:"bjjoff"+dow,t:"BJJ day but View is off — Clay needs cover 12:00 – 14:00."});
 
-  /* Chet */
-  if(!shift){ if(!(walk&&walkH===8)) add("chet",8,1,"Up · Support feed","","care"); C.filter(c=>c.kind==="nap"&&c.h<11).forEach(c=>add("chet",c.h,c.dur,"Nap with Clay","with Prowe","rest")); } else add("chet",27,7.5,"Sleep","03:00 – 10:30","rest");
-  if(!fam) add("chet",11,1,"Play with Clay","feed Bee & Bug first","care");
+  /* Chet: sleep · walk / feed Bee & Bug · support feed · BJJ / Base + yoga */
+  const chetAsleep=h=>shift?((h>=27&&h<34.5)||(h>=3&&h<10.5)):(h>=24&&h<32); const chetBusy=h=>I.some(x=>x.col==="chet"&&!x.mark&&x.kind!=="rest"&&h<x.h+x.dur&&h+0.75>x.h);
+  if(shift) add("chet",27,7.5,"Sleep","03:00 – 10:30","rest"); else add("chet",24,8,"Sleep","up for support feeds · wake 08:00","rest");
+  if(!fam){ add("chet",11,0.5,"Feed Bee & Bug","","care"); if(!dogsAway) add("chet",18,0.5,"Feed Bee & Bug","","care"); }
   if(dow>=1&&dow<=5&&!fam){ if(exDay&&!nannyOff) add("chet",12,2,"Base + yoga","with Prowe · View has Clay","act"); else if(bjjDay&&!nannyOff) add("chet",12,2,"BJJ","View has Clay","act"); }
   if(fam) add("chet",11,8,fam,"whole family + dogs","act");
   if(walk) add("chet",walkH,1,m3()?"Stroller walk":"Walk Bee & Bug",m3()?"Clay + dogs":"near the condo","act");
-  if(m46()&&!fam) add("chet",15,1,"Play with Clay","with Prowe","care");
+  feeds.forEach(f=>{ if(f.by==="chet") add("chet",f.h,f.dur,f.actual?"Feeding Clay":(shift&&f.h>=25&&f.h<=28?"Bottle feed":"Feed Clay"),shift&&f.h>=25&&f.h<=28&&!f.actual?"pumped milk":"","care"); else if(f.by==="prowe"&&!f.actual&&!(shift&&chetAsleep(f.h))&&!chetBusy(f.h)) add("chet",f.h,f.dur,"Support feed",f.h>=24||f.h<7?"night feed":"","care"); });
+  if(shift) add("chet",23.75,2.25,"Awake · on duty","Clay if he stirs","care");
 
-  feeds.forEach(f=>{ if(f.by==="chet") add("chet",f.h,f.dur,f.actual?"Feeding Clay":(shift&&f.h>=25&&f.h<=28?"Bottle feed":"Feed Clay"),shift&&f.h>=25&&f.h<=28&&!f.actual?"pumped milk":"","care"); else if(f.by==="prowe"&&f.h>=19.5&&f.h<=23.6&&!f.actual) add("chet",f.h,0.75,"Support feed","","care"); });
-  if(shift){ add("chet",23.75,2.25,"Awake · on duty","Clay if he stirs","care"); } else add("chet",24,8,"Sleep","up if needed · wake 08:00","rest");
-
-  /* Prowe */
-  C.filter(c=>c.kind==="nap"&&c.h<11).forEach(c=>add("prowe",c.h,c.dur,"Nap with Clay","with Chet","rest"));
-  feeds.forEach(f=>{ if(f.by==="prowe") add("prowe",f.h,f.dur,f.actual?"Feeding Clay":(f.h<9?"Up · Feed":"Feed"),"","care"); else if(f.by==="nanny"&&!f.actual&&f.h>=10&&f.h<=20.5) add("prowe",f.h,0.5,"Pump","","care"); });
-  if(exDay&&!nannyOff) add("prowe",12,2,"Base + yoga","with Chet · View has Clay","act");
-  if(fam) add("prowe",11,8,fam,"","act");
-  if(walk&&m3()) add("prowe",walkH,1,"Stroller walk","Clay + dogs","act");
-  if(m46()) add("prowe",15,1,"Play with Clay","with Chet","care");
-
+  /* Prowe: feed / pump · free · sleep */
+  feeds.forEach(f=>{ if(f.by==="prowe") add("prowe",f.h,f.dur,f.actual?"Feeding Clay":"Feed",f.h>=24||f.h<7?"night feed":"","care"); else if(f.by==="nanny"&&!f.actual&&f.h>=10&&f.h<=20.5) add("prowe",f.h,0.5,"Pump","","care"); else if(f.by==="chet"&&!f.actual&&!(f.h>=24&&f.h<29)) add("prowe",f.h,0.5,"Pump","","care"); });
+  if(exDay&&!nannyOff&&!fam) add("prowe",12,2,"Base + yoga","with Chet · View has Clay","act");
+  if(fam) add("prowe",11,8,fam,"whole family + dogs","act");
   if(shift){ if(feeds.some(f=>f.h>=28.5&&f.h<31)){ add("prowe",24,5,"Sleep","00:00 – 05:00 · Chet has the bottle","rest"); add("prowe",29.75,2.25,"Sleep","to 08:00","rest"); } else add("prowe",24,8,"Sleep","Chet has the 02:00 bottle · wake 08:00","rest"); }
-  else add("prowe",24,8,"Sleep","up if needed · wake 08:00","rest");
+  else add("prowe",24,8,"Sleep","up for feeds · wake 08:00","rest");
 
   /* View */
   if(nannyOff) add("nanny",10,6,"Day off","","rest");
   else { add("nanny",nS,0.5,"On duty","until "+fmt(nE),"duty");
     C.forEach(c=>{ if(c.kind==="feed"){ if(c.f.by==="nanny") add("nanny",c.h,c.dur,c.f.actual?"Feeding Clay":"Feed Clay",c.f.whenWakes?"when he wakes":c.f.due?"due now":"","care"); return; } if(c.h<nS||c.h>=nE) return; if(c.kind==="nap"){} else if(c.kind==="bath") add("nanny",c.h,c.dur,"Bath · wind-down","","care"); else if(c.kind==="play") add("nanny",c.h,c.dur,"Play · tummy time","","care"); });
-    if(exDay||bjjDay){ I.filter(x=>x.col==="nanny"&&x.kind==="rest").forEach(x=>{ if(x.h<14&&x.h+x.dur>12){ if(x.h<12){ const end=x.h+x.dur; x.dur=12-x.h; if(end>14) add("nanny",14,end-14,x.label,x.sub,"rest"); } else if(x.h+x.dur<=14){ x.dur=0; } else { x.dur=x.h+x.dur-14; x.h=14; } } }); add("nanny",12,2,"View has Clay",(exDay?"Base + yoga":"BJJ")+" 12–14","care"); } }
+    if(exDay||bjjDay){ I.filter(x=>x.col==="nanny"&&x.kind==="rest").forEach(x=>{ if(x.h<14&&x.h+x.dur>12){ if(x.h<12){ const end=x.h+x.dur; x.dur=12-x.h; if(end>14) add("nanny",14,end-14,x.label,x.sub,"rest"); } else if(x.h+x.dur<=14){ x.dur=0; } else { x.dur=x.h+x.dur-14; x.h=14; } } }); add("nanny",12,2,"View has Clay",(exDay?"Base + yoga":"BJJ")+" 12:00 – 14:00","care"); } }
 
   if(isToday&&sw&&sw.type==="wake"){ const w=toH(sw.t); I.forEach(it=>{ if(!it.mark&&it.label==="Nap with Clay"&&w>=it.h&&w<it.h+it.dur) it.dur=Math.max(0,w-it.h); }); C.forEach(c=>{ if((c.kind==="nap"||c.kind==="sleep")&&w>=c.h&&w<c.h+c.dur) c.dur=Math.max(0,w-c.h); }); }
-  const S2={dogs:dogsAway&&nowA>=16&&nowA<19?"Dogs at family house":fam&&nowA>=11&&nowA<19?"At family house":walk&&nowA>=walkH&&nowA<walkH+1?"Walk":(nowA>=20||nowA<8)?"Sleep":"Home",
-    driver:driverOn&&nowA>=10&&nowA<19?"On duty":null, maids:dogsAway&&nowA>=10&&nowA<16?"Cleaning":null,
+  C.forEach(c=>{ if(c.kind==="feed"||c.dur<=0.25) return; if(c.kind==="nap"||c.kind==="sleep") mark(c.h,(c.kind==="nap"?"Clay naps":"Clay sleeps")+" · until "+hm(c.h+c.dur),"clay"); else mark(c.h,(c.kind==="bath"?"Clay bath · wind-down":"Clay play · tummy time"),"clay",["chet","prowe"]); });
+  const S2={dogs:dogsAway&&nowA>=mE&&nowA<19?"Dogs at family house":fam&&nowA>=11&&nowA<19?"At family house":walk&&nowA>=walkH&&nowA<walkH+1?"Walk":(nowA>=20||nowA<8)?"Sleep":"Home",
+    driver:driverOn&&nowA>=dS&&nowA<dE?"On duty":null, maids:maidsIn&&nowA>=mS&&nowA<mE?"Cleaning":null,
     view:nannyOff?"Day off":(nowA>=nS&&nowA<nE)?"On duty":"Off"};
   /* a walk trumps the nap block it overlaps */
   ["chet","prowe"].forEach(col=>{ const w=I.find(x=>x.col===col&&x.kind==="act"&&/walk/i.test(x.label)); if(!w) return; I.filter(x=>x.col===col&&x.label==="Nap with Clay"&&x.h<w.h+w.dur&&x.h+x.dur>w.h).forEach(n=>{ const end=n.h+n.dur; if(n.h>=w.h){ n.h=w.h+w.dur; n.dur=Math.max(0,end-n.h); } else n.dur=w.h-n.h; }); });
@@ -371,8 +377,8 @@ function build(dow,date){
 /* ---------- suggestions ---------- */
 function suggestions(today,age){
   const out=[]; const snoozed=k=>S.snooze&&S.snooze[k]&&today<S.snooze[k];
-  if(age!==null&&age>=21&&!S.exFrom&&!snoozed("ex")) out.push({key:"ex",t:"Clay is 3 weeks old — bring Base + yoga back for you and Prowe, Mon · Wed · Fri 12–14 (View has Clay)?",yes:()=>{ S.exFrom=today; saveSettings(); toast("Base + yoga is on the plan"); }});
-  if(age!==null&&age>=42&&!S.bjjFrom&&!snoozed("bjj")) out.push({key:"bjj",t:"Clay is 6 weeks old — restart BJJ, Tue · Thu 12–14 (View has Clay)?",yes:()=>{ S.bjjFrom=today; saveSettings(); toast("BJJ is on the plan"); }});
+  if(age!==null&&age>=21&&!S.exFrom&&!snoozed("ex")) out.push({key:"ex",t:"Clay is 3 weeks old — bring Base + yoga back for you and Prowe, Mon · Wed · Fri 12:00 – 14:00 (View has Clay)?",yes:()=>{ S.exFrom=today; saveSettings(); toast("Base + yoga is on the plan"); }});
+  if(age!==null&&age>=42&&!S.bjjFrom&&!snoozed("bjj")) out.push({key:"bjj",t:"Clay is 6 weeks old — restart BJJ, Tue · Thu 12:00 – 14:00 (View has Clay)?",yes:()=>{ S.bjjFrom=today; saveSettings(); toast("BJJ is on the plan"); }});
   const dates=Object.keys(L).sort().slice(-14); const nights=[]; dates.forEach(d=>{ const fs=(L[d].entries||[]).filter(isFeed).map(x=>toH(x.t)); if(fs.length) nights.push(fs.filter(h=>h>=24&&h<=29.5).length); });
   if(nights.length>=5&&nights.reduce((a,b)=>a+b,0)/nights.length<0.5&&pi()<3&&S.feeds[PH].some(x=>x.t==="02:00"&&!x.off)&&!snoozed("n02")) out.push({key:"n02",t:"Hardly any night feeds lately — turn the 02:00 feed off?",yes:()=>{ const f=S.feeds[PH].find(x=>x.t==="02:00"); if(f){ f.off=true; saveSettings(); } }});
   return out;
@@ -424,15 +430,15 @@ function render(){
     <div class="intake"><div class="l"><span><b>~${ml} ${ui("ml")}</b> ${ui("of")} ${tg} ${ui("todayW")}${bf?` · ${bf} ${ui("bf")} ≈ ${bfml} ${ui("ml")} ${ui("each")}`:""}</span><span>${pc}%</span></div><div class="bar"><i style="width:${pc}%"></i></div></div>
     ${(()=>{ const sm=sleepMin(tlog,nowA), [lo,hi]=sleepGuide(age), spc=Math.min(100,Math.round(sm/((lo+hi)/2*60)*100)); return `<div class="intake sl"><div class="l"><span>😴 <b>${sleepTotal(tlog,nowA)}</b> ${U.lang==="th"?"นอนวันนี้ · แนะนำ":"sleep today · guide"} ${lo}–${hi} ${U.lang==="th"?"ชม.":"h"}</span><span>${spc}%</span></div><div class="bar"><i style="width:${spc}%"></i></div></div>`; })()}
     <details class="feedlog" ${U.logOpen?"open":""} id="feedlog"><summary><div class="logbtn"><span>${ui("feeds")(real.length,sleepTotal(tlog,nowA))}</span></div></summary><div>
-      ${tlog.filter(x=>isFeed(x)||x.type==="sleep"||x.type==="wake").sort((a,b)=>toH(a.t)-toH(b.t)).map(x=>isFeed(x)?`<div class="fl"><span class="t">${x.t}</span><span>${x.type==="breast"?"🤱 "+tr("Breastfeed")+(x.min?" · "+x.min+" "+ui("minutes"):""):"🍼 "+tr("Bottle")+" · "+(x.ml||0)+" "+ui("ml")}<span class="who">${U.lang==="th"?"โดย":"by"} ${PEOPLE[x.who]?ui(x.who):"🏠"}</span></span><button data-editfeed="${x.id}" title="${ui("edit")}">✎</button><button data-delfeed="${x.id}" title="${ui("del")}">×</button></div>`
-        :`<div class="fl"><span class="t">${x.t}</span><span>${x.type==="sleep"?"😴 "+tr("Asleep"):"👀 "+tr("Awake")}<span class="who">${U.lang==="th"?"โดย":"by"} ${PEOPLE[x.who]?ui(x.who):"🏠"}</span></span><button data-editfeed="${x.id}" title="${ui("edit")}">✎</button><button data-delfeed="${x.id}" title="${ui("del")}">×</button></div>`).join("")||`<p class="hint" style="padding:6px 0">${ui("nothing")}</p>`}
+      ${tlog.filter(x=>isFeed(x)||x.type==="sleep"||x.type==="wake").sort((a,b)=>toH(a.t)-toH(b.t)).map(x=>isFeed(x)?`<div class="fl"><span class="t">${x.t}</span><span>${x.type==="breast"?"🤱 "+tr("Breast")+(x.min?" · "+x.min+" "+ui("minutes"):""):"🍼 "+tr("Bottle")+" · "+(x.ml||0)+" "+ui("ml")}<span class="who"> · ${U.lang==="th"?"โดย":"by"} ${PEOPLE[x.who]?ui(x.who):"🏠"}</span></span><button data-editfeed="${x.id}" title="${ui("edit")}">✎</button><button data-delfeed="${x.id}" title="${ui("del")}">×</button></div>`
+        :`<div class="fl"><span class="t">${x.t}</span><span>${x.type==="sleep"?"😴 "+tr("Asleep"):"👀 "+tr("Awake")}<span class="who"> · ${U.lang==="th"?"โดย":"by"} ${PEOPLE[x.who]?ui(x.who):"🏠"}</span></span><button data-editfeed="${x.id}" title="${ui("edit")}">✎</button><button data-delfeed="${x.id}" title="${ui("del")}">×</button></div>`).join("")||`<p class="hint" style="padding:6px 0">${ui("nothing")}</p>`}
     </div></details>`
   :`<div class="lab">${U.lang==="th"?"ก่อนเคลย์เกิด":"Before Clay arrives"}</div><div class="big" style="font-size:34px">${niceDate(DUE)}</div><div class="sub">${U.lang==="th"?"แตะเมื่อเคลย์เกิดแล้ว":"tap the button the moment he's here"}</div><div class="acts"><button class="btn primary big full" data-born>${U.lang==="th"?"เคลย์เกิดแล้ว":"Clay is here"}</button></div>`;
 
   /* NOW */
   const at=col=>T.items.filter(i=>i.col===col&&!i.mark&&nowA>=i.h&&nowA<i.h+i.dur).sort((a,b)=>b.h-a.h||(a.kind==="rest"?1:-1))[0];
   const row=(id,name,st,sub,sec)=>`<div class="row${sec?" sec":""}"><span class="e">${EMO[id]}</span><span class="n">${name}</span><span class="s">${tr(st)}${sub?`<small>${tr(sub)}</small>`:""}</span></div>`;
-  let clayS="Free", claySub=""; if(S.birth){ if(sleeping){ clayS="Sleeping"; claySub="since "+sw.t; } else if(T.clayNow){ clayS=T.clayNow.kind==="feed"?(T.clayNow.f.actual?"Feeding":"Feed"):T.CL[T.clayNow.kind]; if(sw&&sw.type==="wake"&&(T.clayNow.kind==="nap"||T.clayNow.kind==="sleep")){ clayS="Awake"; claySub="since "+sw.t; } } }
+  let clayS="Free", claySub=""; if(S.birth){ const lastF=real[real.length-1]; if(sleeping){ clayS="Sleeping"; claySub="since "+sw.t; } else if(T.clayNow&&T.clayNow.kind==="feed"&&T.clayNow.f.actual){ clayS="Feeding"; claySub="since "+T.clayNow.f.actual.t; } else { clayS="Awake"; claySub=lastF?"fed "+lastF.t:(sw?"since "+sw.t:""); } }
   const cur=c=>{ const i=at(c); return i?i.label.replace(/^Up · /,""):"Free"; };
   const vS=T.S2.view==="Day off"?"Day off":T.S2.view==="On duty"?"On duty":"Off duty"; const vSub=T.S2.view==="On duty"&&S.birth?(sleeping?"Clay sleeping":"Clay "+clayS.toLowerCase()):"";
   $("now").innerHTML=`<h2>${ui("now")}</h2><div class="rows">${row("clay",ui("clay"),clayS,claySub)}${row("chet",ui("chet"),cur("chet"))}${row("prowe",ui("prowe"),cur("prowe"))}${row("dogs",ui("dogs"),T.S2.dogs)}${row("nanny",ui("view"),vS,vSub)}${T.S2.driver?row("driver",ui("driver"),T.S2.driver,"",true):""}${T.S2.maids?row("maids",ui("maids"),T.S2.maids,"",true):""}</div>`;
@@ -447,7 +453,7 @@ function render(){
   $("week").innerHTML=[1,2,3,4,5,6,0].map(d=>{ const dd=dateOfDow(d,U.wk); return `<button class="wd ${dd===date?"on":""} ${dd===today?"today":""}" data-day="${d}">${ui("days")[d]}<b>${+dd.slice(8)}</b></button>`; }).join("");
   $("agTitle").textContent=(isToday?ui("today"):(U.lang==="th"?"วัน"+ui("days")[dow]:DAYL[dow])+" "+niceDate(date))+" · "+ui(U.me);
   const mine=R.items.filter(i=>i.col===me.col);
-  const items=R.items.filter(i=>i.col===me.col||(i.mark&&(!i.cols||i.cols.includes(me.col))&&!(i.kind==="feed"&&mine.some(m=>Math.abs(m.h-i.h)<0.1)))).sort((a,b)=>a.h-b.h||(a.mark?1:-1));
+  const items=R.items.filter(i=>i.col===me.col||(i.mark&&(!i.cols||i.cols.includes(me.col))&&!(i.kind==="feed"&&mine.some(m=>Math.abs(m.h-i.h)<0.1&&/^(Feed|Feeding Clay|Feed Clay|Support feed|Bottle feed)$/.test(m.label))))).sort((a,b)=>a.h-b.h||(a.mark?1:-1));
   let html="", marked=false; const curIdx=isToday?items.findIndex(i=>!i.mark&&nowA>=i.h&&nowA<i.h+i.dur):-1; const nextIdx=isToday&&curIdx<0?items.findIndex(i=>!i.mark&&i.h>nowA):-1;
   items.forEach((i,idx)=>{ const past=isToday&&(i.mark?i.h<nowA-0.05:i.h+i.dur<=nowA);
     if(isToday&&!marked&&i.h>nowA){ html+=`<div class="gapmark">${ui("now")} · ${fmt(nowA)}</div>`; marked=true; }
@@ -465,6 +471,7 @@ function calendar(){ const sel=S.birth||DUE; const view=U.cal||sel.slice(0,7); c
   let g=["M","T","W","T","F","S","S"].map(d=>`<span>${d}</span>`).join(""); for(let i=0;i<startDow;i++) g+="<span></span>";
   for(let d=1;d<=dim;d++){ const iso=`${y}-${pad(m)}-${pad(d)}`; g+=`<button data-date="${iso}" class="${iso===sel?"on":""} ${iso>today?"dim":""}">${d}</button>`; }
   return `<div class="cal"><div class="ch"><button data-cal="-1">‹</button><span>${MONTHS[m-1]} ${y}</span><button data-cal="1">›</button></div><div class="g">${g}</div></div>`; }
+const hrsField=(k,[a,b])=>`<div class="hrs"><b>${hm(a)}</b><button class="st" data-hnudge="${k}:0:-30" aria-label="Start 30 minutes earlier">−</button><button class="st" data-hnudge="${k}:0:30" aria-label="Start 30 minutes later">+</button><span>–</span><b>${hm(b)}</b><button class="st" data-hnudge="${k}:1:-30" aria-label="End 30 minutes earlier">−</button><button class="st" data-hnudge="${k}:1:30" aria-label="End 30 minutes later">+</button></div>`;
 const dayPick=(attr,sel,offStyle)=>`<div class="days">${[1,2,3,4,5,6,0].map(d=>`<button data-${attr}="${d}" class="${sel(d)?(offStyle?"off":"on"):""}" title="${DAYL[d]}">${DAYS[d][0]}</button>`).join("")}</div>`;
 function renderSettings(age,today){
   const feeds=sortedFeeds(); const ph=PHASES.find(p=>p.id===PH).label; const offNow=nannyOffOn(today);
@@ -476,15 +483,16 @@ function renderSettings(age,today){
       <div class="field"><span>Feed slots · ${ph}</span><div class="feedrows">${feeds.map(f=>{ const idx=S.feeds[PH].indexOf(f); return `<div class="fr ${f.off?"offrow":""}"><b>${f.t}</b><button class="st" data-nudge="${idx}:-15" aria-label="15 minutes earlier">−</button><button class="st" data-nudge="${idx}:15" aria-label="15 minutes later">+</button><span></span><button class="sw ${f.off?"":"on"}" data-feedon="${idx}" role="switch" aria-checked="${!f.off}" aria-label="Feed on or off"></button><button class="x" data-feeddel="${idx}" aria-label="Remove">×</button></div>`; }).join("")}</div>
         <div class="frow"><button class="btn sm" data-addfeed>+ Add slot</button></div></div>`)+
     person(EMO.chet,"Chet",`
-      <div class="frow"><button class="sw2 ${S.bjjFrom?"on":""}" data-toggle="bjjFrom"><i></i>BJJ · Tue & Thu 12–14</button></div>
+      <div class="frow"><button class="sw2 ${S.bjjFrom?"on":""}" data-toggle="bjjFrom"><i></i>BJJ · Tue & Thu 12:00 – 14:00</button></div>
       <div class="field"><span>Dog walks</span>${dayPick("wd",d=>S.walkDays.includes(d))}<div class="seg sm" data-set="walkSlot"><button data-v="8" class="${S.walkSlot==="8"?"on":""}">08:00</button><button data-v="17" class="${S.walkSlot==="17"?"on":""}">17:00</button></div></div>`)+
     person("🧔🏻👩🏻","Chet & Prowe",`
-      <div class="frow"><button class="sw2 ${S.exFrom?"on":""}" data-toggle="exFrom"><i></i>Base + yoga · Mon Wed Fri 12–14</button></div>`)+
+      <div class="frow"><button class="sw2 ${S.exFrom?"on":""}" data-toggle="exFrom"><i></i>Base + yoga · Mon Wed Fri 12:00 – 14:00</button></div>`)+
     person(EMO.nanny,"View",`
-      <div class="field"><span>Shift</span><div class="seg sm" data-set="nannyShift"><button data-v="9-19" class="${S.nannyShift==="9-19"?"on":""}">09 – 19</button><button data-v="8-18" class="${S.nannyShift==="8-18"?"on":""}">08 – 18</button></div></div>
+      <div class="field"><span>Hours</span>${hrsField("nannyHrs",nannyHrs())}</div>
       <div class="field"><span>Day off</span>${dayPick("noff",d=>String(d)===offNow,true)}</div>`)+
-    person(EMO.driver,"Driver",`<div class="field"><span>Days · 10 – 19</span>${dayPick("dd",d=>S.driverDays.includes(d))}</div>`)+
-    person(EMO.maids,"Maids",`<div class="field"><span>Days · 10 – 16</span>${dayPick("md",d=>S.maidDays.includes(d))}</div>`)+
+    person(EMO.driver,"Driver",`<div class="field"><span>Days</span>${dayPick("dd",d=>S.driverDays.includes(d))}</div><div class="field"><span>Hours</span>${hrsField("driverHrs",driverHrs())}</div>`)+
+    person(EMO.maids,"Maids",`<div class="field"><span>Days</span>${dayPick("md",d=>S.maidDays.includes(d))}</div><div class="field"><span>Hours</span>${hrsField("maidHrs",maidHrs())}</div>
+      <div class="frow"><button class="sw2 ${S.maidDogs!==false?"on":""}" data-toggle="maidDogs"><i></i>Take Bee & Bug to the family house · run & shower</button></div><p class="hint">Off = maids still come, dogs stay home (no 19:00 driver run).</p>`)+
     `<div class="frow" style="padding:4px 4px 0"><button class="btn quiet sm" data-reset>Reset to defaults</button></div>`;
 }
 
@@ -539,13 +547,15 @@ document.body.addEventListener("click",e=>{ const b=e.target.closest("button"); 
   else if(d.feeddel!==undefined){ S.feeds[PH].splice(+d.feeddel,1); saveSettings(); }
   else if(b.hasAttribute("data-addfeed")){ const have=new Set(S.feeds[PH].map(f=>f.t)); let t=12; while(have.has(pad(t%24)+":00")&&t<36) t++; S.feeds[PH].push({t:pad(t%24)+":00"}); saveSettings(); }
   else if(d.noff){ const today=scheduleDate(bkkNow()); if(String(S.nannyOff)!==d.noff){ S.nannyOffPrev=nannyOffOn(today); S.nannyOff=d.noff; S.nannyOffFrom=today; saveSettings(); toast("View's day off: "+DAYL[+d.noff]+" from now on"); } }
-  else if(d.toggle){ const k=d.toggle; S[k]=S[k]?null:scheduleDate(bkkNow()); saveSettings(); }
+  else if(d.toggle){ const k=d.toggle; if(k==="maidDogs") S.maidDogs=S.maidDogs===false; else S[k]=S[k]?null:scheduleDate(bkkNow()); saveSettings(); }
   else if(d.wd){ const x=+d.wd; S.walkDays=S.walkDays.includes(x)?S.walkDays.filter(y=>y!==x):[...S.walkDays,x]; saveSettings(); }
+  else if(d.hnudge){ const [k,i,dm]=d.hnudge.split(":"); const cur=k==="nannyHrs"?nannyHrs():k==="driverHrs"?driverHrs():maidHrs(); const v=[cur[0],cur[1]]; v[+i]=Math.max(0,Math.min(23.5,v[+i]+(+dm)/60)); if(v[1]-v[0]<1){ toast("Keep at least 1 hour"); return; } S[k]=hm(v[0])+"-"+hm(v[1]); saveSettings(); }
   else if(d.dd){ const x=+d.dd; S.driverDays=S.driverDays.includes(x)?S.driverDays.filter(y=>y!==x):[...S.driverDays,x]; saveSettings(); }
   else if(d.md){ const x=+d.md; S.maidDays=S.maidDays.includes(x)?S.maidDays.filter(y=>y!==x):[...S.maidDays,x]; saveSettings(); }
   else if(d.v&&b.closest(".seg[data-set]")){ S[b.closest(".seg[data-set]").dataset.set]=d.v; saveSettings(); }
   else if(b.hasAttribute("data-reset")){ const birth=S.birth, w=S.weight; S=clone(DEFAULTS); S.birth=birth; S.weight=w; saveSettings(); toast("Back to defaults"); } });
-document.body.addEventListener("change",e=>{ if(e.target.id==="weightIn"){ S.weight=+e.target.value||null; saveSettings(); } });
+document.body.addEventListener("change",e=>{ if(e.target.id==="weightIn"){ S.weight=+e.target.value||null; saveSettings(); }
+ });
 document.body.addEventListener("input",e=>{ if(e.target.id==="mlIn") U.ml=+e.target.value||U.ml; if(e.target.id==="minIn") U.min=+e.target.value||U.min; });
 $("settings").addEventListener("toggle",()=>{ if(!$("settings").open) U.calOpen=false; });
 
