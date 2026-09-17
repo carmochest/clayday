@@ -413,7 +413,7 @@ function render(){
 
   /* NOW */
   const at=col=>T.items.filter(i=>i.col===col&&!i.mark&&nowA>=i.h&&nowA<i.h+i.dur).sort((a,b)=>b.h-a.h||(a.kind==="rest"?1:-1))[0];
-  const row=(id,name,st,sub,sec)=>`<div class="row${sec?" sec":""}"><span class="e">${EMO[id]}</span><span class="n">${name}</span><span class="s">${id==="clay"&&S.birth?face(sleeping,20)+" ":""}${tr(st)}${sub?`<small>${tr(sub)}</small>`:""}</span></div>`;
+  const row=(id,name,st,sub,sec)=>`<div class="row${sec?" sec":""}"><span class="e">${EMO[id]}</span><span class="n">${name}</span><span class="s">${tr(st)}${sub?`<small>${tr(sub)}</small>`:""}</span></div>`;
   let clayS="Free", claySub=""; if(S.birth){ if(sleeping){ clayS="Sleeping"; claySub="since "+sw.t; } else if(T.clayNow){ clayS=T.clayNow.kind==="feed"?(T.clayNow.f.actual?"Feeding":"Feed"):T.CL[T.clayNow.kind]; if(sw&&sw.type==="wake"&&(T.clayNow.kind==="nap"||T.clayNow.kind==="sleep")){ clayS="Awake"; claySub="since "+sw.t; } } }
   const cur=c=>{ const i=at(c); return i?i.label.replace(/^Up · /,""):"Free"; };
   const vi=at("nanny"); const vS=T.S2.view==="On duty"&&vi?vi.label:T.S2.view;
