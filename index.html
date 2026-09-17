@@ -330,13 +330,12 @@ function build(dow,date){
   /* Chet */
   if(!shift){ if(!(walk&&walkH===8)) add("chet",8,1,"Up · Support feed","","care"); C.filter(c=>c.kind==="nap"&&c.h<11).forEach(c=>add("chet",c.h,c.dur,"Nap with Clay","with Prowe","rest")); } else add("chet",27,7.5,"Sleep","03:00 – 10:30","rest");
   if(!fam) add("chet",11,1,"Play with Clay","feed Bee & Bug first","care");
-  if(dow>=1&&dow<=5&&!fam){ if(exDay&&!nannyOff) add("chet",12,2,"Base + yoga","with Prowe · View has Clay","act"); else if(bjjDay&&!nannyOff) add("chet",12,2,"BJJ","View has Clay","act"); else add("chet",12,2,"Work","","work"); add("chet",14,3,"Work","","work"); }
+  if(dow>=1&&dow<=5&&!fam){ if(exDay&&!nannyOff) add("chet",12,2,"Base + yoga","with Prowe · View has Clay","act"); else if(bjjDay&&!nannyOff) add("chet",12,2,"BJJ","View has Clay","act"); }
   if(fam) add("chet",11,8,fam,"whole family + dogs","act");
   if(walk) add("chet",walkH,1,m3()?"Stroller walk":"Walk Bee & Bug",m3()?"Clay + dogs":"near the condo","act");
   if(m46()&&!fam) add("chet",15,1,"Play with Clay","with Prowe","care");
-  if(!fam) add("chet",18,2,"Dinner","with Prowe","care"); else add("chet",19,1,"Dinner","home","care");
+
   feeds.forEach(f=>{ if(f.by==="chet") add("chet",f.h,f.dur,f.actual?"Feeding Clay":(shift&&f.h>=25&&f.h<=28?"Bottle feed":"Feed Clay"),shift&&f.h>=25&&f.h<=28&&!f.actual?"pumped milk":"","care"); else if(f.by==="prowe"&&f.h>=19.5&&f.h<=23.6&&!f.actual) add("chet",f.h,0.75,"Support feed","","care"); });
-  add("chet",21,2,"Evening","with Prowe · Bee & Bug","rest");
   if(shift){ add("chet",23.75,2.25,"Awake · on duty","Clay if he stirs","care"); } else add("chet",24,8,"Sleep","up if needed · wake 08:00","rest");
 
   /* Prowe */
@@ -346,14 +345,14 @@ function build(dow,date){
   if(fam) add("prowe",11,8,fam,"","act");
   if(walk&&m3()) add("prowe",walkH,1,"Stroller walk","Clay + dogs","act");
   if(m46()) add("prowe",15,1,"Play with Clay","with Chet","care");
-  add("prowe",21,2,"Evening","with Chet · Bee & Bug","rest");
+
   if(shift){ if(feeds.some(f=>f.h>=28.5&&f.h<31)){ add("prowe",24,5,"Sleep","00:00 – 05:00 · Chet has the bottle","rest"); add("prowe",29.75,2.25,"Sleep","to 08:00","rest"); } else add("prowe",24,8,"Sleep","Chet has the 02:00 bottle · wake 08:00","rest"); }
   else add("prowe",24,8,"Sleep","up if needed · wake 08:00","rest");
 
   /* View */
   if(nannyOff) add("nanny",10,6,"Day off","","rest");
   else { add("nanny",nS,0.5,"On duty","until "+fmt(nE),"duty");
-    C.forEach(c=>{ if(c.kind==="feed"){ if(c.f.by==="nanny") add("nanny",c.h,c.dur,c.f.actual?"Feeding Clay":"Feed Clay",c.f.whenWakes?"when he wakes":c.f.due?"due now":"","care"); return; } if(c.h<nS||c.h>=nE) return; if(c.kind==="nap") add("nanny",c.h,c.dur,"Laundry · tidy","Clay naps","rest"); else if(c.kind==="bath") add("nanny",c.h,c.dur,"Bath · wind-down","","care"); else if(c.kind==="play") add("nanny",c.h,c.dur,"Play · tummy time","","care"); });
+    C.forEach(c=>{ if(c.kind==="feed"){ if(c.f.by==="nanny") add("nanny",c.h,c.dur,c.f.actual?"Feeding Clay":"Feed Clay",c.f.whenWakes?"when he wakes":c.f.due?"due now":"","care"); return; } if(c.h<nS||c.h>=nE) return; if(c.kind==="nap"){} else if(c.kind==="bath") add("nanny",c.h,c.dur,"Bath · wind-down","","care"); else if(c.kind==="play") add("nanny",c.h,c.dur,"Play · tummy time","","care"); });
     if(exDay||bjjDay){ I.filter(x=>x.col==="nanny"&&x.kind==="rest").forEach(x=>{ if(x.h<14&&x.h+x.dur>12){ if(x.h<12){ const end=x.h+x.dur; x.dur=12-x.h; if(end>14) add("nanny",14,end-14,x.label,x.sub,"rest"); } else if(x.h+x.dur<=14){ x.dur=0; } else { x.dur=x.h+x.dur-14; x.h=14; } } }); add("nanny",12,2,"View has Clay",(exDay?"Base + yoga":"BJJ")+" 12–14","care"); } }
 
   if(isToday&&sw&&sw.type==="wake"){ const w=toH(sw.t); I.forEach(it=>{ if(!it.mark&&it.label==="Nap with Clay"&&w>=it.h&&w<it.h+it.dur) it.dur=Math.max(0,w-it.h); }); C.forEach(c=>{ if((c.kind==="nap"||c.kind==="sleep")&&w>=c.h&&w<c.h+c.dur) c.dur=Math.max(0,w-c.h); }); }
