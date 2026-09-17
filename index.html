@@ -14,6 +14,7 @@
 }
 :root[data-sky="dark"]{--sky-ink:#FFF6EC;--sky-ink-2:rgba(255,246,236,.72);--sky-on:#FFF6EC;--sky-on-ink:#2A1F2E;--sky-chip:rgba(255,255,255,.16)}
 *{box-sizing:border-box}
+[hidden]{display:none!important}
 html{height:100%;color-scheme:light;touch-action:manipulation;-webkit-text-size-adjust:100%}
 body{margin:0;background:#F5EFE8;color:var(--ink);font-family:var(--font);font-size:16px;line-height:1.4;padding-inline:12px;padding-block:12px 48px;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent;touch-action:manipulation;overscroll-behavior-y:contain}
 button{font:inherit;color:inherit;cursor:pointer;border:0;background:none;padding:0;text-align:left;touch-action:manipulation;user-select:none;-webkit-user-select:none;transition:transform .18s var(--ease),background .18s var(--ease),color .18s var(--ease),opacity .18s var(--ease),box-shadow .18s var(--ease)}
@@ -119,8 +120,7 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline
 .it.cur::before{content:"";position:absolute;left:4px;top:10px;bottom:10px;width:3px;border-radius:3px;background:#5FAE55}
 .it.cur .tm{color:#2F7A2A}
 .it.cur .lb{color:#1F4D1B}
-.it.next{background:linear-gradient(90deg,rgba(200,232,190,0) 0%,#EEF7EA 12%,#EEF7EA 88%,rgba(200,232,190,0) 100%)}
-.it.next .tm{color:#5FAE55}
+.it.next{}
 .it.rest{color:var(--ink-2)} .it.rest .lb{font-weight:500}
 .mk{display:grid;grid-template-columns:54px 1fr;align-items:center;gap:8px;padding:5px 12px;font-size:12.5px;color:var(--ink-2)}
 .mk .tm{font-variant-numeric:tabular-nums;font-size:12px;font-weight:600;color:var(--ink-3)}
@@ -191,6 +191,16 @@ input.num{width:100px;font:inherit;font-weight:600;font-size:15px;background:var
 @keyframes zz{0%{opacity:0;transform:translate(0,3px) scale(.8)}25%{opacity:1}70%{opacity:1}100%{opacity:0;transform:translate(3px,-6px) scale(1.15)}}
 .state button .face{margin-right:4px}
 .row .e .face{display:block;margin:0 auto}
+.who{position:fixed;inset:0;z-index:40;background:rgba(42,31,46,.55);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:24px}
+.who .box{background:var(--panel-solid);border-radius:24px;padding:22px 20px;width:100%;max-width:360px;box-shadow:var(--shadow);animation:rise .3s var(--ease) both}
+.who h2{margin:0 0 14px;font-size:20px;font-weight:600;text-align:center}
+.who .opts{display:flex;flex-direction:column;gap:8px}
+.who .opts .btn{padding:16px;font-size:17px;display:flex;align-items:center;justify-content:center;gap:10px}
+.who .opts .btn span{font-size:22px}
+#feedcard.due .big{color:var(--accent)}
+#feedcard.due .lab::after{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--accent);margin-left:8px;vertical-align:1px;animation:pulse 1.6s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:.35;transform:scale(.8)}50%{opacity:1;transform:scale(1.15)}}
+.top h1{cursor:default;-webkit-user-select:none;user-select:none}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 
@@ -202,8 +212,9 @@ input.num{width:100px;font:inherit;font-weight:600;font-size:15px;background:var
   <section class="card" id="notesCard" hidden><ul class="notes" id="notes"></ul></section>
   <div class="week" id="week"></div>
   <section class="card agenda"><div class="head"><h2 id="agTitle"></h2><div class="wknav"><button data-wk="-1" aria-label="Previous week">‹</button><button data-wk="0" id="wkToday">●</button><button data-wk="1" aria-label="Next week">›</button></div></div><div class="list" id="list"></div></section>
-  <details class="card" id="settings"><summary>Settings</summary><div class="set" id="set"></div></details>
+  <details class="card" id="settings" hidden><summary>Settings</summary><div class="set" id="set"></div></details>
 </div>
+<div class="who" id="who" hidden></div>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -317,19 +328,19 @@ function build(dow,date){
   if(fam) mark(11,fam+" · whole family + dogs · until 19:00","dog");
 
   /* walk / exercise */
-  let walkH=+S.walkSlot, walk=isWalkDay(dow); if(walk&&shift&&walkH===8) walkH=17;
+  let walkH=+S.walkSlot, walk=isWalkDay(dow); if(walk&&shift&&walkH===8) walkH=17; if(walk&&m3()&&feeds.some(f=>Math.abs(f.h-walkH)<0.5)) walkH=Math.max(walkH,feeds.filter(f=>Math.abs(f.h-walkH)<0.5)[0].h+0.75);
   const exDay=exOn(date)&&(dow===1||dow===3||dow===5), bjjDay=bjjOn(date)&&(dow===2||dow===4);
   if(exDay&&nannyOff) adj.push({k:"warn",key:"exoff"+dow,t:"Base + yoga day but View is off — no cover for Clay 12–14."});
   if(bjjDay&&nannyOff) adj.push({k:"warn",key:"bjjoff"+dow,t:"BJJ day but View is off — Clay needs cover 12–14."});
 
   /* Chet */
   if(!shift){ if(!(walk&&walkH===8)) add("chet",8,1,"Up · Support feed","","care"); C.filter(c=>c.kind==="nap"&&c.h<11).forEach(c=>add("chet",c.h,c.dur,"Nap with Clay","with Prowe","rest")); } else add("chet",27,7.5,"Sleep","03:00 – 10:30","rest");
-  add("chet",11,1,"Play with Clay",dogsAway?"":"feed Bee & Bug first","care");
-  if(dow>=1&&dow<=5){ if(exDay&&!nannyOff) add("chet",12,2,"Base + yoga","with Prowe · View has Clay","act"); else if(bjjDay&&!nannyOff) add("chet",12,2,"BJJ","View has Clay","act"); else add("chet",12,2,"Work","","work"); add("chet",14,3,"Work","","work"); }
+  if(!fam) add("chet",11,1,"Play with Clay","feed Bee & Bug first","care");
+  if(dow>=1&&dow<=5&&!fam){ if(exDay&&!nannyOff) add("chet",12,2,"Base + yoga","with Prowe · View has Clay","act"); else if(bjjDay&&!nannyOff) add("chet",12,2,"BJJ","View has Clay","act"); else add("chet",12,2,"Work","","work"); add("chet",14,3,"Work","","work"); }
   if(fam) add("chet",11,8,fam,"whole family + dogs","act");
   if(walk) add("chet",walkH,1,m3()?"Stroller walk":"Walk Bee & Bug",m3()?"Clay + dogs":"near the condo","act");
   if(m46()&&!fam) add("chet",15,1,"Play with Clay","with Prowe","care");
-  add("chet",18,2,"Dinner","with Prowe","care");
+  if(!fam) add("chet",18,2,"Dinner","with Prowe","care"); else add("chet",19,1,"Dinner","home","care");
   feeds.forEach(f=>{ if(f.by==="chet") add("chet",f.h,f.dur,f.actual?"Feeding Clay":(shift&&f.h>=25&&f.h<=28?"Bottle feed":"Feed Clay"),shift&&f.h>=25&&f.h<=28&&!f.actual?"pumped milk":"","care"); else if(f.by==="prowe"&&f.h>=19.5&&f.h<=23.6&&!f.actual) add("chet",f.h,0.75,"Support feed","","care"); });
   add("chet",21,2,"Evening","with Prowe · Bee & Bug","rest");
   if(shift){ add("chet",23.75,2.25,"Awake · on duty","Clay if he stirs","care"); } else add("chet",24,8,"Sleep","up if needed · wake 08:00","rest");
@@ -342,19 +353,22 @@ function build(dow,date){
   if(walk&&m3()) add("prowe",walkH,1,"Stroller walk","Clay + dogs","act");
   if(m46()) add("prowe",15,1,"Play with Clay","with Chet","care");
   add("prowe",21,2,"Evening","with Chet · Bee & Bug","rest");
-  if(shift){ add("prowe",24,5,"Sleep","00:00 – 05:00 · Chet has the bottle","rest"); add("prowe",29.75,2.25,"Sleep","to 08:00","rest"); }
+  if(shift){ if(feeds.some(f=>f.h>=28.5&&f.h<31)){ add("prowe",24,5,"Sleep","00:00 – 05:00 · Chet has the bottle","rest"); add("prowe",29.75,2.25,"Sleep","to 08:00","rest"); } else add("prowe",24,8,"Sleep","Chet has the 02:00 bottle · wake 08:00","rest"); }
   else add("prowe",24,8,"Sleep","up if needed · wake 08:00","rest");
 
   /* View */
   if(nannyOff) add("nanny",10,6,"Day off","","rest");
   else { add("nanny",nS,0.5,"On duty","until "+fmt(nE),"duty");
     C.forEach(c=>{ if(c.kind==="feed"){ if(c.f.by==="nanny") add("nanny",c.h,c.dur,c.f.actual?"Feeding Clay":"Feed Clay",c.f.whenWakes?"when he wakes":c.f.due?"due now":"","care"); return; } if(c.h<nS||c.h>=nE) return; if(c.kind==="nap") add("nanny",c.h,c.dur,"Laundry · tidy","Clay naps","rest"); else if(c.kind==="bath") add("nanny",c.h,c.dur,"Bath · wind-down","","care"); else if(c.kind==="play") add("nanny",c.h,c.dur,"Play · tummy time","","care"); });
-    if(exDay||bjjDay) add("nanny",12,2,"View has Clay",(exDay?"Base + yoga":"BJJ")+" 12–14","care"); }
+    if(exDay||bjjDay){ I.filter(x=>x.col==="nanny"&&x.kind==="rest").forEach(x=>{ if(x.h<14&&x.h+x.dur>12){ if(x.h<12){ const end=x.h+x.dur; x.dur=12-x.h; if(end>14) add("nanny",14,end-14,x.label,x.sub,"rest"); } else if(x.h+x.dur<=14){ x.dur=0; } else { x.dur=x.h+x.dur-14; x.h=14; } } }); add("nanny",12,2,"View has Clay",(exDay?"Base + yoga":"BJJ")+" 12–14","care"); } }
 
   if(isToday&&sw&&sw.type==="wake"){ const w=toH(sw.t); I.forEach(it=>{ if(!it.mark&&it.label==="Nap with Clay"&&w>=it.h&&w<it.h+it.dur) it.dur=Math.max(0,w-it.h); }); C.forEach(c=>{ if((c.kind==="nap"||c.kind==="sleep")&&w>=c.h&&w<c.h+c.dur) c.dur=Math.max(0,w-c.h); }); }
   const S2={dogs:dogsAway&&nowA>=16&&nowA<19?"Dogs at family house":fam&&nowA>=11&&nowA<19?"At family house":walk&&nowA>=walkH&&nowA<walkH+1?"Walk":(nowA>=20||nowA<8)?"Sleep":"Home",
     driver:driverOn&&nowA>=10&&nowA<19?"On duty":null, maids:dogsAway&&nowA>=10&&nowA<16?"Cleaning":null,
     view:nannyOff?"Day off":(nowA>=nS&&nowA<nE)?"On duty":"Off"};
+  /* a walk trumps the nap block it overlaps */
+  ["chet","prowe"].forEach(col=>{ const w=I.find(x=>x.col===col&&x.kind==="act"&&/walk/i.test(x.label)); if(!w) return; I.filter(x=>x.col===col&&x.label==="Nap with Clay"&&x.h<w.h+w.dur&&x.h+x.dur>w.h).forEach(n=>{ const end=n.h+n.dur; if(n.h>=w.h){ n.h=w.h+w.dur; n.dur=Math.max(0,end-n.h); } else n.dur=w.h-n.h; }); });
+  for(let i=I.length-1;i>=0;i--) if(!I[i].mark&&I[i].dur<=0) I.splice(i,1);
   I.sort((a,b)=>a.h-b.h);
   /* merge back-to-back rows that say the same thing (e.g. Work 12–14 + Work 14–17 → Work 12–17) */
   ["chet","prowe","nanny"].forEach(col=>{ const rows=I.filter(x=>x.col===col&&!x.mark); for(let i=rows.length-1;i>0;i--){ const a=rows[i-1], b=rows[i]; if(a.label===b.label&&a.sub===b.sub&&Math.abs(a.h+a.dur-b.h)<0.05){ a.dur+=b.dur; I.splice(I.indexOf(b),1); } } });
@@ -385,7 +399,7 @@ function picker(){ const bottle=U.pick.mode==="bottle"; const ed=U.pick.edit; re
   ${bottle?`<div class="pre">${[60,90,120,150,180,210].map(m=>`<button data-ml="${m}" class="${U.ml===m?"on":""}">${m} ${ui("ml")}</button>`).join("")}</div>`
     :`<div class="pre">${[5,10,15,20,30,40].map(m=>`<button data-min="${m}" class="${U.min===m?"on":""}">${m} ${ui("minutes")}</button>`).join("")}</div>`}
   <div class="cust"><label>${bottle?ui("ml"):ui("minutes")}<input type="number" id="${bottle?"mlIn":"minIn"}" value="${bottle?U.ml:U.min}" min="0" max="${bottle?400:90}" step="${bottle?5:1}" inputmode="numeric"></label><label>${ui("time")}<input type="time" lang="en-GB" id="tmIn" value="${ed?ed.t:nowHM()}"></label></div>
-  <div class="go"><button class="btn quiet" data-pickclose>${ui("cancel")}</button><button class="btn primary" data-picksave>${ed?ui("save"):ui("log")}</button></div>
+  <div class="go"><button class="btn quiet" data-pickclose>${ui("cancel")}</button><button class="btn ${ed?"primary":""}" data-picksave>${ed?ui("save"):ui("log")}</button></div>
   ${ed?`<button class="btn quiet sm" data-delfeed="${ed.id}" style="justify-self:center">${ui("del")}</button>`:""}</div>`; }
 
 function render(){
@@ -396,12 +410,17 @@ function render(){
   $("clock").textContent=fmt(nowA);
   $("dateline").innerHTML=`${U.lang==="th"?ui("days")[now.dow]+" "+(+now.date.slice(8))+"/"+(+now.date.slice(5,7)):DAYS[now.dow]+" "+niceDate(now.date)} · ${S.birth?(age<=0?ui("born"):`${ui("day")} ${age} · ${U.lang==="th"?"ด."+PHASES.find(p=>p.id===tPH).label.replace(/Months? /,""):PHASES.find(p=>p.id===tPH).label.replace("Month","M").replace("Months","M")}`):ui("due")+" "+niceDate(DUE)}<button data-lang="${U.lang==="en"?"th":"en"}">${U.lang==="en"?"ไทย":"EN"}</button>`;
   $("meSeg").innerHTML=Object.entries(PEOPLE).map(([k,p])=>`<button role="tab" aria-selected="${U.me===k}" class="${U.me===k?"on":""}" data-me="${k}">${ui(k)}</button>`).join("");
+  $("meSeg").hidden=!!U.locked||!U.showSettings;
+  $("who").hidden=!U.choose; if(U.choose) $("who").innerHTML=`<div class="box"><h2>Who are you? · คุณคือใคร</h2><div class="opts"><button class="btn" data-choose="chet"><span>🧔🏻</span>Chet</button><button class="btn" data-choose="prowe"><span>👩🏻</span>Prowe</button><button class="btn" data-choose="view"><span>🧑🏻‍🍼</span>View · วิว</button></div></div>`;
+  $("settings").hidden=!U.showSettings; $("now").hidden=U.me==="view";
 
   /* NEXT FEED */
   const tlog=(L[today]&&L[today].entries)||[]; const real=tlog.filter(isFeed).sort((a,b)=>toH(a.t)-toH(b.t)); const last=real[real.length-1];
   const next=T.feeds.find(f=>f.h>nowA-0.02&&!f.actual&&!f.missed); const mins=next?Math.max(0,Math.round((next.h-nowA)*60)):null;
+  const lastReal=T.feeds.filter(f=>f.actual).slice(-1)[0]; const overdueBy=lastReal?nowA-(lastReal.h+T.gap):0;
   const sleeping=T.sleeping, sw=T.sw;
   const bfml=bfEst(age); const ml=real.reduce((a,x)=>a+(x.type==="breast"?bfml:(+x.ml||0)),0), bml=real.reduce((a,x)=>a+(x.type==="bottle"?(+x.ml||0):0),0), bf=real.filter(x=>x.type==="breast").length, tg=mlTarget(age), pc=tg?Math.min(100,Math.round(ml/tg*100)):0;
+  $("feedcard").classList.toggle("due",!!(S.birth&&next&&next.due&&!next.whenWakes&&overdueBy>=1/3));
   $("feedcard").innerHTML=S.birth?`
     <div class="nowgrid"><div><div class="lab">${ui("next")}</div><div class="big">${next?fmt(next.h):"—"}</div>
       <div class="sub">${next?(next.whenWakes?tr("Feed when he wakes"):next.due?tr("Feed · due now"):tr(mins>60?`in ${Math.floor(mins/60)} h ${pad(mins%60)} min`:`in ${mins} min`)):ui("none")}${next&&next.key&&!next.due?`<button class="skip" data-skip="${next.key}">${ui("skip")}</button>`:""}${last?`<span class="last">${ui("last")} ${last.t}${last.type==="bottle"?` · ${last.ml} ${ui("ml")}`:" · "+ui("bf")}</span>`:""}</div></div>
@@ -456,6 +475,7 @@ function renderSettings(age,today){
   const feeds=sortedFeeds(); const ph=PHASES.find(p=>p.id===PH).label; const offNow=nannyOffOn(today);
   const person=(emo,name,body)=>`<section class="person"><h4><span>${emo}</span>${name}</h4>${body}</section>`;
   $("set").innerHTML=
+    person("📱","This phone",`<div class="field"><span>I am</span><div class="seg sm">${Object.keys(PEOPLE).map(k=>`<button data-me="${k}" class="${U.me===k?"on":""}">${PEOPLE[k].n}</button>`).join("")}</div></div><div class="field"><span>Language</span><div class="seg sm"><button data-lang="en" class="${U.lang==="en"?"on":""}">EN</button><button data-lang="th" class="${U.lang==="th"?"on":""}">ไทย</button></div></div>`)+
     person(EMO.clay,"Clay",`
       <div class="field"><span>Arrival</span>${S.birth?`<div class="frow"><b>Born ${niceDate(S.birth)}</b><button class="btn quiet sm" data-calopen>${U.calOpen?"Done":"Change"}</button></div>${U.calOpen?calendar():""}`:`<div class="frow"><button class="btn primary sm" data-born>Clay is here</button></div>${calendar()}`}</div>
       <div class="field"><span>Weight · kg</span><div class="frow"><input class="num" type="number" id="weightIn" step="0.1" min="1" max="15" placeholder="kg" value="${S.weight||""}"></div></div>
@@ -489,11 +509,16 @@ function toast(m){ const t=$("toast"); t.textContent=m; t.classList.add("show");
 
 /* ---------- wiring ---------- */
 S=Object.assign(clone(DEFAULTS),lsGet("clay.settings",{})); normalize();
-U.me=lsGet("clay.me","chet"); if(!PEOPLE[U.me]) U.me="chet"; U.lang=lsGet("clay.lang","en");
+const Q=new URLSearchParams(location.search);
+U.me=lsGet("clay.me",null); U.lang=lsGet("clay.lang","en");
+if(Q.get("me")&&PEOPLE[Q.get("me")]){ U.me=Q.get("me"); U.locked=true; lsSet("clay.me",U.me); }
+if(Q.get("lang")==="th"||Q.get("lang")==="en"){ U.lang=Q.get("lang"); lsSet("clay.lang",U.lang); }
+if(Q.get("settings")) U.showSettings=true;
+if(!U.me||!PEOPLE[U.me]){ U.me="chet"; U.choose=true; }
 try{ for(let i=0;i<localStorage.length;i++){ const k=localStorage.key(i); if(k.startsWith("clay.log.")) L[k.slice(9)]=JSON.parse(localStorage.getItem(k)); } }catch(e){}
 document.body.addEventListener("click",e=>{ const b=e.target.closest("button"); if(!b) return; const d=b.dataset;
   if(d.me){ U.me=d.me; lsSet("clay.me",U.me); U.scrollKey=null; render(); }
-  else if(d.lang){ U.lang=d.lang; lsSet("clay.lang",U.lang); render(); }
+  else if(d.lang){ U.lang=d.lang; lsSet("clay.lang",U.lang); lsSet("clay.langSet",true); render(); }
   else if(d.day){ U.day=+d.day; render(); }
   else if(d.wk!==undefined){ if(d.wk==="0"){ U.wk=0; U.day=null; } else U.wk+=+d.wk; render(); }
   else if(d.state){ addLog(d.state); }
@@ -501,7 +526,9 @@ document.body.addEventListener("click",e=>{ const b=e.target.closest("button"); 
   else if(d.pickopen){ U.pick={mode:d.pickopen}; render(); }
   else if(d.editfeed){ const date=scheduleDate(bkkNow()); const x=(L[date]&&L[date].entries||[]).find(e=>e.id===d.editfeed); if(!x) return; U.logOpen=true; if(x.type==="bottle") U.ml=x.ml||U.ml; else if(x.min) U.min=x.min; U.pick={mode:x.type,edit:x}; render(); }
   else if(d.delfeed){ U.pick=null; U.logOpen=true; removeLog(d.delfeed); }
-  else if(d.ml){ U.ml=+d.ml; render(); } else if(d.min){ U.min=+d.min; render(); }
+  else if(d.ml){ U.ml=+d.ml; if(U.pick&&!U.pick.edit){ addLog("bottle",{ml:U.ml}); } else render(); }
+  else if(d.min){ U.min=+d.min; if(U.pick&&!U.pick.edit){ addLog("breast",{min:U.min}); } else render(); }
+  else if(d.choose){ U.me=d.choose; lsSet("clay.me",U.me); U.choose=false; if(U.me==="view"&&!lsGet("clay.langSet",false)){ U.lang="th"; lsSet("clay.lang","th"); } lsSet("clay.langSet",true); render(); }
   else if(b.hasAttribute("data-pickclose")){ U.pick=null; render(); }
   else if(b.hasAttribute("data-picksave")){ const ed=U.pick.edit; const tm=($("tmIn")&&/^\d\d:\d\d$/.test($("tmIn").value))?$("tmIn").value:null;
     if(U.pick.mode==="bottle"){ const v=+($("mlIn")&&$("mlIn").value)||U.ml; U.ml=v; if(ed){ ed.ml=v; delete ed.min; ed.type="bottle"; if(tm) ed.t=tm; U.pick=null; saveDay(scheduleDate(bkkNow())); } else addLog("bottle",Object.assign({ml:v},tm?{t:tm}:{})); }
@@ -525,6 +552,8 @@ document.body.addEventListener("click",e=>{ const b=e.target.closest("button"); 
 document.body.addEventListener("change",e=>{ if(e.target.id==="weightIn"){ S.weight=+e.target.value||null; saveSettings(); } });
 document.body.addEventListener("input",e=>{ if(e.target.id==="mlIn") U.ml=+e.target.value||U.ml; if(e.target.id==="minIn") U.min=+e.target.value||U.min; });
 $("settings").addEventListener("toggle",()=>{ if(!$("settings").open) U.calOpen=false; });
+(function(){ let t=null; const el=document.querySelector(".top h1"); const start=()=>{ t=setTimeout(()=>{ U.showSettings=!U.showSettings; render(); if(U.showSettings){ $("settings").open=true; $("settings").scrollIntoView({behavior:"smooth"}); toast(U.showSettings?"Settings shown":""); } else toast("Settings hidden"); },600); }; const end=()=>clearTimeout(t);
+  el.addEventListener("touchstart",start,{passive:true}); el.addEventListener("touchend",end); el.addEventListener("touchmove",end); el.addEventListener("mousedown",start); el.addEventListener("mouseup",end); el.addEventListener("mouseleave",end); el.addEventListener("contextmenu",e=>e.preventDefault()); })();
 document.body.addEventListener("toggle",e=>{ if(e.target.id==="feedlog") U.logOpen=e.target.open; },true);
 (function(){ let sx=0,sy=0,t=0; const el=document.querySelector(".agenda"); el.addEventListener("touchstart",e=>{ sx=e.touches[0].clientX; sy=e.touches[0].clientY; t=Date.now(); },{passive:true});
   el.addEventListener("touchend",e=>{ const dx=e.changedTouches[0].clientX-sx, dy=e.changedTouches[0].clientY-sy; if(Date.now()-t<600&&Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.5){ const nd=addDays(dateOfDow(U.day,U.wk),dx<0?1:-1); const base=scheduleDate(bkkNow()); const bd=new Date(base+"T12:00:00Z").getUTCDay(); const diff=Math.round((new Date(nd+"T12:00:00Z")-new Date(base+"T12:00:00Z"))/864e5); U.day=new Date(nd+"T12:00:00Z").getUTCDay(); U.wk=Math.floor((diff-((U.day-bd+7)%7))/7); render(); } },{passive:true}); })();
