@@ -291,8 +291,8 @@ function build(dow,date){
     while(t<30){ if(!(noFeed&&t>noFeed[0]&&t<noFeed[1])) feeds.push({h:t,key:"feed@"+fmt(t),pred:!firstP||overdue,due:firstP&&overdue,whenWakes:firstP&&overdue&&sleeping}); t+=gap; firstP=false; } }
   else plan.forEach(f=>feeds.push({...f}));
   feeds=feeds.filter(f=>!(f.key&&isToday&&skips.has(f.key))); feeds.sort((a,b)=>a.h-b.h);
-  const swEv=log.filter(x=>x.type==="sleep"||x.type==="wake").map(x=>toH(x.t));
-  feeds.forEach(f=>{ f.dur=0.75; if(f.actual){ const nx=swEv.find(t=>t>=f.h); if(nx!==undefined) f.dur=Math.max(0.02,Math.min(0.75,nx-f.h)); } });
+  const raw=(L[date]&&L[date].entries)||[];   // insertion order: a toggle tapped after a feed ends that feed, even in the same minute
+  feeds.forEach(f=>{ f.dur=0.75; if(f.actual){ const i=raw.indexOf(f.actual); const nx=raw.slice(i+1).find(x=>x.type==="sleep"||x.type==="wake"); if(nx) f.dur=Math.max(0,Math.min(0.75,toH(nx.t)-f.h)); } });
 
   /* Clay's own timeline */
   const C=[]; feeds.forEach(f=>C.push({h:f.h,dur:f.dur,kind:"feed",f}));
@@ -301,7 +301,7 @@ function build(dow,date){
     else if(ab>=20.5||ab<7) C.push({h:a,dur:b-a,kind:"sleep"}); else C.push({h:a,dur:b-a,kind:"nap"}); }
   if(sleeping){ const s=toH(sw.t); C.forEach(c=>{ if((c.kind==="nap"||c.kind==="sleep")&&s>=c.h-0.5&&s<c.h+c.dur){ c.dur=c.h+c.dur-s; c.h=s; } }); }
   const CL={feed:"Feed",bath:"Bath · wind-down",play:"Play · tummy time",sleep:"Sleep",nap:"Nap"};
-  const clayNow=C.find(c=>nowA>=c.h&&nowA<c.h+c.dur);
+  const clayNow=C.filter(c=>nowA>=c.h&&nowA<c.h+c.dur).sort((a,b)=>b.h-a.h||(a.kind==="feed"?-1:1))[0];
 
   /* who feeds Clay: whoever logged it; otherwise View on shift, Chet on the shift-night bottle, else Prowe */
   const dutyAt=h=>!nannyOff&&h>=nS&&h<nE&&!(fam&&h>=11&&h<19);
@@ -347,6 +347,7 @@ function build(dow,date){
     C.forEach(c=>{ if(c.kind==="feed"){ if(c.f.by==="nanny") add("nanny",c.h,c.dur,c.f.actual?"Feeding Clay":"Feed Clay",c.f.whenWakes?"when he wakes":c.f.due?"due now":"","care"); return; } if(c.h<nS||c.h>=nE) return; if(c.kind==="nap") add("nanny",c.h,c.dur,"Clay naps","Laundry · tidy","rest"); else if(c.kind==="bath") add("nanny",c.h,c.dur,"Bath · wind-down","","care"); else if(c.kind==="play") add("nanny",c.h,c.dur,"Play · tummy time","","care"); });
     if(exDay||bjjDay) add("nanny",12,2,"View has Clay",(exDay?"Base + yoga":"BJJ")+" 12–14","care"); }
 
+  if(isToday&&sw&&sw.type==="wake"){ const w=toH(sw.t); I.forEach(it=>{ if(!it.mark&&it.label==="Nap with Clay"&&w>=it.h&&w<it.h+it.dur) it.dur=Math.max(0,w-it.h); }); C.forEach(c=>{ if((c.kind==="nap"||c.kind==="sleep")&&w>=c.h&&w<c.h+c.dur) c.dur=Math.max(0,w-c.h); }); }
   const S2={dogs:dogsAway&&nowA>=16&&nowA<19?"Dogs at family house":fam&&nowA>=11&&nowA<19?"At family house":walk&&nowA>=walkH&&nowA<walkH+1?"Walk":(nowA>=20||nowA<8)?"Sleep":"Home",
     driver:driverOn&&nowA>=10&&nowA<19?"On duty":null, maids:dogsAway&&nowA>=10&&nowA<16?"Cleaning":null,
     view:nannyOff?"Day off":(nowA>=nS&&nowA<nE)?"On duty":"Off"};
@@ -409,8 +410,8 @@ function render(){
   :`<div class="lab">${U.lang==="th"?"ก่อนเคลย์เกิด":"Before Clay arrives"}</div><div class="big" style="font-size:34px">${niceDate(DUE)}</div><div class="sub">${U.lang==="th"?"แตะเมื่อเคลย์เกิดแล้ว":"tap the button the moment he's here"}</div><div class="acts"><button class="btn primary big full" data-born>${U.lang==="th"?"เคลย์เกิดแล้ว":"Clay is here"}</button></div>`;
 
   /* NOW */
-  const at=col=>T.items.find(i=>i.col===col&&!i.mark&&nowA>=i.h&&nowA<i.h+i.dur);
-  const row=(id,name,st,sub,sec)=>`<div class="row${sec?" sec":""}"><span class="e">${id==="clay"&&S.birth?face(sleeping,30):EMO[id]}</span><span class="n">${name}</span><span class="s">${tr(st)}${sub?`<small>${tr(sub)}</small>`:""}</span></div>`;
+  const at=col=>T.items.filter(i=>i.col===col&&!i.mark&&nowA>=i.h&&nowA<i.h+i.dur).sort((a,b)=>b.h-a.h||(a.kind==="rest"?1:-1))[0];
+  const row=(id,name,st,sub,sec)=>`<div class="row${sec?" sec":""}"><span class="e">${EMO[id]}</span><span class="n">${name}</span><span class="s">${id==="clay"&&S.birth?face(sleeping,20)+" ":""}${tr(st)}${sub?`<small>${tr(sub)}</small>`:""}</span></div>`;
   let clayS="Free", claySub=""; if(S.birth){ if(sleeping){ clayS="Sleeping"; claySub="since "+sw.t; } else if(T.clayNow){ clayS=T.clayNow.kind==="feed"?(T.clayNow.f.actual?"Feeding":"Feed"):T.CL[T.clayNow.kind]; if(sw&&sw.type==="wake"&&(T.clayNow.kind==="nap"||T.clayNow.kind==="sleep")){ clayS="Awake"; claySub="since "+sw.t; } } }
   const cur=c=>{ const i=at(c); return i?i.label.replace(/^Up · /,""):"Free"; };
   const vi=at("nanny"); const vS=T.S2.view==="On duty"&&vi?vi.label:T.S2.view;
