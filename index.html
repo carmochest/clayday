@@ -237,7 +237,7 @@ const DEFAULT_FEEDS={
 const DUE="2026-11-07";
 const clone=o=>JSON.parse(JSON.stringify(o));
 const DEFAULTS={birth:null,weight:null,nannyShift:"9-19",nannyHrs:null,driverHrs:"10:00-19:00",maidHrs:"10:00-16:00",maidDogs:true,nannyOff:"6",nannyOffFrom:null,nannyOffPrev:null,walkDays:[3,5,6],walkSlot:"8",driverDays:[1,2,3,4,5],maidDays:[1,4],exFrom:null,bjjFrom:null,snooze:{},feeds:clone(DEFAULT_FEEDS)};
-const PEOPLE={chet:{n:"Chet",col:"chet"},prowe:{n:"Prowe",col:"prowe"},view:{n:"View",col:"nanny"}};
+const PEOPLE={chet:{n:"Chet",col:"chet"},prowe:{n:"Prowe",col:"prowe"},view:{n:"Nanny",col:"nanny"}};
 const EMO={clay:"👶🏻",chet:"🧔🏻",prowe:"👩🏻",dogs:"🐶",nanny:"🧑🏻‍🍼",driver:"🚗",maids:"🧹"};
 const bfEst=age=>age===null?90:age<7?45:age<14?60:age<30?75:age<60?100:120;
 
@@ -245,13 +245,13 @@ let S=clone(DEFAULTS), L={}, U={me:"chet",day:null,wk:0,pick:null,ml:90,min:15,c
 
 /* ---------- i18n ---------- */
 const TH=[["Feed when he wakes","ให้นมเมื่อตื่น"],["Feed · due now","ถึงเวลาให้นม"],["Dream feed","มื้อดึก"],["Support feed","ช่วยให้นม"],["Feed Clay","ให้นมเคลย์"],["Night feed","มื้อกลางคืน"],["Feed · pump","ให้นม · ปั๊มนม"],["Breastfed","นมแม่"],["Breastfeed","นมแม่"],["Bottle feed","ให้นมขวด"],["Bottle","ขวดนม"],["Breast","นมแม่"],["Clay feeds","เคลย์กินนม"],["Feeding","กำลังกินนม"],["Feed","ให้นม"],
-["Bath · wind-down","อาบน้ำ · เตรียมนอน"],["Play · tummy time","เล่น · นอนคว่ำ"],["Play with Clay","เล่นกับเคลย์"],["Nap with Clay","งีบพร้อมเคลย์"],["Clay naps","เคลย์งีบ"],["then Clay naps until","แล้วเคลย์งีบถึง"],["then Clay sleeps until","แล้วเคลย์นอนถึง"],["then Clay bath","แล้วเคลย์อาบน้ำ"],["then Clay play","แล้วเคลย์เล่น"],["Clay sleeps until","เคลย์นอนถึง"],["Clay naps until","เคลย์งีบถึง"],["Clay sleeps","เคลย์นอน"],["View feeds Clay","วิวให้นมเคลย์"],["Prowe feeds Clay","แม่ให้นมเคลย์"],["Chet feeds Clay","พ่อให้นมเคลย์"],["View fed Clay","วิวให้นมเคลย์แล้ว"],["Prowe fed Clay","แม่ให้นมเคลย์แล้ว"],["Chet fed Clay","พ่อให้นมเคลย์แล้ว"],["then Clay","แล้วเคลย์"],["due now","ถึงเวลา"],["when he wakes","เมื่อตื่น"],["dream feed","มื้อดึก"],["bottle","ขวดนม"],["breast","นมแม่"],["bath","อาบน้ำ"],["play","เล่น"],["naps until","งีบถึง"],["then bath","แล้วอาบน้ำ"],["then play","แล้วเล่น"],["Clay bath","เคลย์อาบน้ำ"],["Clay play","เคลย์เล่น"],["sleeps until","นอนถึง"],["fed ","กินนมเมื่อ "],["as planned","ตามแผน"],["Nap","งีบ"],["Sleeping","กำลังหลับ"],["Sleep","นอน"],["Awake","ตื่น"],["Own time","เวลาส่วนตัว"],
+["Bath · wind-down","อาบน้ำ · เตรียมนอน"],["Play · tummy time","เล่น · นอนคว่ำ"],["Play with Clay","เล่นกับเคลย์"],["Nap with Clay","งีบพร้อมเคลย์"],["Clay naps","เคลย์งีบ"],["then Clay naps until","แล้วเคลย์งีบถึง"],["then Clay sleeps until","แล้วเคลย์นอนถึง"],["then Clay bath","แล้วเคลย์อาบน้ำ"],["then Clay play","แล้วเคลย์เล่น"],["Clay sleeps until","เคลย์นอนถึง"],["Clay naps until","เคลย์งีบถึง"],["Clay sleeps","เคลย์นอน"],["Nanny feeds Clay","พี่เลี้ยงให้นมเคลย์"],["Prowe feeds Clay","แม่ให้นมเคลย์"],["Chet feeds Clay","พ่อให้นมเคลย์"],["Nanny fed Clay","พี่เลี้ยงให้นมเคลย์แล้ว"],["Prowe fed Clay","แม่ให้นมเคลย์แล้ว"],["Chet fed Clay","พ่อให้นมเคลย์แล้ว"],["then Clay","แล้วเคลย์"],["due now","ถึงเวลา"],["when he wakes","เมื่อตื่น"],["dream feed","มื้อดึก"],["bottle","ขวดนม"],["breast","นมแม่"],["bath","อาบน้ำ"],["play","เล่น"],["naps until","งีบถึง"],["then bath","แล้วอาบน้ำ"],["then play","แล้วเล่น"],["Clay bath","เคลย์อาบน้ำ"],["Clay play","เคลย์เล่น"],["sleeps until","นอนถึง"],["fed ","กินนมเมื่อ "],["as planned","ตามแผน"],["Nap","งีบ"],["Sleeping","กำลังหลับ"],["Sleep","นอน"],["Awake","ตื่น"],["Own time","เวลาส่วนตัว"],
 ["On duty","เข้างาน"],["Off duty","เลิกงาน"],["Clay sleeping","เคลย์หลับ"],["Clay feeding","เคลย์กินนม"],["Clay nap","เคลย์งีบ"],["Clay awake","เคลย์ตื่น"],["Clay bath · wind-down","เคลย์อาบน้ำ"],["Clay play · tummy time","เคลย์เล่น"],["Day off","วันหยุด"],["Off","หยุด"],["Free","ว่าง"],["Home","อยู่บ้าน"],["Maids in · cleaning · dogs to family house","แม่บ้านมา · ทำความสะอาด · พาหมาไปบ้านครอบครัว"],["Maids leave","แม่บ้านกลับ"],["Cleaning","ทำความสะอาด"],["Driver brings the dogs home","คนขับพาหมากลับบ้าน"],["Dogs home · someone brings them (driver off)","หมากลับบ้าน · ต้องมีคนไปรับ (คนขับหยุด)"],["Feed Bee & Bug · play with Clay","ให้อาหารบี บั๊ก · เล่นกับเคลย์"],["Feed Bee & Bug","ให้อาหารบี บั๊ก"],["Chet's family house","บ้านครอบครัวพ่อ"],["Prowe's family house","บ้านครอบครัวแม่"],["At family house","อยู่บ้านครอบครัว"],["Dogs at family house","หมาอยู่บ้านครอบครัว"],["Dogs home","หมากลับบ้าน"],["whole family + dogs · until 19:00","ทั้งครอบครัว + หมา · ถึง 19:00"],
-["Stroller walk","เดินเล่นรถเข็น"],["Walk Bee & Bug","พาหมาเดินเล่น"],["Walk","เดินเล่น"],["Base + yoga","ออกกำลังกาย"],["BJJ","ยิวยิตสู"],["Work","ทำงาน"],["Dinner","อาหารเย็น"],["Evening","ช่วงค่ำ"],["Awake · on duty","ตื่นเฝ้า"],["Laundry · tidy","ซักผ้า · เก็บของ"],["Up","ตื่น"],["View has Clay","วิวดูแลเคลย์"],["night feed","มื้อกลางคืน"],["Clay at ","เคลย์อยู่ที่"],
-["with Prowe","กับแม่"],["with Chet","กับพ่อ"],["feed Bee & Bug first","ให้อาหารบี บั๊กก่อน"],["Clay + dogs","เคลย์ + หมา"],["near the condo","ใกล้คอนโด"],["up if needed · wake 08:00","ตื่นถ้าจำเป็น · ตื่น 08:00"],["to 08:00","ถึง 08:00"],["00:00 – 05:00 · Chet has the bottle","00:00 – 05:00 · พ่อให้ขวด"],["Clay if he stirs","ดูเคลย์ถ้าตื่น"],["Feeding Clay","กำลังให้นมเคลย์"],["Maids in · cleaning","แม่บ้านมา · ทำความสะอาด"],["Maids leave · take Bee & Bug to the family house","แม่บ้านกลับ · พาบี บั๊กไปบ้านครอบครัว"],["at the family house","ที่บ้านครอบครัว"],["Month 1","เดือนที่ 1"],["Month 2½","เดือนที่ 2½"],["Month 2","เดือนที่ 2"],["Month 3","เดือนที่ 3"],["Months 4–6","เดือนที่ 4–6"],["Asleep","หลับ"],["Pump","ปั๊มนม"],["Support feed","ช่วยให้นม"],["· Prowe","· แม่"],["· Chet","· พ่อ"],["· View","· วิว"],["Vit D · tummy time","วิตามินดี · นอนคว่ำ"],["predicted","คาดการณ์"],["pumped milk","นมปั๊ม"],["when he wakes","เมื่อตื่น"],["due now","ถึงเวลา"],["until","ถึง"],["since","ตั้งแต่"],["in ","อีก "],[" min"," นาที"],[" h "," ชม. "],[" ml"," มล."]];
+["Stroller walk","เดินเล่นรถเข็น"],["Walk Bee & Bug","พาหมาเดินเล่น"],["Walk","เดินเล่น"],["Base + yoga","ออกกำลังกาย"],["BJJ","ยิวยิตสู"],["Work","ทำงาน"],["Dinner","อาหารเย็น"],["Evening","ช่วงค่ำ"],["Awake · on duty","ตื่นเฝ้า"],["Laundry · tidy","ซักผ้า · เก็บของ"],["Up","ตื่น"],["Nanny has Clay","พี่เลี้ยงดูแลเคลย์"],["night feed","มื้อกลางคืน"],["Clay at ","เคลย์อยู่ที่"],
+["with Prowe","กับแม่"],["with Chet","กับพ่อ"],["feed Bee & Bug first","ให้อาหารบี บั๊กก่อน"],["Clay + dogs","เคลย์ + หมา"],["near the condo","ใกล้คอนโด"],["up if needed · wake 08:00","ตื่นถ้าจำเป็น · ตื่น 08:00"],["to 08:00","ถึง 08:00"],["00:00 – 05:00 · Chet has the bottle","00:00 – 05:00 · พ่อให้ขวด"],["Clay if he stirs","ดูเคลย์ถ้าตื่น"],["Feeding Clay","กำลังให้นมเคลย์"],["Maids in · cleaning","แม่บ้านมา · ทำความสะอาด"],["Maids leave · take Bee & Bug to the family house","แม่บ้านกลับ · พาบี บั๊กไปบ้านครอบครัว"],["at the family house","ที่บ้านครอบครัว"],["Month 1","เดือนที่ 1"],["Month 2½","เดือนที่ 2½"],["Month 2","เดือนที่ 2"],["Month 3","เดือนที่ 3"],["Months 4–6","เดือนที่ 4–6"],["Asleep","หลับ"],["Pump","ปั๊มนม"],["Support feed","ช่วยให้นม"],["· Prowe","· แม่"],["· Chet","· พ่อ"],["· Nanny","· พี่เลี้ยง"],["Vit D · tummy time","วิตามินดี · นอนคว่ำ"],["predicted","คาดการณ์"],["pumped milk","นมปั๊ม"],["when he wakes","เมื่อตื่น"],["due now","ถึงเวลา"],["until","ถึง"],["since","ตั้งแต่"],["in ","อีก "],[" min"," นาที"],[" h "," ชม. "],[" ml"," มล."]];
 TH.sort((a,b)=>b[0].length-a[0].length);
-const T_UI={en:{next:"Next feed",clayIs:"Clay is",awake:"Awake",sleep:"Sleeping",bottle:"🍼 Bottle",breast:"🤱 Breast",skip:"skip",now:"Now",today:"Today",of:"of",todayW:"today",feeds:(n,s)=>`Today's log · ${n} feed${n===1?"":"s"} · ${s} sleep`,log:"Log",save:"Save",edit:"Edit",cancel:"Cancel",del:"Delete",last:"last",none:"nothing more before 06:00",nothing:"Nothing logged yet today.",bf:"breastfeed",each:"each",again:v=>`${v} again`,time:"Time",ml:"ml",minutes:"min",due:"due around",born:"born today",day:"Day",clay:"Clay",chet:"Chet",prowe:"Prowe",view:"View",dogs:"Bee & Bug",driver:"Driver",maids:"Maids",yes:"Yes",later:"Not yet",days:["Sun","Mon","Tue","Wed","Thu","Fri","Sat"]},
- th:{next:"มื้อถัดไป",clayIs:"เคลย์กำลัง",awake:"ตื่น",sleep:"หลับ",bottle:"🍼 ขวดนม",breast:"🤱 นมแม่",skip:"ข้าม",now:"ตอนนี้",today:"วันนี้",of:"จาก",todayW:"วันนี้",feeds:(n,s)=>`บันทึกวันนี้ · ${n} มื้อ · นอน ${s}`,log:"บันทึก",save:"บันทึก",edit:"แก้ไข",cancel:"ยกเลิก",del:"ลบ",last:"ล่าสุด",none:"ไม่มีมื้อก่อน 06:00",nothing:"ยังไม่มีบันทึกวันนี้",bf:"นมแม่",each:"ต่อครั้ง",again:v=>`${v} อีก`,time:"เวลา",ml:"มล.",minutes:"นาที",due:"กำหนดคลอดประมาณ",born:"เกิดวันนี้",day:"วันที่",clay:"เคลย์",chet:"พ่อ",prowe:"แม่",view:"วิว",dogs:"บี & บั๊ก",driver:"คนขับรถ",maids:"แม่บ้าน",yes:"ตกลง",later:"ไว้ก่อน",days:["อา","จ","อ","พ","พฤ","ศ","ส"]}};
+const T_UI={en:{next:"Next feed",clayIs:"Clay is",awake:"Awake",sleep:"Sleeping",bottle:"🍼 Bottle",breast:"🤱 Breast",skip:"skip",now:"Now",today:"Today",of:"of",todayW:"today",feeds:(n,s)=>`Today's log · ${n} feed${n===1?"":"s"} · ${s} sleep`,log:"Log",save:"Save",edit:"Edit",cancel:"Cancel",del:"Delete",last:"last",none:"nothing more before 06:00",nothing:"Nothing logged yet today.",bf:"breastfeed",each:"each",again:v=>`${v} again`,time:"Time",ml:"ml",minutes:"min",due:"due around",born:"born today",day:"Day",clay:"Clay",chet:"Chet",prowe:"Prowe",view:"Nanny",dogs:"Bee & Bug",driver:"Driver",maids:"Maids",yes:"Yes",later:"Not yet",days:["Sun","Mon","Tue","Wed","Thu","Fri","Sat"]},
+ th:{next:"มื้อถัดไป",clayIs:"เคลย์กำลัง",awake:"ตื่น",sleep:"หลับ",bottle:"🍼 ขวดนม",breast:"🤱 นมแม่",skip:"ข้าม",now:"ตอนนี้",today:"วันนี้",of:"จาก",todayW:"วันนี้",feeds:(n,s)=>`บันทึกวันนี้ · ${n} มื้อ · นอน ${s}`,log:"บันทึก",save:"บันทึก",edit:"แก้ไข",cancel:"ยกเลิก",del:"ลบ",last:"ล่าสุด",none:"ไม่มีมื้อก่อน 06:00",nothing:"ยังไม่มีบันทึกวันนี้",bf:"นมแม่",each:"ต่อครั้ง",again:v=>`${v} อีก`,time:"เวลา",ml:"มล.",minutes:"นาที",due:"กำหนดคลอดประมาณ",born:"เกิดวันนี้",day:"วันที่",clay:"เคลย์",chet:"พ่อ",prowe:"แม่",view:"พี่เลี้ยง",dogs:"บี & บั๊ก",driver:"คนขับรถ",maids:"แม่บ้าน",yes:"ตกลง",later:"ไว้ก่อน",days:["อา","จ","อ","พ","พฤ","ศ","ส"]}};
 const ui=k=>T_UI[U.lang][k];
 function tr(s){ if(U.lang==="en"||!s) return s; let out=s; TH.forEach(([a,b])=>{ out=out.split(a).join(b); }); return out; }
 
@@ -321,28 +321,28 @@ function build(dow,date){
   const CL={feed:"Feed",bath:"Bath · wind-down",play:"Play · tummy time",sleep:"Sleep",nap:"Nap"};
   const clayNow=C.filter(c=>nowA>=c.h&&nowA<c.h+c.dur).sort((a,b)=>b.h-a.h||(a.kind==="feed"?-1:1))[0];
 
-  /* who feeds Clay: whoever logged it; otherwise View on shift, Chet on the shift-night bottle, else Prowe */
+  /* who feeds Clay: whoever logged it; otherwise Nanny on shift, Chet on the shift-night bottle, else Prowe */
   const dutyAt=h=>!nannyOff&&h>=nS&&h<nE&&!(fam&&h>=11&&h<19);
   feeds.forEach(f=>{ f.by=f.actual&&PEOPLE[f.actual.who]?PEOPLE[f.actual.who].col:(dutyAt(f.h)?"nanny":(shift&&f.h>=25&&f.h<=28)?"chet":"prowe"); });
-  const NM={chet:"Chet",prowe:"Prowe",nanny:"View"};
+  const NM={chet:"Chet",prowe:"Prowe",nanny:"Nanny"};
   feeds.forEach(f=>{ const who=NM[f.by]; const lbl=f.actual?who+" fed Clay · "+(f.actual.type==="breast"?"breast":"bottle "+(f.actual.ml||0)+" ml"):(who+" feeds Clay"+(f.whenWakes?" · when he wakes":f.due?" · due now":m46()&&Math.abs(f.h%24-23)<0.5?" · dream feed":"")); mark(f.h,lbl,"feed",["chet","prowe","nanny"].filter(c=>c!==f.by)); });
   if(maidsIn){ mark(mS,"Maids in · cleaning","maid",["chet","prowe"]); mark(mE,dogsAway?"Maids leave · take Bee & Bug to the family house":"Maids leave","maid",["chet","prowe"]); }
   if(dogsAway){ mark(driverOn?dE:19,driverOn?"Driver brings the dogs home":"Dogs home · someone brings them (driver off)","drv",["chet","prowe"]); if(!driverOn) adj.push({k:"warn",key:"drv"+dow,t:`Driver is off ${DAYL[dow]} but the dogs are at the family house — someone else brings them home at 19:00.`}); }
   if(driverOn){ mark(dS,"Driver on duty","drv",["chet","prowe"]); if(!dogsAway) mark(dE,"Driver leaves","drv",["chet","prowe"]); }
   if(fam) mark(11,"Clay at "+fam+" · 11:00 – 19:00","dog",["nanny"]);
-  if(nannyOff) mark(nS,"View's day off","nanny",["chet","prowe"]); else { mark(nS,"View on duty","nanny",["chet","prowe"]); mark(nE,"View leaves","nanny",["chet","prowe"]); }
+  if(nannyOff) mark(nS,"Nanny's day off","nanny",["chet","prowe"]); else { mark(nS,"Nanny on duty","nanny",["chet","prowe"]); mark(nE,"Nanny leaves","nanny",["chet","prowe"]); }
 
   /* walk / exercise */
   let walkH=+S.walkSlot, walk=isWalkDay(dow); if(walk&&shift&&walkH===8) walkH=17; if(walk&&m3()&&feeds.some(f=>Math.abs(f.h-walkH)<0.5)) walkH=Math.max(walkH,feeds.filter(f=>Math.abs(f.h-walkH)<0.5)[0].h+0.75);
   const exDay=exOn(date)&&(dow===1||dow===3||dow===5), bjjDay=bjjOn(date)&&(dow===2||dow===4);
-  if(exDay&&nannyOff) adj.push({k:"warn",key:"exoff"+dow,t:"Base + yoga day but View is off — no cover for Clay 12:00 – 14:00."});
-  if(bjjDay&&nannyOff) adj.push({k:"warn",key:"bjjoff"+dow,t:"BJJ day but View is off — Clay needs cover 12:00 – 14:00."});
+  if(exDay&&nannyOff) adj.push({k:"warn",key:"exoff"+dow,t:"Base + yoga day but Nanny is off — no cover for Clay 12:00 – 14:00."});
+  if(bjjDay&&nannyOff) adj.push({k:"warn",key:"bjjoff"+dow,t:"BJJ day but Nanny is off — Clay needs cover 12:00 – 14:00."});
 
   /* Chet: sleep · walk / feed Bee & Bug · support feed · BJJ / Base + yoga */
   const bedF=feeds.find(f=>f.h>=19.5&&f.h<=22.5); const bedH=Math.max(20.5,bedF?bedF.h+bedF.dur+0.25:21); const chetAsleep=h=>shift?((h>=27&&h<34.5)||(h>=3&&h<10.5)):(h>=24&&h<32); const chetBusy=h=>I.some(x=>x.col==="chet"&&!x.mark&&x.kind!=="rest"&&h<x.h+x.dur&&h+0.75>x.h);
   if(shift){ add("chet",bedH,23.5-bedH,"Sleep","until the 23:00 feed","rest"); add("chet",27,7.5,"Sleep","03:00 – 10:30","rest"); } else add("chet",bedH,32-bedH,"Sleep","up for support feeds · wake 08:00","rest");
   if(!fam){ add("chet",11,0.5,"Feed Bee & Bug","","care"); if(!dogsAway) add("chet",18,0.5,"Feed Bee & Bug","","care"); }
-  if(dow>=1&&dow<=5&&!fam){ if(exDay&&!nannyOff) add("chet",12,2,"Base + yoga","with Prowe · View has Clay","act"); else if(bjjDay&&!nannyOff) add("chet",12,2,"BJJ","View has Clay","act"); }
+  if(dow>=1&&dow<=5&&!fam){ if(exDay&&!nannyOff) add("chet",12,2,"Base + yoga","with Prowe · Nanny has Clay","act"); else if(bjjDay&&!nannyOff) add("chet",12,2,"BJJ","Nanny has Clay","act"); }
   if(fam) add("chet",11,8,fam,"whole family + dogs","act");
   if(walk) add("chet",walkH,1,m3()?"Stroller walk":"Walk Bee & Bug",m3()?"Clay + dogs":"near the condo","act");
   feeds.forEach(f=>{ if(f.by==="chet") add("chet",f.h,f.dur,f.actual?"Feeding Clay":(shift&&f.h>=25&&f.h<=28?"Bottle feed":"Feed Clay"),shift&&f.h>=25&&f.h<=28&&!f.actual?"pumped milk":"","care"); else if(f.by==="prowe"&&!f.actual&&!(shift&&chetAsleep(f.h))&&!chetBusy(f.h)) add("chet",f.h,f.dur,"Support feed","","care"); });
@@ -350,21 +350,21 @@ function build(dow,date){
 
   /* Prowe: feed / pump · free · sleep */
   feeds.forEach(f=>{ if(f.by==="prowe") add("prowe",f.h,f.dur,f.actual?"Feeding Clay":"Feed","","care"); else if(f.by==="nanny"&&!f.actual&&f.h>=10&&f.h<=20.5) add("prowe",f.h,0.5,"Pump","","care"); else if(f.by==="chet"&&!f.actual&&!(f.h>=24&&f.h<29)) add("prowe",f.h,0.5,"Pump","","care"); });
-  if(exDay&&!nannyOff&&!fam) add("prowe",12,2,"Base + yoga","with Chet · View has Clay","act");
+  if(exDay&&!nannyOff&&!fam) add("prowe",12,2,"Base + yoga","with Chet · Nanny has Clay","act");
   if(fam) add("prowe",11,8,fam,"whole family + dogs","act");
   if(shift){ if(feeds.some(f=>f.h>=28.5&&f.h<31)){ add("prowe",bedH,29-bedH,"Sleep","Chet has the 02:00 bottle · up at 05:00","rest"); add("prowe",29.75,2.25,"Sleep","to 08:00","rest"); } else add("prowe",bedH,32-bedH,"Sleep","Chet has the 02:00 bottle · wake 08:00","rest"); }
   else add("prowe",bedH,32-bedH,"Sleep","up for feeds · wake 08:00","rest");
 
-  /* View */
+  /* Nanny */
   if(nannyOff) add("nanny",10,6,"Day off","","rest");
   else { add("nanny",nS,0.5,"On duty","until "+fmt(nE),"duty");
     C.forEach(c=>{ if(c.kind==="feed"){ if(c.f.by==="nanny") add("nanny",c.h,c.dur,c.f.actual?"Feeding Clay":"Feed Clay",c.f.whenWakes?"when he wakes":c.f.due?"due now":"","care"); return; } if(c.h<nS||c.h>=nE) return; if(c.kind==="nap"){} else if(c.kind==="bath") add("nanny",c.h,c.dur,"Bath · wind-down","","care"); else if(c.kind==="play") add("nanny",c.h,c.dur,"Play · tummy time","","care"); });
-    if(exDay||bjjDay){ I.filter(x=>x.col==="nanny"&&x.kind==="rest").forEach(x=>{ if(x.h<14&&x.h+x.dur>12){ if(x.h<12){ const end=x.h+x.dur; x.dur=12-x.h; if(end>14) add("nanny",14,end-14,x.label,x.sub,"rest"); } else if(x.h+x.dur<=14){ x.dur=0; } else { x.dur=x.h+x.dur-14; x.h=14; } } }); add("nanny",12,2,"View has Clay",(exDay?"Base + yoga":"BJJ")+" 12:00 – 14:00","care"); } }
+    if(exDay||bjjDay){ I.filter(x=>x.col==="nanny"&&x.kind==="rest").forEach(x=>{ if(x.h<14&&x.h+x.dur>12){ if(x.h<12){ const end=x.h+x.dur; x.dur=12-x.h; if(end>14) add("nanny",14,end-14,x.label,x.sub,"rest"); } else if(x.h+x.dur<=14){ x.dur=0; } else { x.dur=x.h+x.dur-14; x.h=14; } } }); add("nanny",12,2,"Nanny has Clay",(exDay?"Base + yoga":"BJJ")+" 12:00 – 14:00","care"); } }
 
   if(isToday&&sw&&sw.type==="wake"){ const w=toH(sw.t); I.forEach(it=>{ if(!it.mark&&it.label==="Nap with Clay"&&w>=it.h&&w<it.h+it.dur) it.dur=Math.max(0,w-it.h); }); C.forEach(c=>{ if((c.kind==="nap"||c.kind==="sleep")&&w>=c.h&&w<c.h+c.dur) c.dur=Math.max(0,w-c.h); }); }
   C.forEach(c=>{ if(c.kind==="feed"||c.dur<=0.25) return; const f=feeds.find(f=>c.h>=f.h&&c.h<=f.h+f.dur+0.1); const txt=c.kind==="nap"?"naps until "+hm(c.h+c.dur):c.kind==="sleep"?"sleeps until "+hm(c.h+c.dur):c.kind==="bath"?"bath":"play"; if(f) f.after=txt; else mark(c.h,"Clay "+txt,"clay",c.kind==="nap"||c.kind==="sleep"?null:["chet","prowe"]); });
   feeds.forEach(f=>{ if(!f.after) return; const t="then Clay "+f.after; I.forEach(it=>{ if(Math.abs(it.h-f.h)>0.01) return; if(it.mark&&it.kind==="feed") it.sub=t; else if(!it.mark&&/^(Feed|Feeding Clay|Feed Clay|Support feed|Bottle feed)$/.test(it.label)&&!(it.col==="nanny"&&/^(bath|play)$/.test(f.after))) it.sub=(it.sub?it.sub+" · ":"")+t; }); });
-  /* Prowe's pump sits on View's feed: one line, not two */
+  /* Prowe's pump sits on Nanny's feed: one line, not two */
   I.filter(x=>x.col==="prowe"&&x.label==="Pump").forEach(pu=>{ const mk=I.find(x=>x.mark&&x.kind==="feed"&&Math.abs(x.h-pu.h)<0.01); if(mk){ pu.sub=mk.label+(mk.sub?" · "+mk.sub:""); mk.cols=(mk.cols||["chet","prowe","nanny"]).filter(c=>c!=="prowe"); } });
   const S2={dogs:dogsAway&&nowA>=mE&&nowA<19?"Dogs at family house":fam&&nowA>=11&&nowA<19?"At family house":walk&&nowA>=walkH&&nowA<walkH+1?"Walk":(nowA>=20||nowA<8)?"Sleep":"Home",
     driver:driverOn&&nowA>=dS&&nowA<dE?"On duty":null, maids:maidsIn&&nowA>=mS&&nowA<mE?"Cleaning":null,
@@ -381,8 +381,8 @@ function build(dow,date){
 /* ---------- suggestions ---------- */
 function suggestions(today,age){
   const out=[]; const snoozed=k=>S.snooze&&S.snooze[k]&&today<S.snooze[k];
-  if(age!==null&&age>=21&&!S.exFrom&&!snoozed("ex")) out.push({key:"ex",t:"Clay is 3 weeks old — bring Base + yoga back for you and Prowe, Mon · Wed · Fri 12:00 – 14:00 (View has Clay)?",yes:()=>{ S.exFrom=today; saveSettings(); toast("Base + yoga is on the plan"); }});
-  if(age!==null&&age>=42&&!S.bjjFrom&&!snoozed("bjj")) out.push({key:"bjj",t:"Clay is 6 weeks old — restart BJJ, Tue · Thu 12:00 – 14:00 (View has Clay)?",yes:()=>{ S.bjjFrom=today; saveSettings(); toast("BJJ is on the plan"); }});
+  if(age!==null&&age>=21&&!S.exFrom&&!snoozed("ex")) out.push({key:"ex",t:"Clay is 3 weeks old — bring Base + yoga back for you and Prowe, Mon · Wed · Fri 12:00 – 14:00 (Nanny has Clay)?",yes:()=>{ S.exFrom=today; saveSettings(); toast("Base + yoga is on the plan"); }});
+  if(age!==null&&age>=42&&!S.bjjFrom&&!snoozed("bjj")) out.push({key:"bjj",t:"Clay is 6 weeks old — restart BJJ, Tue · Thu 12:00 – 14:00 (Nanny has Clay)?",yes:()=>{ S.bjjFrom=today; saveSettings(); toast("BJJ is on the plan"); }});
   const dates=Object.keys(L).sort().slice(-14); const nights=[]; dates.forEach(d=>{ const fs=(L[d].entries||[]).filter(isFeed).map(x=>toH(x.t)); if(fs.length) nights.push(fs.filter(h=>h>=24&&h<=29.5).length); });
   if(nights.length>=5&&nights.reduce((a,b)=>a+b,0)/nights.length<0.5&&pi()<3&&S.feeds[PH].some(x=>x.t==="02:00"&&!x.off)&&!snoozed("n02")) out.push({key:"n02",t:"Hardly any night feeds lately — turn the 02:00 feed off?",yes:()=>{ const f=S.feeds[PH].find(x=>x.t==="02:00"); if(f){ f.off=true; saveSettings(); } }});
   return out;
@@ -491,7 +491,7 @@ function renderSettings(age,today){
       <div class="field"><span>Dog walks</span>${dayPick("wd",d=>S.walkDays.includes(d))}<div class="seg sm" data-set="walkSlot"><button data-v="8" class="${S.walkSlot==="8"?"on":""}">08:00</button><button data-v="17" class="${S.walkSlot==="17"?"on":""}">17:00</button></div></div>`)+
     person("🧔🏻👩🏻","Chet & Prowe",`
       <div class="frow"><button class="sw2 ${S.exFrom?"on":""}" data-toggle="exFrom"><i></i>Base + yoga · Mon Wed Fri 12:00 – 14:00</button></div>`)+
-    person(EMO.nanny,"View",`
+    person(EMO.nanny,"Nanny",`
       <div class="field"><span>Hours</span>${hrsField("nannyHrs",nannyHrs())}</div>
       <div class="field"><span>Day off</span>${dayPick("noff",d=>String(d)===offNow,true)}</div>`)+
     person(EMO.driver,"Driver",`<div class="field"><span>Hours</span>${hrsField("driverHrs",driverHrs())}</div><div class="field"><span>Days</span>${dayPick("dd",d=>S.driverDays.includes(d))}</div>`)+
@@ -555,7 +555,7 @@ document.body.addEventListener("click",e=>{ const b=e.target.closest("button"); 
   else if(d.feedon!==undefined){ const f=S.feeds[PH][+d.feedon]; f.off=!f.off; saveSettings(); }
   else if(d.feeddel!==undefined){ S.feeds[PH].splice(+d.feeddel,1); saveSettings(); }
   else if(b.hasAttribute("data-addfeed")){ const have=new Set(S.feeds[PH].map(f=>f.t)); let t=12; while(have.has(pad(t%24)+":00")&&t<36) t++; S.feeds[PH].push({t:pad(t%24)+":00"}); saveSettings(); }
-  else if(d.noff){ const today=scheduleDate(bkkNow()); if(String(S.nannyOff)!==d.noff){ S.nannyOffPrev=nannyOffOn(today); S.nannyOff=d.noff; S.nannyOffFrom=today; saveSettings(); toast("View's day off: "+DAYL[+d.noff]+" from now on"); } }
+  else if(d.noff){ const today=scheduleDate(bkkNow()); if(String(S.nannyOff)!==d.noff){ S.nannyOffPrev=nannyOffOn(today); S.nannyOff=d.noff; S.nannyOffFrom=today; saveSettings(); toast("Nanny's day off: "+DAYL[+d.noff]+" from now on"); } }
   else if(d.toggle){ const k=d.toggle; if(k==="maidDogs") S.maidDogs=S.maidDogs===false; else S[k]=S[k]?null:scheduleDate(bkkNow()); saveSettings(); }
   else if(d.wd){ const x=+d.wd; S.walkDays=S.walkDays.includes(x)?S.walkDays.filter(y=>y!==x):[...S.walkDays,x]; saveSettings(); }
   else if(d.hnudge){ const [k,i,dm]=d.hnudge.split(":"); const cur=k==="nannyHrs"?nannyHrs():k==="driverHrs"?driverHrs():maidHrs(); const v=[cur[0],cur[1]]; v[+i]=Math.max(0,Math.min(23.5,v[+i]+(+dm)/60)); if(v[1]-v[0]<1){ toast("Keep at least 1 hour"); return; } S[k]=hm(v[0])+"-"+hm(v[1]); saveSettings(); }
