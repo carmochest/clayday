@@ -24,7 +24,8 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline
 
 .top{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:2px 4px 4px}
 .top h1{font-size:34px;font-weight:600;letter-spacing:-.02em;margin:0;line-height:1;color:var(--sky-ink);font-variant-numeric:tabular-nums}
-.top small{display:block;font-size:12.5px;font-weight:400;color:var(--sky-ink-2);margin-top:4px;white-space:nowrap}
+.top>div:first-child{min-width:0}
+.top small{display:block;font-size:12.5px;font-weight:400;color:var(--sky-ink-2);margin-top:4px;line-height:1.3}
 .top small button{color:var(--sky-ink-2);text-decoration:underline;text-underline-offset:3px;font-size:12.5px;margin-left:6px}
 .wknav{display:flex;gap:2px}
 .wknav button{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;text-align:center;color:var(--ink-2);font-size:18px}
@@ -34,7 +35,7 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline
 .seg button{padding:8px 14px;border-radius:999px;font-weight:600;font-size:14px;color:var(--ink-2);white-space:nowrap;text-align:center}
 .seg button.on{background:var(--on);color:var(--on-ink);box-shadow:0 2px 8px rgba(42,31,46,.18)}
 .seg button[disabled]{opacity:.35;cursor:default}
-.seg.sm button{padding:6px 11px;font-size:13px}
+.seg.sm button{padding:6px 10px;font-size:13px}
 .top .seg{background:var(--sky-chip)} .top .seg button{color:var(--sky-ink-2)} .top .seg button.on{background:var(--sky-on);color:var(--sky-on-ink)}
 
 .card{background:var(--panel);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-radius:22px;box-shadow:var(--shadow);padding:16px 16px;animation:rise .35s var(--ease) both}
@@ -58,7 +59,8 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline
 .btn.sm{padding:8px 12px;font-size:13.5px;border-radius:999px}
 .acts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
 .acts.three{grid-template-columns:1.45fr 1fr 1fr}
-.acts.three .btn{padding:14px 6px;font-size:15px}
+.acts.three .btn{padding:14px 6px;font-size:15px;overflow:hidden;text-overflow:ellipsis}
+@media (max-width:380px){.acts.three .btn{font-size:14px;padding:14px 4px}}
 .acts .full{grid-column:1/-1}
 .pick{margin-top:10px;background:var(--chip);border-radius:16px;padding:12px;display:flex;flex-direction:column;gap:10px;animation:rise .25s var(--ease) both}
 .pick .pre{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
@@ -110,7 +112,8 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline
 .agenda{padding:10px 6px 6px}
 .agenda .head{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:2px 10px 8px}
 .agenda .head h2{margin:0;font-size:12px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3)}
-.list{max-height:min(600px,66vh);overflow-y:auto;scrollbar-width:none;-webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 5%,#000 93%,transparent 100%);mask-image:linear-gradient(to bottom,transparent 0,#000 5%,#000 93%,transparent 100%);padding:4px 0 26px;scroll-behavior:smooth}
+.list{--mt:transparent;--mb:transparent;max-height:min(600px,66vh);overflow-y:auto;scrollbar-width:none;-webkit-mask-image:linear-gradient(to bottom,var(--mt) 0,#000 6%,#000 93%,var(--mb) 100%);mask-image:linear-gradient(to bottom,var(--mt) 0,#000 6%,#000 93%,var(--mb) 100%);padding:4px 0 26px;scroll-behavior:smooth}
+.list.at-top{--mt:#000} .list.at-bottom{--mb:#000}
 .list::-webkit-scrollbar{display:none}
 .it{display:grid;grid-template-columns:54px 1fr;align-items:baseline;gap:8px;padding:10px 12px;border-radius:14px;font-size:15.5px}
 .it .tm{font-variant-numeric:tabular-nums;color:var(--ink-2);font-size:13.5px;font-weight:600}
@@ -226,7 +229,7 @@ const FIREBASE_CONFIG=null;
 /* ---------- constants ---------- */
 const TZ="Asia/Bangkok", DAY_START=6;
 const DAYS=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"], DAYL=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"], MONTHS=["January","February","March","April","May","June","July","August","September","October","November","December"];
-const PHASES=[{id:"m1",label:"Month 1"},{id:"m2",label:"Month 2"},{id:"m25",label:"Month 2½"},{id:"m3",label:"Month 3"},{id:"m46",label:"Months 4–6"}];
+const PHASES=[{id:"m1",label:"Month 1"},{id:"m2",label:"Month 2"},{id:"m25",label:"Month 2½"},{id:"m3",label:"Month 3"},{id:"m46",label:"Month 4–6"}];
 const DEFAULT_FEEDS={
   m1 :[{t:"08:00"},{t:"11:00"},{t:"14:00"},{t:"17:00"},{t:"20:00"},{t:"23:00"},{t:"02:00"},{t:"05:00"}],
   m2 :[{t:"08:00"},{t:"11:00"},{t:"14:00"},{t:"17:00"},{t:"20:00"},{t:"23:00"},{t:"02:00"},{t:"05:00",off:true}],
@@ -263,9 +266,9 @@ function dateOfDow(dow,wk){ const base=scheduleDate(bkkNow()); const bd=new Date
 const pad=n=>String(n).padStart(2,"0");
 const nowHM=()=>{ const n=bkkNow(); return pad(n.h)+":"+pad(n.m); };
 function toH(t){ const [h,m]=t.split(":").map(Number); let x=h+m/60; if(x<DAY_START) x+=24; return x; }
-function fmt(h){ h=((h%24)+24)%24; const H=Math.floor(h), M=Math.round((h-H)*60); return pad(H)+":"+pad(M%60); }
+function fmt(h){ const m=((Math.round(h*60)%1440)+1440)%1440; return pad(Math.floor(m/60))+":"+pad(m%60); }
 function nowAbs(){ const n=bkkNow(); return n.hf<DAY_START?n.hf+24:n.hf; }
-function niceDate(iso){ return new Date(iso+"T12:00:00Z").toLocaleDateString("en-GB",{day:"numeric",month:"short",timeZone:"UTC"}); }
+function niceDate(iso){ return (+iso.slice(8))+" "+MONTHS[+iso.slice(5,7)-1].slice(0,3); }
 
 /* ---------- age / phase / rules ---------- */
 function ageDays(date){ if(!S.birth) return null; return Math.round((new Date(date+"T12:00:00Z")-new Date(S.birth+"T12:00:00Z"))/864e5); }
@@ -274,7 +277,7 @@ let PH="m1"; const pi=()=>PHASES.findIndex(p=>p.id===PH), m3=()=>pi()>=3, m46=()
 const hrsOf=(str,def)=>{ const m=/^(\d\d):(\d\d)-(\d\d):(\d\d)$/.exec(str||""); if(!m) return def; const a=+m[1]+m[2]/60, b=+m[3]+m[4]/60; return b>a?[a,b]:def; };
 const nannyHrs=()=>hrsOf(S.nannyHrs,S.nannyShift==="8-18"?[8,18]:[9,19]);
 const driverHrs=()=>hrsOf(S.driverHrs,[10,19]); const maidHrs=()=>hrsOf(S.maidHrs,[10,16]);
-const hm=h=>pad(Math.floor(h%24))+":"+pad(Math.round((h%1)*60));
+const hm=fmt;
 const nannyOffOn=date=>String(S.nannyOffFrom&&date<S.nannyOffFrom&&S.nannyOffPrev!==null?S.nannyOffPrev:S.nannyOff);
 const isMaidDay=d=>S.maidDays.includes(d); const isDogsAway=d=>isMaidDay(d)&&S.maidDogs!==false;
 const famHouse=d=>m3()?(d===6?"Chet's family house":d===0?"Prowe's family house":null):null;
@@ -298,7 +301,7 @@ function build(dow,date){
   /* Clay's feeds: plan, then live prediction from the last real feed */
   const plan=sortedFeeds().filter(f=>!f.off).map(f=>({h:toH(f.t),key:"feed@"+f.t}));
   const real=log.filter(isFeed); const {gap,learned}=typicalGap();
-  const sw=[...log].reverse().find(x=>x.type==="sleep"||x.type==="wake"); const sleeping=isToday&&!!(sw&&sw.type==="sleep");
+  let sw=[...log].reverse().find(x=>x.type==="sleep"||x.type==="wake"), carried=false; if(!sw&&isToday){ const y=L[addDays(date,-1)]; const ysw=y&&[...(y.entries||[])].reverse().find(x=>x.type==="sleep"||x.type==="wake"); if(ysw&&ysw.type==="sleep"&&toH(ysw.t)>=20){ sw=ysw; carried=true; } } const sleeping=isToday&&!!(sw&&sw.type==="sleep");
   let feeds=[]; const noFeed=m46()?[23.6,31.5]:null;
   if(isToday&&real.length){ const last=toH(real[real.length-1].t), first=toH(real[0].t);
     plan.filter(f=>f.h<first-0.75).forEach(f=>feeds.push({...f,missed:f.h<nowA}));
@@ -375,14 +378,14 @@ function build(dow,date){
   I.sort((a,b)=>a.h-b.h);
   /* merge back-to-back rows that say the same thing (e.g. Work 12–14 + Work 14–17 → Work 12–17) */
   ["chet","prowe","nanny"].forEach(col=>{ const rows=I.filter(x=>x.col===col&&!x.mark); for(let i=rows.length-1;i>0;i--){ const a=rows[i-1], b=rows[i]; if(a.label===b.label&&a.sub===b.sub&&Math.abs(a.h+a.dur-b.h)<0.05){ a.dur+=b.dur; I.splice(I.indexOf(b),1); } } });
-  return {items:I,adj,feeds,gap,learned,shift,sleeping,sw,clayNow,CL,S2};
+  return {items:I,adj,feeds,gap,learned,shift,sleeping,sw,carried,clayNow,CL,S2};
 }
 
 /* ---------- suggestions ---------- */
 function suggestions(today,age){
   const out=[]; const snoozed=k=>S.snooze&&S.snooze[k]&&today<S.snooze[k];
-  if(age!==null&&age>=21&&!S.exFrom&&!snoozed("ex")) out.push({key:"ex",t:"Clay is 3 weeks old — bring Base + yoga back for you and Prowe, Mon · Wed · Fri 12:00 – 14:00 (Nanny has Clay)?",yes:()=>{ S.exFrom=today; saveSettings(); toast("Base + yoga is on the plan"); }});
-  if(age!==null&&age>=42&&!S.bjjFrom&&!snoozed("bjj")) out.push({key:"bjj",t:"Clay is 6 weeks old — restart BJJ, Tue · Thu 12:00 – 14:00 (Nanny has Clay)?",yes:()=>{ S.bjjFrom=today; saveSettings(); toast("BJJ is on the plan"); }});
+  if(age!==null&&age>=21&&!S.exFrom&&!snoozed("ex")) out.push({key:"ex",t:`Clay is ${Math.floor(age/7)} weeks old — bring Base + yoga back for you and Prowe, Mon · Wed · Fri 12:00 – 14:00 (Nanny has Clay)?`,yes:()=>{ S.exFrom=today; saveSettings(); toast("Base + yoga is on the plan"); }});
+  if(age!==null&&age>=42&&!S.bjjFrom&&!snoozed("bjj")) out.push({key:"bjj",t:`Clay is ${Math.floor(age/7)} weeks old — restart BJJ, Tue · Thu 12:00 – 14:00 (Nanny has Clay)?`,yes:()=>{ S.bjjFrom=today; saveSettings(); toast("BJJ is on the plan"); }});
   const dates=Object.keys(L).sort().slice(-14); const nights=[]; dates.forEach(d=>{ const fs=(L[d].entries||[]).filter(isFeed).map(x=>toH(x.t)); if(fs.length) nights.push(fs.filter(h=>h>=24&&h<=29.5).length); });
   if(nights.length>=5&&nights.reduce((a,b)=>a+b,0)/nights.length<0.5&&pi()<3&&S.feeds[PH].some(x=>x.t==="02:00"&&!x.off)&&!snoozed("n02")) out.push({key:"n02",t:"Hardly any night feeds lately — turn the 02:00 feed off?",yes:()=>{ const f=S.feeds[PH].find(x=>x.t==="02:00"); if(f){ f.off=true; saveSettings(); } }});
   return out;
@@ -396,9 +399,9 @@ const face=(sleeping,size)=>`<svg class="face ${sleeping?"zz":"aw"}" width="${si
   <g class="eye"><ellipse class="white" cx="26" cy="23" rx="3.6" ry="3.4" fill="#fff"/><circle class="pupil" cx="26" cy="23" r="1.9" fill="#2A1F2E"/><path class="lid" d="M22.5 23.5q3.5 1.6 7 0" stroke="#2A1F2E" stroke-width="1.4" fill="none" stroke-linecap="round"/></g></g>
   <path d="M17 30q3 2 6 0" stroke="#C9776A" stroke-width="1.3" fill="none" stroke-linecap="round"/>
   <g class="zs" font-family="var(--font)" font-weight="600" fill="#5B4670"><text x="29" y="12" font-size="7">z</text><text x="33" y="7" font-size="9">Z</text><text x="37" y="2" font-size="11">Z</text></g></svg>`;
-function sleepMin(log,nowA){ const ev=log.filter(x=>x.type==="sleep"||x.type==="wake").sort((a,b)=>toH(a.t)-toH(b.t)); let tot=0, s=null; ev.forEach(x=>{ if(x.type==="sleep"){ if(s===null) s=toH(x.t); } else if(s!==null){ tot+=Math.max(0,toH(x.t)-s); s=null; } }); if(s!==null) tot+=Math.max(0,nowA-s); return Math.round(tot*60); }
+function sleepMin(log,nowA,carried){ const ev=log.filter(x=>x.type==="sleep"||x.type==="wake").sort((a,b)=>toH(a.t)-toH(b.t)); let tot=0, s=carried?DAY_START:null; ev.forEach(x=>{ if(x.type==="sleep"){ if(s===null) s=toH(x.t); } else if(s!==null){ tot+=Math.max(0,toH(x.t)-s); s=null; } }); if(s!==null) tot+=Math.max(0,nowA-s); return Math.round(tot*60); }
 function sleepGuide(ageDays){ return ageDays<120?[14,17]:ageDays<365?[12,15]:[11,14]; }
-function sleepTotal(log,nowA){ const m=sleepMin(log,nowA); return m<60?`${m} ${U.lang==="th"?"นาที":"min"}`:`${Math.floor(m/60)} ${U.lang==="th"?"ชม.":"h"} ${pad(m%60)}`; }
+function sleepTotal(log,nowA,carried){ const m=sleepMin(log,nowA,carried); return m<60?`${m} ${U.lang==="th"?"นาที":"min"}`:`${Math.floor(m/60)} ${U.lang==="th"?"ชม.":"h"} ${pad(m%60)}`; }
 function picker(){ const bottle=U.pick.mode==="bottle"; const sw=U.pick.mode==="sleep"||U.pick.mode==="wake"; const ed=U.pick.edit; return `<div class="pick">
   <div class="lab">${ed?ui("edit"):ui("log")} · ${sw?(U.pick.mode==="sleep"?"😴 "+tr("Asleep"):"👀 "+tr("Awake")):bottle?tr("Bottle"):tr("Breastfeed")}</div>
   ${sw?"":bottle?`<div class="pre">${[60,90,120,150,180,210].map(m=>`<button data-ml="${m}" class="${U.ml===m?"on":""}">${m} ${ui("ml")}</button>`).join("")}</div>`
@@ -407,13 +410,14 @@ function picker(){ const bottle=U.pick.mode==="bottle"; const sw=U.pick.mode==="
   <div class="go"><button class="btn quiet" data-pickclose>${ui("cancel")}</button><button class="btn primary" data-picksave>${ed?ui("save"):ui("log")}</button></div>
   ${ed?`<button class="btn quiet sm" data-delfeed="${ed.id}" style="justify-self:center">${ui("del")}</button>`:""}</div>`; }
 
+function listEdges(){ const l=$("list"); l.classList.toggle("at-top",l.scrollTop<4); l.classList.toggle("at-bottom",l.scrollTop+l.clientHeight>=l.scrollHeight-4); }
 function render(){
   const sy=window.scrollY;
   const now=bkkNow(), today=scheduleDate(now), tdow=new Date(today+"T12:00:00Z").getUTCDay(); if(U.day===null||U.today!==today){ U.day=tdow; U.today=today; U.scrollKey=null; }
   const dow=U.day, date=dateOfDow(dow,U.wk), isToday=date===today, nowA=nowAbs(); const me=PEOPLE[U.me]||PEOPLE.chet;
   const T=build(tdow,today), tPH=PH; const R=build(dow,date); const age=ageDays(today);
   $("clock").textContent=fmt(nowA);
-  $("dateline").innerHTML=`${U.lang==="th"?ui("days")[now.dow]+" "+(+now.date.slice(8))+"/"+(+now.date.slice(5,7)):DAYS[now.dow]+" "+niceDate(now.date)} · ${S.birth?(age<=0?ui("born"):`${ui("day")} ${age} · ${U.lang==="th"?"ด."+PHASES.find(p=>p.id===tPH).label.replace(/Months? /,""):PHASES.find(p=>p.id===tPH).label}`):ui("due")+" "+niceDate(DUE)}`;
+  $("dateline").innerHTML=`${U.lang==="th"?ui("days")[now.dow]+" "+(+now.date.slice(8))+"/"+(+now.date.slice(5,7)):DAYS[now.dow]+" "+niceDate(now.date)} · ${S.birth?(age<=0?ui("born"):`${ui("day")} ${age} · ${U.lang==="th"?"ด."+PHASES.find(p=>p.id===tPH).label.replace(/Months? /,""):PHASES.find(p=>p.id===tPH).label.replace(" "," ")}`):ui("due")+" "+niceDate(DUE)}`;
   $("meSeg").innerHTML=Object.entries(PEOPLE).map(([k,p])=>`<button role="tab" aria-selected="${U.me===k}" class="${U.me===k?"on":""}" data-me="${k}">${ui(k)}</button>`).join("");
   $("meSeg").hidden=!!U.locked;
   $("settings").hidden=U.me==="view"; $("setSum").textContent=U.lang==="th"?"ตั้งค่า":"Settings"; $("now").hidden=U.me==="view";
@@ -432,8 +436,8 @@ function render(){
     <div class="acts ${last?"three":""}">${last?`<button class="btn primary big" data-again='${JSON.stringify({type:last.type,ml:last.ml||0,min:last.min||0})}'>${last.type==="bottle"?"🍼 "+ui("again")(last.ml+" "+ui("ml")):"🤱 "+ui("again")(tr("Breast"))}</button>`:""}<button class="btn big" data-pickopen="bottle">${ui("bottle")}</button><button class="btn big" data-pickopen="breast">${ui("breast")}</button></div>
     ${U.pick?picker():""}
     <div class="intake"><div class="l"><span><b>~${ml} ${ui("ml")}</b> ${ui("of")} ${tg} ${ui("todayW")}${bf?` · ${bf} ${ui("bf")} ≈ ${bfml} ${ui("ml")} ${ui("each")}`:""}</span><span>${pc}%</span></div><div class="bar"><i style="width:${pc}%"></i></div></div>
-    ${(()=>{ const sm=sleepMin(tlog,nowA), [lo,hi]=sleepGuide(age), spc=Math.min(100,Math.round(sm/((lo+hi)/2*60)*100)); return `<div class="intake sl"><div class="l"><span>😴 <b>${sleepTotal(tlog,nowA)}</b> ${U.lang==="th"?"นอนวันนี้ · แนะนำ":"sleep today · guide"} ${lo}–${hi} ${U.lang==="th"?"ชม.":"h"}</span><span>${spc}%</span></div><div class="bar"><i style="width:${spc}%"></i></div></div>`; })()}
-    <details class="feedlog" ${U.logOpen?"open":""} id="feedlog"><summary><div class="logbtn"><span>${ui("feeds")(real.length,sleepTotal(tlog,nowA))}</span></div></summary><div>
+    ${(()=>{ const sm=sleepMin(tlog,nowA,T.carried), [lo,hi]=sleepGuide(age), spc=Math.min(100,Math.round(sm/((lo+hi)/2*60)*100)); return `<div class="intake sl"><div class="l"><span>😴 <b>${sleepTotal(tlog,nowA,T.carried)}</b> ${U.lang==="th"?"นอนวันนี้ · แนะนำ":"sleep today · guide"} ${lo}–${hi} ${U.lang==="th"?"ชม.":"h"}</span><span>${spc}%</span></div><div class="bar"><i style="width:${spc}%"></i></div></div>`; })()}
+    <details class="feedlog" ${U.logOpen?"open":""} id="feedlog"><summary><div class="logbtn"><span>${ui("feeds")(real.length,sleepTotal(tlog,nowA,T.carried))}</span></div></summary><div>
       ${tlog.filter(x=>isFeed(x)||x.type==="sleep"||x.type==="wake").sort((a,b)=>toH(a.t)-toH(b.t)).map(x=>isFeed(x)?`<div class="fl"><span class="t">${x.t}</span><span>${x.type==="breast"?"🤱 "+tr("Breast")+(x.min?" · "+x.min+" "+ui("minutes"):""):"🍼 "+tr("Bottle")+" · "+(x.ml||0)+" "+ui("ml")}<span class="who"> · ${U.lang==="th"?"โดย":"by"} ${PEOPLE[x.who]?ui(x.who):"🏠"}</span></span><button data-editfeed="${x.id}" title="${ui("edit")}">✎</button><button data-delfeed="${x.id}" title="${ui("del")}">×</button></div>`
         :`<div class="fl"><span class="t">${x.t}</span><span>${x.type==="sleep"?"😴 "+tr("Asleep"):"👀 "+tr("Awake")}<span class="who"> · ${U.lang==="th"?"โดย":"by"} ${PEOPLE[x.who]?ui(x.who):"🏠"}</span></span><button data-editfeed="${x.id}" title="${ui("edit")}">✎</button><button data-delfeed="${x.id}" title="${ui("del")}">×</button></div>`).join("")||`<p class="hint" style="padding:6px 0">${ui("nothing")}</p>`}
     </div></details>`
@@ -465,7 +469,7 @@ function render(){
     html+=`<div class="it ${past?"past":""} ${idx===curIdx?"cur":""} ${idx===nextIdx?"next":""} ${i.kind==="rest"?"rest":""}"><span class="tm">${fmt(i.h)}</span><span class="lb">${tr(i.label)}${i.sub?`<small>${tr(i.sub)}</small>`:""}</span></div>`; });
   if(isToday&&!marked) html+=`<div class="gapmark">${ui("now")} · ${fmt(nowA)}</div>`;
   $("list").innerHTML=html;
-  const list=$("list"); const nx=list.querySelector(".it.cur")||list.querySelector(".it.next")||list.querySelector(".gapmark"); if(nx&&U.scrollKey!==date+U.me){ U.scrollKey=date+U.me; list.scrollTop=Math.max(0,nx.offsetTop-list.clientHeight*0.3); }
+  const list=$("list"); const nx=list.querySelector(".it.cur")||list.querySelector(".it.next")||list.querySelector(".gapmark"); if(nx&&U.scrollKey!==date+U.me){ U.scrollKey=date+U.me; list.scrollTop=Math.max(0,nx.offsetTop-list.clientHeight*0.3); } listEdges();
 
   PH=tPH; renderSettings(age,today);
   if(Math.abs(window.scrollY-sy)>2) window.scrollTo(0,sy);
@@ -508,8 +512,8 @@ function saveSettings(){ lsSet("clay.settings",S); render(); if(db){ clearTimeou
 function saveDay(date){ lsSet("clay.log."+date,L[date]); render(); if(db) db.set("days/"+date,L[date]); }
 function normalize(){ S.feeds=Object.assign(clone(DEFAULT_FEEDS),S.feeds||{}); tidyFeeds(); ["walkDays","driverDays","maidDays"].forEach(k=>{ if(!Array.isArray(S[k])) S[k]=DEFAULTS[k]; }); if(!S.snooze) S.snooze={}; }
 function applySettings(data){ S=Object.assign(clone(DEFAULTS),data); normalize(); lsSet("clay.settings",S); render(); }
-function addLog(type,extra,quiet){ const n=bkkNow(), date=scheduleDate(n), t=pad(n.h)+":"+pad(n.m); L[date]=L[date]||{date,entries:[]}; L[date].date=date; const e=Object.assign({id:Date.now().toString(36),t,type,who:U.me},extra||{}); if(!/^\d\d:\d\d$/.test(e.t)) e.t=t;
-  const prev=L[date].entries; const lastE=prev[prev.length-1];
+function addLog(type,extra,quiet){ const n=bkkNow(); let date=scheduleDate(n); const t=pad(n.h)+":"+pad(n.m); if(extra&&extra.t&&/^\d\d:\d\d$/.test(extra.t)&&toH(extra.t)>nowAbs()+6) date=addDays(date,-1); L[date]=L[date]||{date,entries:[]}; L[date].date=date; const e=Object.assign({id:Date.now().toString(36),t,type,who:U.me},extra||{}); if(!/^\d\d:\d\d$/.test(e.t)) e.t=t;
+  const prev=L[date].entries; let lastE=[...prev].reverse().find(x=>x.type==="sleep"||x.type==="wake"); if(!lastE&&(type==="sleep"||type==="wake")){ const y=L[addDays(date,-1)]; const ysw=y&&[...(y.entries||[])].reverse().find(x=>x.type==="sleep"||x.type==="wake"); if(ysw&&ysw.type==="sleep"&&toH(ysw.t)>=20) lastE=ysw; }
   if((type==="sleep"||type==="wake")&&lastE&&lastE.type===type){ toast(U.lang==="th"?(type==="sleep"?"เคลย์หลับอยู่แล้ว":"เคลย์ตื่นอยู่แล้ว"):(type==="sleep"?"Clay's already asleep":"Clay's already awake")+" · "+lastE.t); return; }
   if(isFeed(e)&&!(extra&&extra.t)){ const dup=prev.filter(isFeed).find(x=>Math.abs(toH(x.t)-toH(e.t))<0.034); if(dup){ toast((U.lang==="th"?"บันทึกไปแล้วเมื่อ ":"Already logged at ")+dup.t); return; } }
   L[date].entries=[...prev,e]; U.day=new Date(date+"T12:00:00Z").getUTCDay(); U.pick=null; saveDay(date);
@@ -542,7 +546,7 @@ document.body.addEventListener("click",e=>{ const b=e.target.closest("button"); 
   else if(d.min){ U.min=+d.min; render(); }
 
   else if(b.hasAttribute("data-pickclose")){ U.pick=null; render(); }
-  else if(b.hasAttribute("data-picksave")){ const ed=U.pick.edit; const tm=($("tmIn")&&/^\d\d:\d\d$/.test($("tmIn").value))?$("tmIn").value:null;
+  else if(b.hasAttribute("data-picksave")){ const ed0=U.pick.edit; const ed=ed0?(((L[scheduleDate(bkkNow())]||{}).entries||[]).find(x=>x.id===ed0.id)||ed0):null; const tm=($("tmIn")&&/^\d\d:\d\d$/.test($("tmIn").value))?$("tmIn").value:null;
     if(U.pick.mode==="sleep"||U.pick.mode==="wake"){ if(ed&&tm){ ed.t=tm; } U.pick=null; saveDay(scheduleDate(bkkNow())); }
     else if(U.pick.mode==="bottle"){ const v=+($("mlIn")&&$("mlIn").value)||U.ml; U.ml=v; if(ed){ ed.ml=v; delete ed.min; ed.type="bottle"; if(tm) ed.t=tm; U.pick=null; saveDay(scheduleDate(bkkNow())); } else addLog("bottle",Object.assign({ml:v},tm?{t:tm}:{})); }
     else { const v=+($("minIn")&&$("minIn").value)||0; if(ed){ ed.type="breast"; delete ed.ml; if(v) ed.min=v; else delete ed.min; if(tm) ed.t=tm; U.pick=null; saveDay(scheduleDate(bkkNow())); } else addLog("breast",Object.assign(v?{min:v}:{},tm?{t:tm}:{})); } }
@@ -570,6 +574,7 @@ document.body.addEventListener("input",e=>{ if(e.target.id==="mlIn") U.ml=+e.tar
 $("settings").addEventListener("toggle",()=>{ if(!$("settings").open) U.calOpen=false; });
 
 document.body.addEventListener("toggle",e=>{ if(e.target.id==="feedlog") U.logOpen=e.target.open; },true);
+$("list").addEventListener("scroll",listEdges,{passive:true});
 (function(){ let sx=0,sy=0,t=0; const el=document.querySelector(".agenda"); el.addEventListener("touchstart",e=>{ sx=e.touches[0].clientX; sy=e.touches[0].clientY; t=Date.now(); },{passive:true});
   el.addEventListener("touchend",e=>{ const dx=e.changedTouches[0].clientX-sx, dy=e.changedTouches[0].clientY-sy; if(Date.now()-t<600&&Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.5){ const nd=addDays(dateOfDow(U.day,U.wk),dx<0?1:-1); const base=scheduleDate(bkkNow()); const bd=new Date(base+"T12:00:00Z").getUTCDay(); const diff=Math.round((new Date(nd+"T12:00:00Z")-new Date(base+"T12:00:00Z"))/864e5); U.day=new Date(nd+"T12:00:00Z").getUTCDay(); U.wk=Math.floor((diff-((U.day-bd+7)%7))/7); render(); } },{passive:true}); })();
 render(); (function tick(){ const ms=60000-(Date.now()%60000)+50; setTimeout(()=>{ if(!U.pick&&document.activeElement.tagName!=="INPUT") render(); tick(); },ms); })();
