@@ -43,7 +43,7 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline
 .lab{font-size:11.5px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3)}
 .big{font-size:46px;font-weight:600;letter-spacing:-.025em;line-height:1;margin-top:2px;font-variant-numeric:tabular-nums}
 .sub{color:var(--ink-2);font-size:14px;margin-top:4px}
-.sub .skip{color:var(--ink-3);text-decoration:underline;text-underline-offset:3px;margin-left:8px;font-size:13px}
+.sub .skip{color:var(--ink-3);text-decoration:underline;text-underline-offset:3px;margin-left:2px;font-size:13px;padding:8px 8px;margin-top:-8px;margin-bottom:-8px}
 .sub .last{display:inline-block;white-space:nowrap;margin-left:8px;font-size:12.5px;color:var(--ink-3);font-weight:500}
 .sub{color:var(--ink);font-weight:600}
 .nowgrid{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
@@ -588,6 +588,7 @@ document.body.addEventListener("toggle",e=>{ if(e.target.id==="feedlog") U.logOp
 $("list").addEventListener("scroll",listEdges,{passive:true});
 (function(){ let sx=0,sy=0,t=0; const el=document.querySelector(".agenda"); el.addEventListener("touchstart",e=>{ sx=e.touches[0].clientX; sy=e.touches[0].clientY; t=Date.now(); },{passive:true});
   el.addEventListener("touchend",e=>{ const dx=e.changedTouches[0].clientX-sx, dy=e.changedTouches[0].clientY-sy; if(Date.now()-t<600&&Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.5){ const nd=addDays(dateOfDow(U.day,U.wk),dx<0?1:-1); const base=scheduleDate(bkkNow()); const bd=new Date(base+"T12:00:00Z").getUTCDay(); const diff=Math.round((new Date(nd+"T12:00:00Z")-new Date(base+"T12:00:00Z"))/864e5); U.day=new Date(nd+"T12:00:00Z").getUTCDay(); U.wk=Math.floor((diff-((U.day-bd+7)%7))/7); render(); } },{passive:true}); })();
+let lastSeen=Date.now(); document.addEventListener("visibilitychange",()=>{ if(document.hidden){ lastSeen=Date.now(); return; } if(Date.now()-lastSeen>600000){ U.day=null; U.wk=0; U.pick=null; U.scrollKey=null; } render(); });
 render(); (function tick(){ const ms=60000-(Date.now()%60000)+50; setTimeout(()=>{ if(!U.pick&&document.activeElement.tagName!=="INPUT") render(); tick(); },ms); })();
 
 /* ---------- shared sync: claude.ai database, or Firebase on GitHub Pages ---------- */
