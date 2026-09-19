@@ -585,6 +585,11 @@ $("settings").addEventListener("toggle",()=>{ if(!$("settings").open) U.calOpen=
 
 document.body.addEventListener("toggle",e=>{ if(e.target.id==="feedlog") U.logOpen=e.target.open; if(e.target.classList&&e.target.classList.contains("person")){ U.setOpen=U.setOpen||{}; U.setOpen[e.target.dataset.person]=e.target.open; } },true);
 $("list").addEventListener("scroll",listEdges,{passive:true});
+/* press-and-hold on any −/+ stepper repeats it */
+(function(){ let t=null, iv=null; const stop=()=>{ clearTimeout(t); clearInterval(iv); t=iv=null; };
+  const start=e=>{ const b=e.target.closest("button[data-adj],button[data-hnudge],button[data-nudge]"); if(!b) return; stop(); t=setTimeout(()=>{ iv=setInterval(()=>{ const again=document.querySelector(`button[data-adj="${b.dataset.adj||""}"],button[data-hnudge="${b.dataset.hnudge||""}"],button[data-nudge="${b.dataset.nudge||""}"]`); if(again) again.click(); else stop(); },140); },450); };
+  document.body.addEventListener("touchstart",start,{passive:true}); document.body.addEventListener("mousedown",start);
+  ["touchend","touchcancel","mouseup","mouseleave"].forEach(ev=>document.body.addEventListener(ev,stop)); })();
 (function(){ let sx=0,sy=0,t=0; const el=document.querySelector(".agenda"); el.addEventListener("touchstart",e=>{ sx=e.touches[0].clientX; sy=e.touches[0].clientY; t=Date.now(); },{passive:true});
   el.addEventListener("touchend",e=>{ const dx=e.changedTouches[0].clientX-sx, dy=e.changedTouches[0].clientY-sy; if(Date.now()-t<600&&Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.5){ const nd=addDays(dateOfDow(U.day,U.wk),dx<0?1:-1); const base=scheduleDate(bkkNow()); const bd=new Date(base+"T12:00:00Z").getUTCDay(); const diff=Math.round((new Date(nd+"T12:00:00Z")-new Date(base+"T12:00:00Z"))/864e5); U.day=new Date(nd+"T12:00:00Z").getUTCDay(); U.wk=Math.floor((diff-((U.day-bd+7)%7))/7); render(); } },{passive:true}); })();
 let lastSeen=Date.now(); document.addEventListener("visibilitychange",()=>{ if(document.hidden){ lastSeen=Date.now(); return; } if(Date.now()-lastSeen>600000){ U.day=null; U.wk=0; U.pick=null; U.scrollKey=null; } render(); });
