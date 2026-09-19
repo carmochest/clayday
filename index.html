@@ -43,7 +43,7 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline
 .lab{font-size:11.5px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3)}
 .big{font-size:46px;font-weight:600;letter-spacing:-.025em;line-height:1;margin-top:2px;font-variant-numeric:tabular-nums}
 .sub{color:var(--ink-2);font-size:14px;margin-top:4px}
-.sub .skip{color:var(--ink-3);text-decoration:underline;text-underline-offset:3px;margin-left:2px;font-size:13px;padding:8px 8px;margin-top:-8px;margin-bottom:-8px}
+.sub .skip{color:var(--ink-3);text-decoration:underline;text-underline-offset:3px;margin-left:0;font-size:13px;padding:8px 5px;margin-top:-8px;margin-bottom:-8px}
 .sub .last{display:inline-block;white-space:nowrap;margin-left:8px;font-size:12.5px;color:var(--ink-3);font-weight:500}
 .sub{color:var(--ink);font-weight:600}
 .nowgrid{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
@@ -63,13 +63,12 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline
 @media (max-width:380px){.acts.three .btn{font-size:14px;padding:14px 4px}}
 .acts .full{grid-column:1/-1}
 .pick{margin-top:10px;background:var(--chip);border-radius:16px;padding:12px;display:flex;flex-direction:column;gap:10px;animation:rise .25s var(--ease) both}
-.pick .pre{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
-.pick .pre button{border-radius:12px;padding:12px 6px;background:var(--panel-solid);font-weight:600;font-size:15px;text-align:center;box-shadow:0 1px 2px rgba(0,0,0,.06)}
-.pick .pre button.on{background:var(--on);color:var(--on-ink)}
-.pick .cust{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.pick .cust label{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--ink-2);font-weight:600;min-width:0}
-.pick input{width:100%;font:inherit;font-weight:600;font-size:16px;background:var(--panel-solid);border:0;border-radius:10px;padding:10px 10px;color:var(--ink);min-width:0}
-.pick input::-webkit-calendar-picker-indicator{display:none}
+.pick .stp{display:grid;grid-template-columns:1fr 48px 108px 48px;align-items:center;gap:6px;background:var(--panel-solid);border-radius:14px;padding:6px 6px 6px 14px}
+.pick .stp .sl{font-size:12px;font-weight:600;color:var(--ink-2);text-transform:uppercase;letter-spacing:.06em}
+.pick .stp b{font-size:24px;font-weight:600;text-align:center;font-variant-numeric:tabular-nums;letter-spacing:-.01em;line-height:1}
+.pick .stp b small{display:block;font-size:11px;font-weight:600;color:var(--accent);letter-spacing:0;margin-top:2px} .pick .stp b em{font-style:normal}
+.pick .stp .st{width:48px;height:48px;border-radius:12px;background:var(--chip);display:grid;place-items:center;font-size:22px;font-weight:600;color:var(--ink-2);text-align:center}
+.pick .stp .st:active{background:var(--chip-2)}
 .pick .go{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .pick .go .btn{border-radius:12px;padding:12px}
 .intake{margin-top:14px}
@@ -411,11 +410,12 @@ function sleepMin(log,nowA,carried){ const ev=log.filter(x=>x.type==="sleep"||x.
 function sleepGuide(ageDays){ return ageDays<120?[14,17]:ageDays<365?[12,15]:[11,14]; }
 function fmtDur(m){ m=Math.max(0,Math.round(m)); return m<60?`${m} ${U.lang==="th"?"นาที":"min"}`:`${Math.floor(m/60)} ${U.lang==="th"?"ชม.":"h"} ${pad(m%60)}`; }
 function sleepTotal(log,nowA,carried){ return fmtDur(sleepMin(log,nowA,carried)); }
-function picker(){ const bottle=U.pick.mode==="bottle"; const sw=U.pick.mode==="sleep"||U.pick.mode==="wake"; const ed=U.pick.edit; return `<div class="pick">
+function picker(){ const bottle=U.pick.mode==="bottle"; const sw=U.pick.mode==="sleep"||U.pick.mode==="wake"; const ed=U.pick.edit; const late=(()=>{ const n=nowAbs(), h=toH(U.tm||nowHM()); return Math.round((h>n?n+24-h:n-h)*60); })();
+  const stp=(lab,val,k,step,unit)=>`<div class="stp"><span class="sl">${lab}</span><button class="st" data-adj="${k}:${-step}" aria-label="less">−</button><b>${val}${unit?`<small>${unit}</small>`:""}</b><button class="st" data-adj="${k}:${step}" aria-label="more">+</button></div>`;
+  return `<div class="pick">
   <div class="lab">${ed?ui("edit"):ui("log")} · ${sw?(U.pick.mode==="sleep"?"😴 "+tr("Asleep"):"👀 "+tr("Awake")):bottle?tr("Bottle"):tr("Breastfeed")}</div>
-  ${sw?"":bottle?`<div class="pre">${[60,90,120,150,180,210].map(m=>`<button data-ml="${m}" class="${U.ml===m?"on":""}">${m} ${ui("ml")}</button>`).join("")}</div>`
-    :`<div class="pre">${[5,10,15,20,30,40].map(m=>`<button data-min="${m}" class="${U.min===m?"on":""}">${m} ${ui("minutes")}</button>`).join("")}</div>`}
-  <div class="cust">${sw?"":`<label>${bottle?ui("ml"):ui("minutes")}<input type="number" id="${bottle?"mlIn":"minIn"}" value="${bottle?U.ml:U.min}" min="0" max="${bottle?400:90}" step="${bottle?5:1}" inputmode="numeric"></label>`}<label>${ui("time")}<input type="time" lang="en-GB" id="tmIn" value="${ed?ed.t:nowHM()}"></label></div>
+  ${sw?"":bottle?stp(ui("ml"),U.ml,"ml",10,""):stp(ui("minutes"),U.min,"min",5,"")}
+  ${stp(ui("time"),U.tm,"tm",5,late>=3&&!ed?`<em>${U.lang==="th"?`${late} นาทีที่แล้ว`:`${late} min ago`}</em>`:"")}
   <div class="go"><button class="btn quiet" data-pickclose>${ui("cancel")}</button><button class="btn primary" data-picksave>${ed?ui("save"):ui("log")}</button></div>
   ${ed?`<button class="btn quiet sm" data-delfeed="${ed.id}" style="justify-self:center">${ui("del")}</button>`:""}</div>`; }
 
@@ -550,17 +550,16 @@ document.body.addEventListener("click",e=>{ const b=e.target.closest("button"); 
   else if(d.wk!==undefined){ if(d.wk==="0"){ U.wk=0; U.day=null; } else U.wk+=+d.wk; render(); }
   else if(d.state){ addLog(d.state); }
   else if(d.again!==undefined){ const l=JSON.parse(d.again); addLog(l.type,l.type==="bottle"?{ml:l.ml}:(l.min?{min:l.min}:{})); }
-  else if(d.pickopen){ U.pick={mode:d.pickopen}; render(); }
-  else if(d.editfeed){ const date=scheduleDate(bkkNow()); const x=(L[date]&&L[date].entries||[]).find(e=>e.id===d.editfeed); if(!x) return; U.logOpen=true; if(x.type==="bottle") U.ml=x.ml||U.ml; else if(x.min) U.min=x.min; U.pick={mode:x.type,edit:x}; render(); }
+  else if(d.pickopen){ U.pick={mode:d.pickopen}; U.tm=nowHM(); render(); }
+  else if(d.editfeed){ const date=scheduleDate(bkkNow()); const x=(L[date]&&L[date].entries||[]).find(e=>e.id===d.editfeed); if(!x) return; U.logOpen=true; if(x.type==="bottle") U.ml=x.ml||U.ml; else if(x.min) U.min=x.min; U.pick={mode:x.type,edit:x}; U.tm=x.t; render(); }
   else if(d.delfeed){ U.pick=null; U.logOpen=true; removeLog(d.delfeed); }
-  else if(d.ml){ U.ml=+d.ml; render(); }
-  else if(d.min){ U.min=+d.min; render(); }
+  else if(d.adj){ const [k,dv]=d.adj.split(":"); const v=+dv; if(k==="ml") U.ml=Math.max(10,Math.min(400,U.ml+v)); else if(k==="min") U.min=Math.max(0,Math.min(90,U.min+v)); else { let h=toH(U.tm)+v/60; const now=nowAbs(); if(h<DAY_START) h+=24; if(h>=DAY_START+24) h-=24; if(!U.pick.edit&&h>now&&h<=now+6) h=now; U.tm=fmt(h); } render(); }
 
   else if(b.hasAttribute("data-pickclose")){ U.pick=null; render(); }
-  else if(b.hasAttribute("data-picksave")){ const ed0=U.pick.edit; const ed=ed0?(((L[scheduleDate(bkkNow())]||{}).entries||[]).find(x=>x.id===ed0.id)||ed0):null; const tm=($("tmIn")&&/^\d\d:\d\d$/.test($("tmIn").value))?$("tmIn").value:null;
+  else if(b.hasAttribute("data-picksave")){ const ed0=U.pick.edit; const ed=ed0?(((L[scheduleDate(bkkNow())]||{}).entries||[]).find(x=>x.id===ed0.id)||ed0):null; const tm=/^\d\d:\d\d$/.test(U.tm||"")?U.tm:null;
     if(U.pick.mode==="sleep"||U.pick.mode==="wake"){ if(ed&&tm){ ed.t=tm; } U.pick=null; saveDay(scheduleDate(bkkNow())); }
-    else if(U.pick.mode==="bottle"){ const v=+($("mlIn")&&$("mlIn").value)||U.ml; U.ml=v; if(ed){ ed.ml=v; delete ed.min; ed.type="bottle"; if(tm) ed.t=tm; U.pick=null; saveDay(scheduleDate(bkkNow())); } else addLog("bottle",Object.assign({ml:v},tm?{t:tm}:{})); }
-    else { const v=+($("minIn")&&$("minIn").value)||0; if(ed){ ed.type="breast"; delete ed.ml; if(v) ed.min=v; else delete ed.min; if(tm) ed.t=tm; U.pick=null; saveDay(scheduleDate(bkkNow())); } else addLog("breast",Object.assign(v?{min:v}:{},tm?{t:tm}:{})); } }
+    else if(U.pick.mode==="bottle"){ const v=U.ml; if(ed){ ed.ml=v; delete ed.min; ed.type="bottle"; if(tm) ed.t=tm; U.pick=null; saveDay(scheduleDate(bkkNow())); } else addLog("bottle",Object.assign({ml:v},tm?{t:tm}:{})); }
+    else { const v=U.min||0; if(ed){ ed.type="breast"; delete ed.ml; if(v) ed.min=v; else delete ed.min; if(tm) ed.t=tm; U.pick=null; saveDay(scheduleDate(bkkNow())); } else addLog("breast",Object.assign(v?{min:v}:{},tm?{t:tm}:{})); } }
   else if(d.skip){ addLog("skip",{key:d.skip}); }
   else if(b.hasAttribute("data-born")){ S.birth=scheduleDate(bkkNow()); saveSettings(); toast("Welcome, Clay"); }
   else if(b.hasAttribute("data-calopen")){ U.calOpen=!U.calOpen; render(); }
