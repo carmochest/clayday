@@ -21,6 +21,8 @@ button:active{transform:scale(.96)}
 button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:8px}
 #sky{position:fixed;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none}
 .wrap{max-width:500px;margin:0 auto;display:flex;flex-direction:column;gap:10px}
+/* earlier cards paint above later cards' shadows */
+.wrap>*{position:relative} .wrap>:nth-child(1){z-index:9} .wrap>:nth-child(2){z-index:8} .wrap>:nth-child(3){z-index:7} .wrap>:nth-child(4){z-index:6} .wrap>:nth-child(5){z-index:5} .wrap>:nth-child(6){z-index:4} .wrap>:nth-child(7){z-index:3} .wrap>:nth-child(8){z-index:2}
 
 .top{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:2px 4px 4px}
 .top h1{font-size:34px;font-weight:600;letter-spacing:-.02em;margin:0;line-height:1;color:var(--sky-ink);font-variant-numeric:tabular-nums}
@@ -64,12 +66,16 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline
 .acts .full{grid-column:1/-1}
 .acts.one{grid-template-columns:1fr}
 .stbadge{font-weight:600;font-size:17px;margin-top:8px;white-space:nowrap}
-.bar{position:fixed;left:0;right:0;bottom:0;z-index:40;padding:8px max(10px,env(safe-area-inset-left)) calc(8px + env(safe-area-inset-bottom,0px)) max(10px,env(safe-area-inset-right));display:flex;justify-content:center;pointer-events:none}
-.bar>div{width:100%;max-width:500px;pointer-events:auto;background:var(--panel);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-radius:22px;box-shadow:0 -2px 6px rgba(42,31,46,.05),0 12px 34px rgba(42,31,46,.16);padding:8px}
-.barrow{display:flex;gap:6px}
-.barrow .btn{flex:1;padding:14px 2px;font-size:13px;border-radius:14px;overflow:hidden;text-overflow:ellipsis;min-width:0}
-.barrow .btn.again{flex:1.35}
-.bar .pick{margin:0 0 8px;animation:rise .22s var(--ease) both}
+.dock{position:fixed;left:0;right:0;bottom:0;z-index:40;padding:8px max(10px,env(safe-area-inset-left)) calc(8px + env(safe-area-inset-bottom,0px)) max(10px,env(safe-area-inset-right));display:flex;justify-content:center;pointer-events:none}
+.dock::before{content:"";position:absolute;left:0;right:0;bottom:0;top:-56px;background:linear-gradient(to top,rgba(42,31,46,.34),rgba(42,31,46,.18) 55%,rgba(42,31,46,0));pointer-events:none}
+.dock>div{position:relative;width:100%;max-width:500px;pointer-events:auto;background:var(--panel-solid);border-radius:24px;box-shadow:0 10px 36px rgba(42,31,46,.30),0 1px 0 rgba(255,255,255,.7) inset;padding:8px;display:flex;flex-direction:column;gap:8px}
+.dock .bar-state{padding:3px} .dock .bar-state button{padding:9px 10px;font-size:14.5px}
+.barrow{display:flex;gap:8px}
+.barrow .btn{flex:1;padding:15px 4px;font-size:15px;border-radius:15px;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.barrow .btn.again{flex:1.3}
+.dock .pick{margin:0;background:var(--chip);animation:rise .22s var(--ease) both}
+.scrim{position:fixed;inset:0;z-index:39;background:rgba(42,31,46,.42);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);animation:fade .2s ease both}
+@keyframes fade{from{opacity:0}to{opacity:1}}
 :root[data-bar="1"] body{padding-bottom:calc(var(--barh,90px) + 20px)}
 :root[data-bar="1"] .toast{bottom:calc(var(--barh,90px) + 10px)}
 .pick{margin-top:10px;background:var(--chip);border-radius:16px;padding:12px;display:flex;flex-direction:column;gap:10px;animation:rise .25s var(--ease) both}
@@ -95,6 +101,7 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline
 .feedlog .arr{width:26px;height:26px;border-radius:50%;background:var(--panel-solid);display:grid;place-items:center;color:var(--ink-2);font-size:14px;transition:transform .25s var(--ease)}
 .feedlog[open] .arr{transform:rotate(180deg)}
 .feedlog>div{margin-top:2px;padding-top:0}
+.feedlog:not([open])>div,details.card:not([open])>.set,.person:not([open])>.pbody{display:none}
 .fl{display:grid;grid-template-columns:46px 1fr auto auto;column-gap:0;align-items:center;gap:8px;padding:9px 0;font-size:14.5px;border-bottom:1px solid var(--line)}
 .fl:last-child{border-bottom:0}
 .fl .t{font-variant-numeric:tabular-nums;color:var(--ink-2);font-weight:600}
@@ -236,7 +243,8 @@ input.num{width:100px;font:inherit;font-weight:600;font-size:15px;background:var
   <details class="card" id="settings"><summary id="setSum">Settings</summary><div class="set" id="set"></div></details>
 </div>
 
-<div class="bar" id="bar" hidden><div></div></div>
+<button class="scrim" id="scrim" data-pickclose hidden aria-label="Close"></button>
+<div class="dock" id="bar" hidden><div></div></div>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -468,9 +476,10 @@ function render(){
 
   /* bottom bar */
   document.documentElement.dataset.bar=U.bar&&S.birth?"1":"";
-  $("bar").hidden=!(U.bar&&S.birth);
+  $("bar").hidden=!(U.bar&&S.birth); $("scrim").hidden=!(U.bar&&S.birth&&U.pick);
   if(U.bar&&S.birth){ const types=(S.feedType||"both")==="both"?["bottle","breast"]:[S.feedType]; const ag=last&&types.includes(last.type);
-    $("bar").firstElementChild.innerHTML=`${U.pick?picker():""}<div class="barrow">${ag?`<button class="btn primary again" data-again='${JSON.stringify({type:last.type,ml:last.ml||0,min:last.min||0})}'>${last.type==="bottle"?"🍼 "+ui("again")(last.ml+" "+ui("ml")):"🤱 "+ui("again")(tr("Breast"))}</button>`:""}${types.map(t=>`<button class="btn" data-pickopen="${t}">${ui(t)}</button>`).join("")}<button class="btn st8" data-state="${sleeping?"wake":"sleep"}">${sleeping?"👀 "+ui("awake"):"😴 "+(U.lang==="th"?"หลับ":"Sleep")}</button></div>`; }
+    $("bar").firstElementChild.innerHTML=`${U.pick?picker():""}<div class="state bar-state"><button data-state="wake" class="${sw&&!sleeping?"on":""}">👀 ${ui("awake")}</button><button data-state="sleep" class="${sleeping?"on":""}">😴 ${ui("sleep")}</button></div><div class="barrow">${ag?`<button class="btn primary again" data-again='${JSON.stringify({type:last.type,ml:last.ml||0,min:last.min||0})}'>${last.type==="bottle"?"🍼 "+ui("again")(last.ml+" "+ui("ml")):"🤱 "+ui("again")(tr("Breast"))}</button>`:""}${types.map(t=>`<button class="btn" data-pickopen="${t}">${ui(t)}</button>`).join("")}</div>`;
+    $("bar").classList.toggle("sheet",!!U.pick); }
   requestAnimationFrame(()=>{ const h=$("bar").hidden?0:$("bar").offsetHeight; document.documentElement.style.setProperty("--barh",h+"px"); });
 
   /* NOW */
