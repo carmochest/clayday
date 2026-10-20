@@ -555,7 +555,7 @@ function renderSettings(age,today){
     person(EMO.maids,"Maids",`${hm(maidHrs()[0])} – ${hm(maidHrs()[1])} · ${[1,2,3,4,5,6,0].filter(d=>S.maidDays.includes(d)).map(d=>DAYS[d]).join(" ")||"no days"}${S.maidDogs!==false?" · dogs out":""}`,`<div class="field"><span>Hours</span>${hrsField("maidHrs",maidHrs())}</div><div class="field"><span>Days</span>${dayPick("md",d=>S.maidDays.includes(d))}</div>
       <div class="frow"><button class="sw2 ${S.maidDogs!==false?"on":""}" data-toggle="maidDogs"><i></i>Take Bee & Bug to the family house · run & shower</button></div><p class="hint">Off = maids still come, dogs stay home (no 19:00 driver run).</p>`)+
     person("📱","This phone",U.bar?"buttons at the bottom":"buttons in the card",`<div class="frow"><button class="sw2 ${U.bar?"on":""}" data-toggle="bar"><i></i>Buttons at the bottom of the screen</button></div><p class="hint">Easier to reach one-handed. Off = Bottle / Breast and the sleep switch stay in the top card.</p>`)+
-    `<div class="frow" style="padding:4px 4px 0"><button class="btn quiet sm" data-reset>Reset to defaults</button></div>`;
+    `<div class="frow" style="padding:4px 4px 0;justify-content:space-between"><button class="btn quiet sm" data-reset>Reset settings</button><button class="btn quiet sm" data-wipe style="color:var(--accent)">Start fresh · erase all logs</button></div>`;
 }
 
 /* ---------- persistence ---------- */
@@ -625,6 +625,7 @@ document.body.addEventListener("click",e=>{ const b=e.target.closest("button"); 
   else if(d.dd){ const x=+d.dd; S.driverDays=S.driverDays.includes(x)?S.driverDays.filter(y=>y!==x):[...S.driverDays,x]; saveSettings(); }
   else if(d.md){ const x=+d.md; S.maidDays=S.maidDays.includes(x)?S.maidDays.filter(y=>y!==x):[...S.maidDays,x]; saveSettings(); }
   else if(d.v&&b.closest(".seg[data-set]")){ S[b.closest(".seg[data-set]").dataset.set]=d.v; saveSettings(); }
+  else if(b.hasAttribute("data-wipe")){ if(!U.wipeArmed){ U.wipeArmed=true; b.textContent="Tap again to erase every log"; setTimeout(()=>{ U.wipeArmed=false; render(); },4000); return; } U.wipeArmed=false; Object.keys(L).forEach(d=>{ L[d]={date:d,entries:[]}; lsSet("clay.log."+d,L[d]); if(db) db.set("days/"+d,L[d]); }); S.birth=null; S.weight=null; S.snooze={}; S.exFrom=null; S.bjjFrom=null; U.day=null; U.wk=0; U.pick=null; saveSettings(); toast("Fresh start — every log erased"); }
   else if(b.hasAttribute("data-reset")){ if(!U.resetArmed){ U.resetArmed=true; b.textContent="Tap again to reset everything"; setTimeout(()=>{ U.resetArmed=false; render(); },4000); return; } U.resetArmed=false; const birth=S.birth, w=S.weight; S=clone(DEFAULTS); S.birth=birth; S.weight=w; saveSettings(); toast("Back to defaults"); } });
 document.body.addEventListener("keydown",e=>{ if(e.key==="Enter"&&e.target.closest&&e.target.closest(".pick")){ e.preventDefault(); const b=document.querySelector("[data-picksave]"); if(b) b.click(); } });
 document.body.addEventListener("change",e=>{ if(e.target.id==="weightIn"){ S.weight=+e.target.value||null; saveSettings(); }
