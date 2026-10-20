@@ -1,6 +1,6 @@
 /* Clay Day service worker: the app is one HTML file, so cache it and serve it offline.
    Pages are network-first (updates arrive when online), everything else cache-first. */
-const CACHE = "clayday-v1";
+const CACHE = "clayday-v2";
 const PRECACHE = ["./", "./index.html", "./manifest.json", "./icon-192.png", "./icon-512.png", "./apple-touch-icon.png",
   "https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js",
   "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"];
