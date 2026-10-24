@@ -238,18 +238,26 @@ input.num{width:100px;font:inherit;font-weight:600;font-size:15px;background:var
 #feedcard.due .lab.nl::after{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--accent);margin-left:8px;vertical-align:1px;animation:pulse 1.6s ease-in-out infinite}
 @keyframes pulse{0%,100%{opacity:.35;transform:scale(.8)}50%{opacity:1;transform:scale(1.15)}}
 .top h1{cursor:default;-webkit-user-select:none;user-select:none}
+.topr{display:flex;align-items:center;gap:5px;flex:none}
+.gear{width:36px;height:36px;flex:none;border-radius:50%;display:grid;place-items:center;color:var(--sky-ink-2);background:var(--sky-chip)} .gear:active{background:var(--sky-on);color:var(--sky-on-ink)}
+#settings{position:fixed;inset:0;z-index:70;overflow-y:auto;-webkit-overflow-scrolling:touch;background:#F5EFE8;padding:0 max(12px,env(safe-area-inset-left)) calc(24px + env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-right));animation:rise .22s var(--ease) both}
+#settings .sethead{position:sticky;top:0;z-index:1;display:flex;justify-content:space-between;align-items:center;padding:calc(12px + env(safe-area-inset-top,0px)) 4px 10px;background:linear-gradient(#F5EFE8 75%,rgba(245,239,232,0))}
+#settings .sethead h2{margin:0;font-size:22px;font-weight:600;letter-spacing:-.01em}
+#settings .set{max-width:500px;margin:0 auto;padding:0}
+@media (display-mode:standalone){#settings .sethead{padding-top:calc(env(safe-area-inset-top,20px) + 34px)}}
+html.lock,html.lock body{overflow:hidden}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 
 <canvas id="sky" aria-hidden="true"></canvas>
 <div class="wrap">
-  <header class="top"><div><h1 id="clock">00:00</h1><small id="dateline"></small></div><div class="seg sm" id="meSeg" role="tablist" aria-label="I am"></div></header>
+  <header class="top"><div><h1 id="clock">00:00</h1><small id="dateline"></small></div><div class="topr"><div class="seg sm" id="meSeg" role="tablist" aria-label="I am"></div><button class="gear" id="gearBtn" data-setopen aria-label="Settings"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3h.1a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8v.1a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button></div></header>
   <section class="card" id="feedcard"></section>
   <section class="card now" id="now"></section>
   <section class="card" id="notesCard" hidden><ul class="notes" id="notes"></ul></section>
   <div class="week" id="week"></div>
   <section class="card agenda"><div class="head"><h2 id="agTitle"></h2><div class="wknav"><button data-wk="-1" aria-label="Previous week">‹</button><button data-wk="0" id="wkToday">●</button><button data-wk="1" aria-label="Next week">›</button></div></div><div class="list" id="list"></div></section>
-  <details class="card" id="settings"><summary id="setSum">Settings</summary><div class="set" id="set"></div></details>
+  <section id="settings" hidden><div class="sethead"><h2 id="setSum">Settings</h2><button class="btn sm" data-setclose>Done</button></div><div class="set" id="set"></div></section>
 </div>
 
 <button class="scrim" id="scrim" data-pickclose hidden aria-label="Close"></button>
@@ -464,10 +472,10 @@ function render(){
   const dow=U.day, date=dateOfDow(dow,U.wk), isToday=date===today, nowA=nowAbs(); const me=PEOPLE[U.me]||PEOPLE.chet;
   const T=build(tdow,today), tPH=PH; const R=build(dow,date); const age=ageDays(today);
   $("clock").textContent=fmt(nowA);
-  $("dateline").innerHTML=`${U.lang==="th"?ui("days")[now.dow]+" "+(+now.date.slice(8))+"/"+(+now.date.slice(5,7)):DAYS[now.dow]+" "+niceDate(now.date)} · ${S.birth?(age<=0?ui("born"):`${ui("day")} ${age} · ${U.lang==="th"?"ด."+PHASES.find(p=>p.id===tPH).label.replace(/Months? /,""):PHASES.find(p=>p.id===tPH).label.replace(" "," ")}`):ui("due")+" "+niceDate(DUE)}`;
+  $("dateline").innerHTML=`${U.lang==="th"?ui("days")[now.dow]+" "+(+now.date.slice(8))+"/"+(+now.date.slice(5,7)):DAYS[now.dow]+" "+niceDate(now.date)}<br>${S.birth?(age<=0?ui("born"):`${ui("day")} ${age} · ${U.lang==="th"?"ด."+PHASES.find(p=>p.id===tPH).label.replace(/Months? /,""):PHASES.find(p=>p.id===tPH).label.replace(" "," ")}`):ui("due")+" "+niceDate(DUE)}`;
   $("meSeg").innerHTML=Object.entries(PEOPLE).map(([k,p])=>`<button role="tab" aria-selected="${U.me===k}" class="${U.me===k?"on":""}" data-me="${k}">${ui(k)}</button>`).join("");
   $("meSeg").hidden=!!U.locked;
-  $("settings").hidden=U.me==="view"; $("setSum").textContent=U.lang==="th"?"ตั้งค่า":"Settings"; $("now").hidden=U.me==="view";
+  $("gearBtn").hidden=U.me==="view"; $("settings").hidden=!(U.showSet&&U.me!=="view"); document.documentElement.classList.toggle("lock",!$("settings").hidden); $("setSum").textContent=U.lang==="th"?"ตั้งค่า":"Settings"; $("settings").querySelector("[data-setclose]").textContent=U.lang==="th"?"เสร็จ":"Done"; $("now").hidden=U.me==="view";
 
   /* NEXT FEED */
   const tlog=(L[today]&&L[today].entries)||[]; const real=tlog.filter(isFeed).sort((a,b)=>toH(a.t)-toH(b.t)); const last=real[real.length-1];
@@ -604,6 +612,8 @@ document.body.addEventListener("click",e=>{ const b=e.target.closest("button"); 
   else if(d.lang){ U.lang=d.lang; lsSet("clay.lang",U.lang); lsSet("clay.langSet",true); render(); }
   else if(d.day){ U.day=+d.day; render(); }
   else if(d.wk!==undefined){ if(d.wk==="0"){ U.wk=0; U.day=null; } else U.wk+=+d.wk; render(); }
+  else if(b.hasAttribute("data-setopen")){ U.showSet=true; render(); $("settings").scrollTop=0; }
+  else if(b.hasAttribute("data-setclose")){ U.showSet=false; U.calOpen=false; U.resetArmed=false; U.wipeArmed=false; render(); }
   else if(d.state){ addLog(d.state); }
   else if(d.nappy){ addLog(d.nappy); }
   else if(d.again!==undefined){ const l=JSON.parse(d.again); addLog(l.type,l.type==="bottle"?{ml:l.ml}:(l.min?{min:l.min}:{})); }
@@ -639,7 +649,7 @@ document.body.addEventListener("keydown",e=>{ if(e.key==="Enter"&&e.target.close
 document.body.addEventListener("change",e=>{ if(e.target.id==="weightIn"){ S.weight=+e.target.value||null; saveSettings(); }
  });
 document.body.addEventListener("input",e=>{ if(e.target.id==="mlIn") U.ml=+e.target.value||U.ml; if(e.target.id==="minIn") U.min=+e.target.value||U.min; });
-$("settings").addEventListener("toggle",()=>{ if(!$("settings").open) U.calOpen=false; });
+
 
 document.body.addEventListener("toggle",e=>{ if(e.target.id==="feedlog") U.logOpen=e.target.open; if(e.target.classList&&e.target.classList.contains("person")){ U.setOpen=U.setOpen||{}; U.setOpen[e.target.dataset.person]=e.target.open; } },true);
 $("list").addEventListener("scroll",listEdges,{passive:true});
