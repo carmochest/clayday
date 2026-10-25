@@ -142,29 +142,30 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline
 .list{--mt:transparent;--mb:transparent;max-height:min(600px,66vh);overflow-y:auto;scrollbar-width:none;-webkit-mask-image:linear-gradient(to bottom,var(--mt) 0,#000 6%,#000 93%,var(--mb) 100%);mask-image:linear-gradient(to bottom,var(--mt) 0,#000 6%,#000 93%,var(--mb) 100%);padding:4px 0 26px;scroll-behavior:smooth}
 .list.at-top{--mt:#000} .list.at-bottom{--mb:#000}
 .list::-webkit-scrollbar{display:none}
-.it{display:grid;grid-template-columns:54px 1fr;align-items:baseline;gap:8px;padding:10px 12px;border-radius:14px;font-size:15.5px}
+.it{display:grid;grid-template-columns:54px 1fr;align-items:baseline;gap:8px;padding:11px 12px;border-radius:14px;font-size:15.5px}
 .it .tm{font-variant-numeric:tabular-nums;color:var(--ink-2);font-size:13.5px;font-weight:600}
 .it .lb{font-weight:600;min-width:0;font-size:16px}
 .it .lb small{display:block;font-weight:400;color:var(--ink-3);font-size:12.5px;margin-top:2px;letter-spacing:.01em}
 .it.past{opacity:.45}
-.it.cur{background:linear-gradient(90deg,rgba(200,232,190,0) 0%,#DCF0D5 12%,#DCF0D5 88%,rgba(200,232,190,0) 100%);position:relative}
-.it.cur::before{content:"";position:absolute;left:4px;top:10px;bottom:10px;width:3px;border-radius:3px;background:#5FAE55}
+.it.cur{background:rgba(95,174,85,.10);position:relative;margin:2px 4px;padding-left:8px}
+.it.cur::before{content:"";position:absolute;left:0;top:10px;bottom:10px;width:3px;border-radius:3px;background:#5FAE55}
 .it.cur .tm{color:#2F7A2A}
 .it.cur .lb{color:#1F4D1B}
 .it.next{}
 .it.rest{color:var(--ink-2)} .it.rest .lb{font-weight:500}
 .it.chore .lb{font-weight:500;color:var(--ink-2)} .it.chore .tm{color:var(--ink-3)}
-.mk{display:grid;grid-template-columns:54px 1fr;align-items:center;gap:8px;padding:5px 12px;font-size:12.5px;color:var(--ink-2)}
+.mk{display:grid;grid-template-columns:54px 1fr;align-items:center;gap:8px;padding:5px 12px;font-size:13px;color:var(--ink-2)}
 .mk .tm{font-variant-numeric:tabular-nums;font-size:12px;font-weight:600;color:var(--ink-3)}
-.mk .lb{display:grid;grid-template-columns:auto 1fr;column-gap:7px;align-items:center;font-weight:600;letter-spacing:.02em}
+.mk .lb{display:grid;grid-template-columns:auto 1fr;column-gap:7px;align-items:center;font-weight:500;color:var(--ink-2)}
 .mk .lb small{grid-column:2;font-weight:400;font-size:12px;opacity:.8;margin-top:-1px}
 .mk .lb::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--ink-3);flex:none}
 .mk.feed .lb::before{background:#E9B949} .mk.maid .lb::before{background:#9C7FC4} .mk.dog .lb::before{background:#C9A25C} .mk.drv .lb::before{background:#7C8AA6} .mk.nanny .lb::before{background:#4FA36E} .mk.clay .lb::before{background:#B79BC0}
-.mk.maid,.mk.feed,.mk.drv,.mk.nanny{border-radius:10px;margin:2px 6px;padding:6px 6px}
-.mk.maid{background:var(--maid);color:var(--maid-i)} .mk.feed{background:#FCEFD2;color:#7A5A1E} .mk.drv{background:#E6EAF2;color:#3F4B66} .mk.nanny{background:#DDF0E3;color:#25603C}
-.mk.maid .tm,.mk.feed .tm,.mk.drv .tm,.mk.nanny .tm{color:inherit;opacity:.75}
+.mk.maid,.mk.feed,.mk.drv,.mk.nanny{border-radius:10px;margin:3px 6px;padding:7px 6px}
+.mk.maid{background:rgba(156,127,196,.13)} .mk.feed{background:rgba(233,185,73,.16)} .mk.drv{background:rgba(124,138,166,.13)} .mk.nanny{background:rgba(79,163,110,.14)}
+.mk.maid .tm,.mk.feed .tm,.mk.drv .tm,.mk.nanny .tm{color:var(--ink-3)}
 .mk.past{opacity:.45}
-.gapmark{display:flex;align-items:center;gap:8px;padding:2px 12px;color:var(--accent);font-size:11.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.gapmark{display:flex;align-items:center;gap:8px;padding:4px 12px;color:var(--accent);font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.earlier{display:block;width:calc(100% - 24px);margin:0 12px 6px;padding:8px 10px;border-radius:10px;background:var(--chip);color:var(--ink-2);font-size:12.5px;font-weight:600;text-align:center}
 .gapmark::before,.gapmark::after{content:"";flex:1;border-top:1.5px solid var(--accent);opacity:.5}
 
 .notes{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px}
@@ -473,7 +474,7 @@ function slidePills(){ document.querySelectorAll(".seg,.state").forEach((el,i)=>
 function listEdges(){ const l=$("list"); l.classList.toggle("at-top",l.scrollTop<4); l.classList.toggle("at-bottom",l.scrollTop+l.clientHeight>=l.scrollHeight-4); }
 function render(){
   const sy=window.scrollY;
-  const now=bkkNow(), today=scheduleDate(now), tdow=new Date(today+"T12:00:00Z").getUTCDay(); if(U.day===null||U.today!==today){ U.day=tdow; U.today=today; U.scrollKey=null; }
+  const now=bkkNow(), today=scheduleDate(now), tdow=new Date(today+"T12:00:00Z").getUTCDay(); if(U.day===null||U.today!==today){ U.day=tdow; U.today=today; U.scrollKey=null; U.showPast=false; }
   const dow=U.day, date=dateOfDow(dow,U.wk), isToday=date===today, nowA=nowAbs(); const me=PEOPLE[U.me]||PEOPLE.chet;
   const T=build(tdow,today), tPH=PH; const R=build(dow,date); const age=ageDays(today);
   $("clock").textContent=fmt(nowA);
@@ -534,7 +535,8 @@ function render(){
   const mine=R.items.filter(i=>i.col===me.col); const [nS0,nE0]=nannyHrs(); const nOff=String(dow)===nannyOffOn(date); const inShift=i=>me.col!=="nanny"||(nOff?(i.mark&&i.kind==="nanny"):(i.h>=nS0-0.01&&i.h<=nE0+0.01));
   const items=R.items.filter(inShift).filter(i=>i.col===me.col||(i.mark&&(!i.cols||i.cols.includes(me.col))&&!(i.kind==="feed"&&mine.some(m=>Math.abs(m.h-i.h)<0.1&&/^(Feed|Feeding Clay|Feed Clay|Support feed|Bottle feed)$/.test(m.label))))).sort((a,b)=>a.h-b.h||(a.mark===b.mark?0:a.mark?-1:1));
   let html="", marked=false; const curIdx=isToday?items.findIndex(i=>!i.mark&&nowA>=i.h&&nowA<i.h+i.dur):-1; const nextIdx=isToday&&curIdx<0?items.findIndex(i=>!i.mark&&i.h>nowA):-1;
-  items.forEach((i,idx)=>{ const past=isToday&&(i.mark?i.h<nowA-0.05:i.h+i.dur<=nowA);
+  const isPast=i=>isToday&&(i.mark?i.h<nowA-0.05:i.h+i.dur<=nowA); const pastIdx=items.map((i,k)=>isPast(i)?k:-1).filter(k=>k>=0); const hideBefore=(isToday&&!U.showPast&&pastIdx.length>2)?pastIdx[pastIdx.length-2]:-1; if(hideBefore>0) html+=`<button class="earlier" data-earlier>${U.lang==="th"?`ก่อนหน้านี้ · ${hideBefore}`:`Earlier today · ${hideBefore}`}</button>`; else if(isToday&&U.showPast&&pastIdx.length>2) html+=`<button class="earlier" data-earlier>${U.lang==="th"?"ซ่อนก่อนหน้านี้":"Hide earlier"}</button>`;
+  items.forEach((i,idx)=>{ if(idx<hideBefore) return; const past=isPast(i);
     if(isToday&&!marked&&i.h>nowA){ html+=`<div class="gapmark">${ui("now")} · ${fmt(nowA)}</div>`; marked=true; }
     if(i.mark){ html+=`<div class="mk ${i.kind} ${past?"past":""}"><span class="tm">${fmt(i.h)}</span><span class="lb">${tr(i.label)}${i.sub?`<small>${tr(i.sub)}</small>`:""}</span></div>`; return; }
     html+=`<div class="it ${past?"past":""} ${idx===curIdx?"cur":""} ${idx===nextIdx?"next":""} ${i.kind==="rest"?"rest":i.kind==="chore"?"chore":""}"><span class="tm">${fmt(i.h)}</span><span class="lb">${tr(i.label)}${i.sub?`<small>${tr(i.sub)}</small>`:""}</span></div>`; });
@@ -619,6 +621,7 @@ document.body.addEventListener("click",e=>{ const b=e.target.closest("button"); 
   else if(d.wk!==undefined){ if(d.wk==="0"){ U.wk=0; U.day=null; } else U.wk+=+d.wk; render(); }
   else if(b.hasAttribute("data-setopen")){ U.showSet=true; render(); $("settings").scrollTop=0; }
   else if(b.hasAttribute("data-setclose")){ U.showSet=false; U.calOpen=false; U.resetArmed=false; U.wipeArmed=false; render(); }
+  else if(b.hasAttribute("data-earlier")){ U.showPast=!U.showPast; U.scrollKey=null; render(); }
   else if(d.state){ addLog(d.state); }
   else if(d.nappy){ addLog(d.nappy); }
   else if(d.again!==undefined){ const l=JSON.parse(d.again); addLog(l.type,l.type==="bottle"?{ml:l.ml}:(l.min?{min:l.min}:{})); }
