@@ -241,6 +241,7 @@ input.num{width:100px;font:inherit;font-weight:600;font-size:15px;background:var
 @keyframes pulse{0%,100%{opacity:.35;transform:scale(.8)}50%{opacity:1;transform:scale(1.15)}}
 .top h1{cursor:default;-webkit-user-select:none;user-select:none}
 .topr{display:flex;align-items:center;gap:5px;flex:none}
+.mechip{padding:7px 14px;border-radius:999px;background:var(--sky-on);color:var(--sky-on-ink);font-weight:600;font-size:13.5px;box-shadow:0 2px 8px rgba(42,31,46,.14);white-space:nowrap}
 .gear{width:36px;height:36px;flex:none;border-radius:50%;display:grid;place-items:center;color:var(--sky-ink-2);background:var(--sky-chip)} .gear:active{background:var(--sky-on);color:var(--sky-on-ink)}
 #settings{position:fixed;inset:0;z-index:70;overflow-y:auto;-webkit-overflow-scrolling:touch;background:#F5EFE8;padding:0 max(12px,env(safe-area-inset-left)) calc(24px + env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-right));animation:rise .22s var(--ease) both}
 #settings .sethead{position:sticky;top:0;z-index:1;display:flex;justify-content:space-between;align-items:center;padding:calc(12px + env(safe-area-inset-top,0px)) 4px 10px;background:linear-gradient(#F5EFE8 75%,rgba(245,239,232,0))}
@@ -257,7 +258,7 @@ html.lock,html.lock body{overflow:hidden}
 
 <canvas id="sky" aria-hidden="true"></canvas>
 <div class="wrap">
-  <header class="top"><div><h1 id="clock">00:00</h1><small id="dateline"></small></div><div class="topr"><div class="seg sm" id="meSeg" role="tablist" aria-label="I am"></div><button class="gear" id="gearBtn" data-setopen aria-label="Settings"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3h.1a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8v.1a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button></div></header>
+  <header class="top"><div><h1 id="clock">00:00</h1><small id="dateline"></small></div><div class="topr"><span class="mechip" id="meName" hidden></span><div class="seg sm" id="meSeg" role="tablist" aria-label="I am"></div><button class="gear" id="gearBtn" data-setopen aria-label="Settings"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3h.1a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8v.1a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button></div></header>
   <section class="card" id="feedcard"></section>
   <section class="card now" id="now"></section>
   <section class="card" id="notesCard" hidden><ul class="notes" id="notes"></ul></section>
@@ -480,7 +481,7 @@ function render(){
   $("clock").textContent=fmt(nowA);
   $("dateline").innerHTML=`${U.lang==="th"?ui("days")[now.dow]+" "+(+now.date.slice(8))+"/"+(+now.date.slice(5,7)):DAYS[now.dow]+" "+niceDate(now.date)}<br>${S.birth?(age<=0?ui("born"):`${ui("day")} ${age} · ${U.lang==="th"?"ด."+PHASES.find(p=>p.id===tPH).label.replace(/Months? /,""):PHASES.find(p=>p.id===tPH).label.replace(" "," ")}`):ui("due")+" "+niceDate(DUE)}`;
   $("meSeg").innerHTML=Object.entries(PEOPLE).map(([k,p])=>`<button role="tab" aria-selected="${U.me===k}" class="${U.me===k?"on":""}" data-me="${k}">${ui(k)}</button>`).join("");
-  $("meSeg").hidden=!!U.locked;
+  $("meSeg").hidden=!!U.locked; $("meName").hidden=!U.locked; $("meName").textContent=ui(U.me);
   $("gearBtn").hidden=U.me==="view"; $("settings").hidden=!(U.showSet&&U.me!=="view"); document.documentElement.classList.toggle("lock",!$("settings").hidden); $("setSum").textContent=U.lang==="th"?"ตั้งค่า":"Settings"; $("settings").querySelector("[data-setclose]").textContent=U.lang==="th"?"เสร็จ":"Done"; $("now").hidden=U.me==="view";
 
   /* NEXT FEED */
