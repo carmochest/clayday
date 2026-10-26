@@ -379,9 +379,16 @@ function weightAt(date){ const w=weights().filter(x=>x.d<=date); if(w.length) re
 function perKg(age){ return age<1?60:age<2?80:age<3?100:age<4?120:age<5?135:age<183?150:age<274?130:110; }
 function gainGuide(age){ return age<90?[150,200]:age<180?[100,150]:[70,90]; }
 function feedsPerDay(age){ return age<30?8:age<120?7:6; }
+function feedSug(){ const today=scheduleDate(bkkNow()), age=ageDays(today); if(age===null||age<0) return null; return Math.max(10,Math.round(bfEst(age,today)/10)*10); }
 function mlTarget(age,date){ const kg=weightAt(date||scheduleDate(bkkNow())); if(kg) return Math.min(1000,Math.round(kg*(age===null||age<0?150:perKg(age))/10)*10); if(age===null||age<0) return 0; return age<7?400:age<14?500:age<30?650:age<60?800:age<120?950:1000; }
 const isFeed=x=>x.type==="bottle"||x.type==="breast"; const isNappy=x=>x.type==="pee"||x.type==="poo";
-function typicalGap(){ const dates=Object.keys(L).sort().slice(-7); const gaps=[]; dates.forEach(d=>{ const fs=(L[d].entries||[]).filter(isFeed).map(x=>toH(x.t)).sort((a,b)=>a-b); for(let i=1;i<fs.length;i++){ const g=fs[i]-fs[i-1]; if(g>=1.5&&g<=5.5) gaps.push(g); } }); if(gaps.length<4) return {gap:3,learned:false}; return {gap:Math.round(gaps.reduce((a,b)=>a+b,0)/gaps.length*4)/4,learned:true}; }
+function typicalGap(){ const today=scheduleDate(bkkNow()), dates=Object.keys(L).sort().slice(-7); const day=[], night=[]; let nd=0, nn=0;
+  dates.forEach(d=>{ const recent=d>=addDays(today,-2); const fs=(L[d].entries||[]).filter(isFeed).map(x=>toH(x.t)).sort((a,b)=>a-b); for(let i=1;i<fs.length;i++){ const g=fs[i]-fs[i-1]; if(g<1.5||g>6) continue; const isN=fs[i-1]>=20; const arr=isN?night:day; arr.push(g); if(recent) arr.push(g); if(isN) nn++; else nd++; } });
+  const med=a=>{ const x=a.slice().sort((p,q)=>p-q), m=x.length; return Math.round((m%2?x[(m-1)/2]:(x[m/2-1]+x[m/2])/2)*4)/4; };
+  const gap=nd>=4?med(day):3, ngap=nn>=3?med(night):Math.min(4,gap+0.5); return {gap,ngap,learned:nd>=4,nlearned:nn>=3}; }
+function wakeWindow(age){ const dates=Object.keys(L).sort().slice(-7); const ws=[]; dates.forEach(d=>{ const tr=(L[d].entries||[]).filter(x=>x.type==="sleep"||x.type==="wake").sort((a,b)=>toH(a.t)-toH(b.t)); for(let i=1;i<tr.length;i++){ if(tr[i].type==="sleep"&&tr[i-1].type==="wake"){ const w=toH(tr[i].t)-toH(tr[i-1].t); if(w>=0.4&&w<=4) ws.push(w); } } });
+  if(ws.length>=3){ const x=ws.sort((a,b)=>a-b); return {ww:Math.round(x[Math.floor(x.length/2)]*4)/4,learned:true}; } const a=age===null?0:age; return {ww:a<30?1:a<60?1.25:a<90?1.5:a<120?1.75:a<180?2:a<270?2.5:a<365?3:3.5,learned:false}; }
+function usualMl(){ const today=scheduleDate(bkkNow()); const b=[]; for(let k=0;k>-3;k--){ const d=L[addDays(today,k)]; (d&&d.entries||[]).forEach(x=>{ if(x.type==="bottle"&&+x.ml>0) b.push(+x.ml); }); } if(b.length<4) return null; b.sort((p,q)=>p-q); return Math.round(b[Math.floor(b.length/2)]/10)*10; }
 const exOn=date=>!!S.exFrom&&date>=S.exFrom, bjjOn=date=>!!S.bjjFrom&&date>=S.bjjFrom;
 
 /* ---------- engine ---------- */
@@ -395,16 +402,16 @@ function build(dow,date){
 
   /* Clay's feeds: plan, then live prediction from the last real feed */
   const plan=sortedFeeds().filter(f=>!f.off).map(f=>({h:toH(f.t),key:"feed@"+f.t}));
-  const real=log.filter(isFeed); const {gap,learned}=typicalGap();
+  const real=log.filter(isFeed); const {gap,ngap,learned}=typicalGap();
   let sw=[...log].reverse().find(x=>x.type==="sleep"||x.type==="wake"), carried=false, ysw=null; if(isToday){ const y=L[addDays(date,-1)]; const yy=y&&[...(y.entries||[])].reverse().find(x=>x.type==="sleep"||x.type==="wake"); if(yy&&yy.type==="sleep"&&toH(yy.t)>=20){ ysw=yy; if(!sw){ sw=yy; carried=true; } } } const sleeping=isToday&&!!(sw&&sw.type==="sleep");
   let feeds=[]; const noFeed=m46()?[23.6,31.5]:null;
   if(isToday&&real.length){ const last=toH(real[real.length-1].t), first=toH(real[0].t);
     plan.filter(f=>f.h<first-0.75).forEach(f=>feeds.push({...f,missed:f.h<nowA}));
     real.forEach(x=>feeds.push({h:toH(x.t),actual:x}));
-    let t=last+gap, due=false, planH=null; if(t<nowA){ planH=t; t=nowA+0.03; due=true; } let firstP=true;
-    while(t<30){ if(!(noFeed&&t>noFeed[0]&&t<noFeed[1])) feeds.push({h:t,key:"feed@"+fmt(t),pred:true,due:due&&firstP,plan:due&&firstP?planH:null,whenWakes:due&&firstP&&sleeping}); t+=gap; firstP=false; }
+    let t=last+(last>=20?ngap:gap), due=false, planH=null; if(t<nowA){ planH=t; t=nowA+0.03; due=true; } let firstP=true;
+    while(t<30){ if(!(noFeed&&t>noFeed[0]&&t<noFeed[1])) feeds.push({h:t,key:"feed@"+fmt(t),pred:true,due:due&&firstP,plan:due&&firstP?planH:null,whenWakes:due&&firstP&&sleeping}); t+=(t>=20?ngap:gap); firstP=false; }
   } else if(isToday){ plan.forEach(f=>{ if(f.h<nowA-0.75) feeds.push({...f,missed:true}); }); const nextPlan=plan.find(f=>f.h>=nowA-0.75); let t=nextPlan?Math.max(nextPlan.h,nowA+0.03):nowA+0.03; const overdue=t<=nowA+0.06; let firstP=true;
-    while(t<30){ if(!(noFeed&&t>noFeed[0]&&t<noFeed[1])) feeds.push({h:t,key:"feed@"+fmt(t),pred:!firstP||overdue,due:firstP&&overdue,plan:firstP&&overdue&&nextPlan?nextPlan.h:null,whenWakes:firstP&&overdue&&sleeping}); t+=gap; firstP=false; } }
+    while(t<30){ if(!(noFeed&&t>noFeed[0]&&t<noFeed[1])) feeds.push({h:t,key:"feed@"+fmt(t),pred:!firstP||overdue,due:firstP&&overdue,plan:firstP&&overdue&&nextPlan?nextPlan.h:null,whenWakes:firstP&&overdue&&sleeping}); t+=(t>=20?ngap:gap); firstP=false; } }
   else plan.forEach(f=>feeds.push({...f}));
   feeds=feeds.filter(f=>!(f.key&&isToday&&skips.has(f.key))); feeds.sort((a,b)=>a.h-b.h);
   const raw=(L[date]&&L[date].entries)||[];   // insertion order: a toggle tapped after a feed ends that feed, even in the same minute
@@ -415,8 +422,16 @@ function build(dow,date){
   for(let i=0;i<feeds.length;i++){ const a=feeds[i].h+feeds[i].dur, b=i+1<feeds.length?feeds[i+1].h:feeds[0].h+24; if(b-a<0.6) continue; const ab=a%24;
     if(!m46()&&ab>=17.5&&ab<19.6) C.push({h:a,dur:b-a,kind:"bath"}); else if(m46()&&ab>=14.6&&ab<16.5) C.push({h:a,dur:b-a,kind:"play"}); else if(m46()&&ab>=18.6&&ab<19.9) C.push({h:a,dur:b-a,kind:"bath"});
     else if(ab>=20.5||ab<7) C.push({h:a,dur:b-a,kind:"sleep"}); else C.push({h:a,dur:b-a,kind:"nap"}); }
-  if(sleeping){ const s=toH(sw.t); C.forEach(c=>{ if((c.kind==="nap"||c.kind==="sleep")&&s>=c.h-0.5&&s<c.h+c.dur){ c.dur=c.h+c.dur-s; c.h=s; } }); }
-  const CL={feed:"Feed",bath:"Bath · wind-down",play:"Play · tummy time",sleep:"Sleep",nap:"Nap"};
+  if(isToday){ const tr=log.filter(x=>x.type==="sleep"||x.type==="wake").map(x=>({h:toH(x.t),s:x.type==="sleep"})); if(carried) tr.unshift({h:DAY_START,s:true}); tr.sort((a,b)=>a.h-b.h);
+    if(tr.length){ const {ww}=wakeWindow(age); const napKind=h=>(h%24>=20.5||h%24<7)?"sleep":"nap"; const out=[];
+      C.forEach(c=>{ if(c.kind==="feed"){ out.push(c); return; } const a=c.h, b=c.h+c.dur, act=c.kind==="bath"||c.kind==="play"; const before=tr.filter(t=>t.h<=a+0.01), inside=tr.filter(t=>t.h>a+0.01&&t.h<b-0.01); if((!before.length&&!inside.length)||(a>nowA-0.01&&!inside.length)){ out.push(c); return; }
+        const segs=[]; const seg=(h,e,sl,w0)=>{ if(e-h<=0.02) return; if(sl===true){ segs.push({h,dur:e-h,kind:napKind(h)}); return; } if(sl===null){ segs.push({h,dur:e-h,kind:c.kind}); return; }
+          if(!act&&e>nowA){ const ns=Math.max(h,nowA,(w0!==null?w0:h)+ww); if(ns<e-0.25){ if(ns>h+0.02) segs.push({h,dur:ns-h,kind:"awake",napAt:ns}); segs.push({h:ns,dur:e-ns,kind:napKind(ns),pred:true}); return; } }
+          segs.push({h,dur:e-h,kind:act?c.kind:"awake"}); };
+        let st=before.length?before[before.length-1].s:null, from=a, w0=before.length&&!before[before.length-1].s?before[before.length-1].h:null;
+        inside.forEach(t=>{ seg(from,t.h,st,w0); st=t.s; from=t.h; if(!t.s) w0=t.h; }); seg(from,b,st,w0); out.push(...segs); });
+      C.length=0; C.push(...out); } }
+  const CL={feed:"Feed",bath:"Bath · wind-down",play:"Play · tummy time",sleep:"Sleep",nap:"Nap",awake:"Awake"};
   const clayNow=C.filter(c=>nowA>=c.h&&nowA<c.h+c.dur).sort((a,b)=>b.h-a.h||(a.kind==="feed"?-1:1))[0];
 
   /* who feeds Clay: whoever logged it; otherwise Nanny on shift, Chet on the shift-night bottle, else Prowe */
@@ -463,7 +478,7 @@ function build(dow,date){
     if(exDay||bjjDay){ I.filter(x=>x.col==="nanny"&&x.kind==="rest").forEach(x=>{ if(x.h<14&&x.h+x.dur>12){ if(x.h<12){ const end=x.h+x.dur; x.dur=12-x.h; if(end>14) add("nanny",14,end-14,x.label,x.sub,"rest"); } else if(x.h+x.dur<=14){ x.dur=0; } else { x.dur=x.h+x.dur-14; x.h=14; } } }); add("nanny",12,2,"Nanny has Clay",(exDay?"Base + yoga":"BJJ")+" 12:00 – 14:00","care"); } }
 
   if(isToday&&sw&&sw.type==="wake"){ const w=toH(sw.t); I.forEach(it=>{ if(!it.mark&&it.label==="Nap with Clay"&&w>=it.h&&w<it.h+it.dur) it.dur=Math.max(0,w-it.h); }); C.forEach(c=>{ if((c.kind==="nap"||c.kind==="sleep")&&w>=c.h&&w<c.h+c.dur) c.dur=Math.max(0,w-c.h); }); }
-  C.forEach(c=>{ if(c.kind==="feed"||c.dur<=0.25) return; const f=feeds.find(f=>c.h>=f.h&&c.h<=f.h+f.dur+0.1); const txt=c.kind==="nap"?"naps until "+hm(c.h+c.dur):c.kind==="sleep"?"sleeps until "+hm(c.h+c.dur):c.kind==="bath"?"bath":"play"; if(f) f.after=txt; else mark(c.h,"Clay "+txt,"clay",c.kind==="nap"||c.kind==="sleep"?null:["chet","prowe"]); });
+  C.forEach(c=>{ if(c.kind==="feed"||c.dur<=0.25) return; const f=feeds.find(f=>c.h>=f.h&&c.h<=f.h+f.dur+0.1); if(c.kind==="awake"&&c.h+c.dur<=nowA&&!f) return; const txt=c.kind==="nap"?"naps until "+hm(c.h+c.dur):c.kind==="sleep"?"sleeps until "+hm(c.h+c.dur):c.kind==="awake"?(c.napAt?"is awake · nap around "+hm(c.napAt):"is awake until "+hm(c.h+c.dur)):c.kind==="bath"?"bath":"play"; if(f) f.after=txt; else mark(c.h,"Clay "+txt,"clay",c.kind==="nap"||c.kind==="sleep"?null:["chet","prowe"]); });
   feeds.forEach(f=>{ if(!f.after) return; const t="then Clay "+f.after; I.forEach(it=>{ if(Math.abs(it.h-f.h)>0.01) return; if(it.mark&&it.kind==="feed") it.sub=t; else if(!it.mark&&/^(Feed|Feeding Clay|Feed Clay|Support feed|Bottle feed)$/.test(it.label)&&!(it.col==="nanny"&&/^(bath|play)$/.test(f.after))) it.sub=(it.sub?it.sub+" · ":"")+t; }); });
   /* Prowe's pump sits on Nanny's feed: one line, not two */
   I.filter(x=>x.col==="prowe"&&x.label==="Pump").forEach(pu=>{ const mk=I.find(x=>x.mark&&x.kind==="feed"&&Math.abs(x.h-pu.h)<0.01); if(mk){ pu.sub=mk.label+(mk.sub?" · "+mk.sub:""); mk.cols=(mk.cols||["chet","prowe","nanny"]).filter(c=>c!=="prowe"); } });
@@ -476,7 +491,7 @@ function build(dow,date){
   I.sort((a,b)=>a.h-b.h);
   /* merge back-to-back rows that say the same thing (e.g. Work 12–14 + Work 14–17 → Work 12–17) */
   ["chet","prowe","nanny"].forEach(col=>{ const rows=I.filter(x=>x.col===col&&!x.mark); for(let i=rows.length-1;i>0;i--){ const a=rows[i-1], b=rows[i]; if(a.label===b.label&&a.sub===b.sub&&Math.abs(a.h+a.dur-b.h)<0.05){ a.dur+=b.dur; I.splice(I.indexOf(b),1); } } });
-  return {items:I,adj,feeds,gap,learned,shift,sleeping,sw,carried,ysw,clayNow,CL,S2};
+  return {items:I,adj,feeds,gap,ngap,learned,shift,sleeping,sw,carried,ysw,clayNow,CL,S2};
 }
 
 /* ---------- suggestions ---------- */
@@ -514,7 +529,7 @@ function picker(){ const bottle=U.pick.mode==="bottle"; const sw=U.pick.mode==="
   const stp=(lab,val,k,step,unit)=>`<div class="stp"><span class="sl">${lab}</span><button class="st" data-adj="${k}:${-step}" aria-label="less">−</button><b>${val}${unit?`<small>${unit}</small>`:""}</b><button class="st" data-adj="${k}:${step}" aria-label="more">+</button></div>`;
   return `<div class="pick">
   <div class="lab">${ed?ui("edit"):ui("log")} · ${sw?({sleep:"😴 "+tr("Asleep"),wake:"👀 "+tr("Awake"),pee:"💧 "+ui("pee"),poo:"💩 "+ui("poo")})[U.pick.mode]:bottle?tr("Bottle"):tr("Breastfeed")}</div>
-  ${sw?"":bottle?stp(ui("ml"),U.ml,"ml",10,""):stp(ui("minutes"),U.min,"min",5,"")}
+  ${sw?"":bottle?stp(ui("ml"),U.ml,"ml",10,"")+(()=>{ if(ed) return ""; const sg=feedSug(), us=usualMl(), th=U.lang==="th", p=[]; if(us) p.push((th?"ปกติ ~":"usual ~")+us); if(sg) p.push((th?"แนะนำ ~":"guide ~")+sg); return p.length?`<div style="margin:-6px 0 -2px 14px;color:var(--accent);font-size:11.5px;font-weight:600">${p.join(" · ")} ${ui("ml")}</div>`:""; })():stp(ui("minutes"),U.min,"min",5,"")}
   ${stp(ui("time"),U.tm,"tm",5,late>=3&&!ed?`<em>${U.lang==="th"?`${late} นาทีที่แล้ว`:`${late} min ago`}</em>`:"")}
   <div class="go"><button class="btn quiet" data-pickclose>${ui("cancel")}</button><button class="btn primary" data-picksave>${ed?ui("save"):ui("log")}</button></div>
   ${ed?`<button class="btn quiet sm" data-delfeed="${ed.id}" style="justify-self:center">${ui("del")}</button>`:""}</div>`; }
@@ -617,7 +632,7 @@ function askAvail(){ return !!(AI_ENDPOINT||(window.claude&&window.claude.use));
 function aiContext(){ const now=bkkNow(), today=scheduleDate(now), tdow=new Date(today+"T12:00:00Z").getUTCDay(); const T=build(tdow,today); const age=ageDays(today); const nowA=nowAbs(); const en=(L[today]&&L[today].entries)||[]; const feeds=en.filter(isFeed).sort((a,b)=>toH(a.t)-toH(b.t)); const bfml=bfEst(age,today); const ml=feeds.reduce((t,x)=>t+(x.type==="bottle"?(+x.ml||0):bfml),0); const tg=mlTarget(age,today); const wet=en.filter(x=>x.type==="pee").length, dirty=en.filter(x=>x.type==="poo").length; const sl=sleepMin(en,nowA,!!T.ysw); const [lo,hi]=sleepGuide(age); const next=T.feeds.find(f=>f.h>nowA-0.02&&!f.actual&&!f.missed); const days=[-3,-2,-1].map(k=>{ const d=addDays(today,k); const st=dayStats(d,today,nowA); return `${d}: ${st.feeds} feeds ~${st.ml} ml, sleep ${fmtDur(st.sleep)}, wet ${st.wet}, dirty ${st.dirty}`; }).join("\n");
   const who=({chet:"Chet (father)",prowe:"Prowe (mother)",view:"the nanny"})[U.me]||U.me;
   return `Baby: Clay, boy, ${age===null?"not born yet (due 7 Nov 2026)":age+" days old ("+Math.floor(age/7)+" weeks)"}${(()=>{ const w=weights(); if(!w.length) return S.weight?", weight "+S.weight+" kg":", weight not logged"; const l=w[w.length-1], p=w.length>1?w[w.length-2]:null, med=whoMedian(ageDays(l.d)); return ", weight "+l.kg.toFixed(2)+" kg weighed "+niceDate(l.d)+(med?" (WHO median for that age ~"+med+" kg)":"")+(p?", previously "+p.kg.toFixed(2)+" kg on "+niceDate(p.d):"")+(age!==null&&age>=0?". Milk target = weight × "+perKg(age)+" ml/kg/day, breastfeed estimate = target ÷ "+feedsPerDay(age)+" feeds":""); })()}. Feeding: ${({both:"bottle (formula/expressed) and breast",bottle:"bottle",breast:"breast"})[S.feedType||"both"]}. Location: Bangkok. Time now: ${fmt(nowA)} on ${today}. Asking: ${who}.
-Today so far (day runs 06:00–06:00): ${feeds.length} feeds = ~${ml} ml of a ${tg} ml target (${feeds.map(f=>f.t+" "+(f.type==="bottle"?f.ml+"ml":"breast"+(f.min?" "+f.min+"min":""))).join(", ")||"none yet"}). Sleep logged ${fmtDur(sl)} (guide ${lo}–${hi} h/day); Clay is ${T.sleeping?"asleep since "+T.sw.t:"awake"}. Nappies: ${wet} wet, ${dirty} dirty. Next feed predicted ${next?fmt(next.h)+(next.due?" (overdue)":""):"—"}; usual gap ${fmtDur(T.gap*60)}${T.learned?" (learned)":" (default)"}.
+Today so far (day runs 06:00–06:00): ${feeds.length} feeds = ~${ml} ml of a ${tg} ml target (${feeds.map(f=>f.t+" "+(f.type==="bottle"?f.ml+"ml":"breast"+(f.min?" "+f.min+"min":""))).join(", ")||"none yet"}). Sleep logged ${fmtDur(sl)} (guide ${lo}–${hi} h/day); Clay is ${T.sleeping?"asleep since "+T.sw.t:"awake"}. Nappies: ${wet} wet, ${dirty} dirty. Next feed predicted ${next?fmt(next.h)+(next.due?" (overdue)":""):"—"}; usual gap ${fmtDur(T.gap*60)} by day, ${fmtDur(T.ngap*60)} at night${T.learned?" (learned from his logs)":" (default)"}; usual bottle ${usualMl()?usualMl()+" ml":"not enough data"}, guide ${feedSug()||"—"} ml per feed.
 Previous days:\n${days}
 Household: nanny ${hm(nannyHrs()[0])}–${hm(nannyHrs()[1])}, day off ${DAYS[+nannyOffOn(today)]}; night mode ${T.shift?"shift (Chet does the 02:00 bottle)":"together"}.`; }
 function aiSystem(){ const th=U.lang==="th"; return `You are the care assistant inside "Clay Day", a household app for a newborn in Bangkok. You are an expert in infant care — feeding (breast, formula, mixed), sleep, nappies, soothing, bathing, development, safe sleep — following WHO, AAP and NHS guidance.
@@ -641,7 +656,7 @@ function renderSheet(kind,c){ const {tlog,real,ml,tg,pc,bml,bf,bfml,age,today,no
     <div class="askbar"><textarea id="askIn" rows="1" placeholder="${th?"พิมพ์ หรือกดไมค์เพื่อพูด":"Type, or tap 🎙 to speak"}" enterkeyhint="send"></textarea><button class="btn primary askgo" data-asksend aria-label="Send">➤</button></div>
     <div class="askfoot"><button class="${U.speak?"on":""}" data-askspeak>🔊 ${th?"อ่านคำตอบ":"Read aloud"}${U.speak?(th?" · เปิด":" · on"):""}</button>${U.chat.length?`<button data-askclear>${th?"เริ่มใหม่":"New chat"}</button>`:""}<span>${th?"ไม่ใช่คำแนะนำแพทย์ · ฉุกเฉิน 1669":"Not medical advice · 1669"}</span></div></div>`; } const days=[...Array(7)].map((_,i)=>addDays(today,-6+i)); const dn=d=>{ const x=new Date(d+"T12:00:00Z"); return (th?ui("days")[x.getUTCDay()]:DAYS[x.getUTCDay()])+" "+(+d.slice(8)); }; const h7=(title,rowsHtml)=>`<div class="sh"><h3>${title}</h3>${rowsHtml}</div>`; const last7=th?"7 วันที่ผ่านมา":"Last 7 days";
   if(kind==="milk"){ const gap=T.gap; const bars=days.map(d=>{ const st=dayStats(d,today,nowA); const p=st.tg?Math.min(100,Math.round(st.ml/st.tg*100)):0; return `<div class="d7"><span class="dn">${dn(d)}</span><div class="bar"><i style="width:${p}%"></i></div><span class="dv">${st.feeds?"~"+st.ml+" "+ui("ml"):"—"}</span></div>`; }).join("");
-    return `<div class="sh"><h3>${ui("todayW")}</h3><div class="big">~${ml} <small style="font-size:16px;color:var(--ink-3)">${ui("ml")}</small></div><div class="sub2">${pc}% ${ui("of")} ${tg} ${ui("ml")}${(k=>k?` · ${k} kg × ${perKg(age===null?5:age)} ml/kg`:"")(weightAt(today))}${(bml||bf)?`<br>${bml?`🍼 ${bml} ${ui("ml")}`:""}${bml&&bf?" + ":""}${bf?`🤱 ${bf} × ~${bfml} ${ui("ml")}`:""}`:""}<br>${th?"ช่วงห่างมื้อปกติ":"Usual gap"} ${fmtDur(gap*60)}${T.learned?(th?" · เรียนรู้จากสัปดาห์นี้":" · learned this week"):(th?" · ค่าเริ่มต้น":" · default")}</div><div class="bar"><i style="width:${pc}%"></i></div></div>`+h7("⚖️ "+(th?"น้ำหนัก":"Weight"),weightBlock(age,today,false))+h7(last7,bars)+h7(th?"มื้อวันนี้":"Today's feeds",sheetRows(real)); }
+    return `<div class="sh"><h3>${ui("todayW")}</h3><div class="big">~${ml} <small style="font-size:16px;color:var(--ink-3)">${ui("ml")}</small></div><div class="sub2">${pc}% ${ui("of")} ${tg} ${ui("ml")}${(k=>k?` · ${k} kg × ${perKg(age===null?5:age)} ml/kg`:"")(weightAt(today))}${(bml||bf)?`<br>${bml?`🍼 ${bml} ${ui("ml")}`:""}${bml&&bf?" + ":""}${bf?`🤱 ${bf} × ~${bfml} ${ui("ml")}`:""}`:""}<br>${th?"ช่วงห่างมื้อปกติ":"Usual gap"} ${fmtDur(gap*60)}${T.ngap!==gap?" · "+(th?"กลางคืน ":"night ")+fmtDur(T.ngap*60):""}${T.learned?(th?" · เรียนรู้จากสัปดาห์นี้":" · learned this week"):(th?" · ค่าเริ่มต้น":" · default")}</div><div class="bar"><i style="width:${pc}%"></i></div></div>`+h7("⚖️ "+(th?"น้ำหนัก":"Weight"),weightBlock(age,today,false))+h7(last7,bars)+h7(th?"มื้อวันนี้":"Today's feeds",sheetRows(real)); }
   if(kind==="nappy"){ const wet=tlog.filter(x=>x.type==="pee").length, dirty=tlog.filter(x=>x.type==="poo").length; const wetT=age===null?6:age<=0?1:age===1?2:age===2?3:age===3?4:6; const bars=days.map(d=>{ const st=dayStats(d,today,nowA); return `<div class="d7"><span class="dn">${dn(d)}</span><div class="bar"><i style="width:${Math.min(100,Math.round(st.wet/6*100))}%"></i></div><span class="dv">💧${st.wet} 💩${st.dirty}</span></div>`; }).join("");
     return `<div class="sh np"><h3>${ui("todayW")}</h3><div class="big">💧 ${wet} <small style="font-size:16px;color:var(--ink-3)">/ ${wetT}</small> &nbsp; 💩 ${dirty}</div><div class="sub2">${th?"แนะนำฉี่ 6+ ต่อวันตั้งแต่วันที่ 5":"6+ wet a day from day 5 means he's getting enough"}</div><div class="bar"><i style="width:${Math.min(100,Math.round(wet/wetT*100))}%"></i></div></div>`+h7(last7,bars)+h7(th?"วันนี้":"Today",sheetRows(tlog.filter(isNappy).sort((a,b)=>toH(a.t)-toH(b.t)))); }
   const [lo,hi]=sleepGuide(age); const sm=sleepMin(tlog,nowA,!!T.ysw); const spc=Math.min(100,Math.round(sm/((lo+hi)/2*60)*100));
@@ -727,7 +742,7 @@ document.body.addEventListener("click",e=>{ const b=e.target.closest("button"); 
   else if(d.state){ addLog(d.state); }
   else if(d.nappy){ addLog(d.nappy); }
   else if(d.again!==undefined){ const l=JSON.parse(d.again); addLog(l.type,l.type==="bottle"?{ml:l.ml}:(l.min?{min:l.min}:{})); }
-  else if(d.pickopen){ U.pick={mode:d.pickopen}; U.tm=nowHM(); render(); }
+  else if(d.pickopen){ U.pick={mode:d.pickopen}; U.tm=nowHM(); if(d.pickopen==="bottle"){ const sg=feedSug(), us=usualMl(); const def=us&&(!sg||(us>=sg*0.6&&us<=sg*1.5))?us:sg; if(def) U.ml=def; } render(); }
   else if(d.editfeed){ const date=scheduleDate(bkkNow()); const x=(L[date]&&L[date].entries||[]).find(e=>e.id===d.editfeed); if(!x) return; U.logOpen=true; if(x.type==="bottle") U.ml=x.ml||U.ml; else if(x.min) U.min=x.min; U.pick={mode:x.type,edit:x}; U.tm=x.t; render(); }
   else if(d.delfeed){ U.pick=null; U.logOpen=true; removeLog(d.delfeed); }
   else if(d.adj){ const [k,dv]=d.adj.split(":"); const v=+dv; if(k==="kg"){ if(!U.wpick) return; U.wpick.kg=Math.max(1,Math.min(25,Math.round((U.wpick.kg+v/100)*100)/100)); } else if(k==="wd"){ if(!U.wpick) return; const today=scheduleDate(bkkNow()); let nd=addDays(U.wpick.d,v); if(nd>today) nd=today; const lo=S.birth||addDays(today,-400); if(nd<lo) nd=lo; U.wpick.d=nd; } else if(k==="ml") U.ml=Math.max(10,Math.min(400,U.ml+v)); else if(k==="min") U.min=Math.max(0,Math.min(90,U.min+v)); else { let h=toH(U.tm)+v/60; const now=nowAbs(); if(h<DAY_START) h+=24; if(h>=DAY_START+24) h-=24; if(!U.pick.edit&&h>now&&h<=now+6) h=now; U.tm=fmt(h); } render(); }
