@@ -743,9 +743,9 @@ function renderSettings(age,today){
       <div class="field"><span>Dog walks</span>${dayPick("wd",d=>S.walkDays.includes(d))}<div class="seg sm" data-set="walkSlot"><button data-v="8" class="${S.walkSlot==="8"?"on":""}">08:00</button><button data-v="17" class="${S.walkSlot==="17"?"on":""}">17:00</button></div></div>`)+
     person("🧔🏻👩🏻","Chet & Prowe",S.exFrom?"Base + yoga on":"Base + yoga off",`
       <div class="frow"><button class="sw2 ${S.exFrom?"on":""}" data-toggle="exFrom"><i></i>Base + yoga · Mon Wed Fri 12:00 – 14:00</button></div>`)+
-    person(EMO.nanny,"Nanny",`${hm(nannyHrs()[0])} – ${hm(nannyHrs()[1])} · ${DAYS[+offNow]} off`,`
+    person(EMO.nanny,"Nanny",`${hm(nannyHrs()[0])} – ${hm(nannyHrs()[1])} · ${offNow==="none"?"7 days":DAYS[+offNow]+" off"}`,`
       <div class="field"><span>Hours</span>${hrsField("nannyHrs",nannyHrs())}</div>
-      <div class="field"><span>Day off</span>${dayPick("noff",d=>String(d)===offNow,true)}</div>`)+
+      <div class="field"><span>Day off${offNow==="none"?" · none":""}</span>${dayPick("noff",d=>String(d)===offNow,true)}<p class="hint">Tap the highlighted day again to clear it — she's on 7 days a week until you pick one.</p></div>`)+
     person(EMO.driver,"Driver",`${hm(driverHrs()[0])} – ${hm(driverHrs()[1])} · ${[1,2,3,4,5,6,0].filter(d=>S.driverDays.includes(d)).map(d=>DAYS[d][0]).join("")||"no days"}`,`<div class="field"><span>Hours</span>${hrsField("driverHrs",driverHrs())}</div><div class="field"><span>Days</span>${dayPick("dd",d=>S.driverDays.includes(d))}</div>`)+
     person(EMO.maids,"Maids",`${hm(maidHrs()[0])} – ${hm(maidHrs()[1])} · ${[1,2,3,4,5,6,0].filter(d=>S.maidDays.includes(d)).map(d=>DAYS[d]).join(" ")||"no days"}${S.maidDogs!==false?" · dogs out":""}`,`<div class="field"><span>Hours</span>${hrsField("maidHrs",maidHrs())}</div><div class="field"><span>Days</span>${dayPick("md",d=>S.maidDays.includes(d))}</div>
       <div class="frow"><button class="sw2 ${S.maidDogs!==false?"on":""}" data-toggle="maidDogs"><i></i>Take Bee & Bug to the family house · run & shower</button></div><p class="hint">Off = maids still come, dogs stay home (no 19:00 driver run).</p>`)+
@@ -826,7 +826,7 @@ document.body.addEventListener("click",e=>{ const b=e.target.closest("button"); 
   else if(d.feedon!==undefined){ const f=S.feeds[PH][+d.feedon]; f.off=!f.off; saveSettings(); }
   else if(d.feeddel!==undefined){ S.feeds[PH].splice(+d.feeddel,1); saveSettings(); }
   else if(b.hasAttribute("data-addfeed")){ const have=new Set(S.feeds[PH].map(f=>f.t)); let t=12; while(have.has(pad(t%24)+":00")&&t<36) t++; S.feeds[PH].push({t:pad(t%24)+":00"}); saveSettings(); }
-  else if(d.noff){ const today=scheduleDate(bkkNow()); if(String(S.nannyOff)!==d.noff){ S.nannyOffPrev=nannyOffOn(today); S.nannyOff=d.noff; S.nannyOffFrom=today; saveSettings(); toast("Nanny's day off: "+DAYL[+d.noff]+" from now on"); } }
+  else if(d.noff){ const today=scheduleDate(bkkNow()); const nv=String(S.nannyOff)===d.noff?"none":d.noff; S.nannyOffPrev=nannyOffOn(today); S.nannyOff=nv; S.nannyOffFrom=today; saveSettings(); toast(nv==="none"?"Nanny on 7 days a week from now on":"Nanny's day off: "+DAYL[+nv]+" from now on"); }
   else if(d.toggle&&d.toggle!=="alarm"){ const k=d.toggle; if(k==="bar"){ U.bar=!U.bar; lsSet("clay.bar",U.bar); U.pick=null; render(); return; } if(k==="night"){ U.night=!U.night; lsSet("clay.night",U.night); render(); return; } if(k==="maidDogs") S.maidDogs=S.maidDogs===false; else S[k]=S[k]?null:scheduleDate(bkkNow()); saveSettings(); }
   else if(d.wd){ const x=+d.wd; S.walkDays=S.walkDays.includes(x)?S.walkDays.filter(y=>y!==x):[...S.walkDays,x]; saveSettings(); }
   else if(d.hnudge){ const [k,i,dm]=d.hnudge.split(":"); const cur=k==="nannyHrs"?nannyHrs():k==="driverHrs"?driverHrs():maidHrs(); const v=[cur[0],cur[1]]; v[+i]=Math.max(0,Math.min(23.5,v[+i]+(+dm)/60)); if(v[1]-v[0]<1){ toast("Keep at least 1 hour"); return; } S[k]=hm(v[0])+"-"+hm(v[1]); saveSettings(); }
