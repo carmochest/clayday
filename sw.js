@@ -1,6 +1,6 @@
 /* Clay Day service worker: the app is one HTML file, so cache it and serve it offline.
    Pages are network-first (updates arrive when online), everything else cache-first. */
-const CACHE = "clayday-v2";
+const CACHE = "clayday-v4";
 const PRECACHE = ["./", "./index.html", "./manifest.json", "./icon-192.png", "./icon-512.png", "./apple-touch-icon.png",
   "https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js",
   "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"];
@@ -15,4 +15,14 @@ self.addEventListener("fetch", e => {
     return;
   }
   e.respondWith(caches.match(req).then(hit => hit || fetch(req).then(r => { if (r.ok || r.type === "opaque") { const copy = r.clone(); caches.open(CACHE).then(c => c.put(req, copy)); } return r; })));
+});
+
+/* push notifications (sent by the Cloudflare Worker) */
+self.addEventListener("push", e => {
+  let d = {}; try { d = e.data ? e.data.json() : {}; } catch (x) { d = { title: "Clay Day", body: e.data ? e.data.text() : "" }; }
+  e.waitUntil(self.registration.showNotification(d.title || "Clay Day", { body: d.body || "", icon: "./icon-192.png", badge: "./icon-192.png", tag: d.tag || "clayday", renotify: true, data: { url: d.url || "./" } }));
+});
+self.addEventListener("notificationclick", e => {
+  e.notification.close();
+  e.waitUntil(self.clients.matchAll({ type: "window", includeUncontrolled: true }).then(cs => { const c = cs.find(x => "focus" in x); return c ? c.focus() : self.clients.openWindow(e.notification.data && e.notification.data.url || "./"); }));
 });

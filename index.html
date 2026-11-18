@@ -345,6 +345,7 @@ html.boot *{transition:none!important;animation:none!important}
    To sync between phones on carmochest.github.io, paste your Firebase web config here
    (Firebase console → Project settings → Your apps → SDK setup → Config). Leave null for local-only. */
 /* AI helper on GitHub Pages: paste your Cloudflare Worker URL here (see worker.js). On claude.ai the page asks Claude directly. */
+const APP_VERSION="9.59";
 const AI_ENDPOINT="";
 const FIREBASE_CONFIG={apiKey:"AIzaSyB-RyK-3Zt5waeECka0oX4fqPdwbjlgglA",authDomain:"clayday-38bc7.firebaseapp.com",projectId:"clayday-38bc7",storageBucket:"clayday-38bc7.firebasestorage.app",messagingSenderId:"510703800976",appId:"1:510703800976:web:ae61236265d8666599be15"};
 
@@ -786,7 +787,7 @@ function renderSettings(age,today){
     person(EMO.maids,"Maids",`${hm(maidHrs()[0])} – ${hm(maidHrs()[1])} · ${[1,2,3,4,5,6,0].filter(d=>S.maidDays.includes(d)).map(d=>DAYS[d]).join(" ")||"no days"}${S.maidDogs!==false?" · dogs out":""}`,`<div class="field"><span>Hours</span>${hrsField("maidHrs",maidHrs())}</div><div class="field"><span>Days</span>${dayPick("md",d=>S.maidDays.includes(d))}</div>
       <div class="frow"><button class="sw2 ${S.maidDogs!==false?"on":""}" data-toggle="maidDogs"><i></i>Take Bee & Bug to the family house · run & shower</button></div><p class="hint">Off = maids still come, dogs stay home (no 19:00 driver run).</p>`)+
     person("📱","This phone",[U.alarm?"alarm on":"alarm off",U.night?"night look":null,U.simple?null:"timetable on home"].filter(Boolean).join(" · "),`<div class="frow"><button class="sw2 ${U.alarm?"on":""}" data-toggle="alarm"><i></i>Feed alarm</button></div>${U.alarm?`<div class="field"><span>Remind me</span><div class="seg sm" data-set="lead"><button data-v="0" class="${+U.lead===0?"on":""}">At feed time</button><button data-v="5" class="${+U.lead===5?"on":""}">5 min before</button><button data-v="10" class="${+U.lead===10?"on":""}">10 min before</button></div></div>`:""}<p class="hint">Chimes while the app is open on screen (iPhone can't ring in the background yet).</p><div class="frow"><button class="sw2 ${U.night?"on":""}" data-toggle="night"><i></i>Night look · 20:00 – 08:00</button></div><div class="frow"><button class="sw2 ${U.simple?"":"on"}" data-toggle="simple"><i></i>Timetable on the home screen</button></div><p class="hint">Off keeps the home screen clean — the timetable lives behind the 📅 icon.</p>`)+
-    `<div class="frow" style="padding:4px 4px 0;justify-content:space-between"><button class="btn quiet sm" data-reset>Reset settings</button><button class="btn quiet sm" data-wipe style="color:var(--accent)">Start fresh · erase all logs</button></div>`;
+    `<div class="frow" style="padding:4px 4px 0;justify-content:space-between"><button class="btn quiet sm" data-reset>Reset settings</button><button class="btn quiet sm" data-wipe style="color:var(--accent)">Start fresh · erase all logs</button></div><p class="hint" style="text-align:center;padding-top:10px;opacity:.7">Clay Day v${APP_VERSION}</p>`;
 }
 
 /* ---------- persistence ---------- */
