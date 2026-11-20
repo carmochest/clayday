@@ -323,40 +323,31 @@ html.lock,html.lock body{overflow:hidden}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 html.boot *{transition:none!important;animation-duration:.001s!important;animation-delay:-1s!important;animation-iteration-count:1!important}
 
-/* v10.5: goals form, This week in the home style */
+/* v10.7: goals page (fields + weekly progress + weight); This week in the log-sheet style */
 :root{--c-milk:#F2766A;--c-sleep:#A98BC4;--c-nappy:#7FBBDD}
 #alarm button.em{padding:5px 9px;font-size:19px;line-height:1.2}#alarm{gap:7px}
 #sheet .card{animation:none}
-.gform{padding:4px 16px}
-.frm{display:grid;grid-template-columns:1fr 132px;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);cursor:text}
-.frm:last-child{border-bottom:0}
-.frm b{display:block;font-size:15.5px;font-weight:600}.frm small{display:block;font-size:12px;color:var(--ink-3);margin-top:1px}
+.gform{padding:16px 16px 4px}
+.gf{padding:13px 0;border-bottom:1px solid var(--line)}.gf:last-child{border-bottom:0}
+.frm{display:grid;grid-template-columns:1fr 132px;align-items:center;gap:12px}
+.frm b{display:block;font-size:15.5px;font-weight:600}
+.frm small{display:flex;align-items:center;gap:10px;font-size:12.5px;color:var(--ink-3);margin-top:1px;min-height:24px}
+.guse{font-size:12.5px;font-weight:600;color:var(--accent);padding:3px 2px}
 .frm input{font:inherit;font-size:16px;font-weight:400;color:var(--ink);caret-color:var(--accent);background:var(--chip);border:0;border-radius:12px;padding:0 14px;margin:0;width:132px;height:44px;text-align:left;letter-spacing:.01em;box-sizing:border-box;-webkit-appearance:none;appearance:none;-moz-appearance:textfield;font-variant-numeric:tabular-nums}
 .frm input::-webkit-inner-spin-button,.frm input::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
 .frm input::-webkit-date-and-time-value{text-align:left}
 .frm input[type="time"]{padding:0 10px 0 14px}
 .frm input:focus{outline:2px solid var(--accent);outline-offset:1px}
-.wkc{padding:16px}
-.wkc>.lab{margin-bottom:12px}
-.dsel{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline;font-size:13.5px;color:var(--ink-2);font-variant-numeric:tabular-nums;margin-bottom:12px}
-.dsel b{font-size:15px;font-weight:600;color:var(--ink);flex-basis:100%}
-.dgrid{display:grid;grid-template-columns:26px repeat(7,1fr);gap:0 6px;align-items:stretch}
-.dgrid .de{font-size:16px;line-height:1;align-self:center}
-.dv{height:54px;display:flex;justify-content:center;align-items:stretch;padding:5px 0;width:100%}
-.dv span{display:block;width:8px;border-radius:999px;background:var(--chip);position:relative;overflow:hidden}
-.dv i{position:absolute;left:0;right:0;bottom:0;border-radius:999px;background:var(--accent)}
-.dv.np i{background:#7FBBDD}.dv.sl i{background:#A98BC4}
-.dv.sel{background:var(--tile)}.dv.sel.top{border-radius:10px 10px 0 0}
-.dgrid .dl{text-align:center;font-size:11.5px;font-weight:600;color:var(--ink-3);padding:4px 0 7px}
-.dgrid .dl.t{color:var(--ink);background:var(--tile);border-radius:0 0 10px 10px}
-.wkc .gp.mi .bar i{background:var(--accent)}.wkc .gp.np .bar i{background:#7FBBDD}.wkc .gp.sl .bar i{background:#A98BC4}
-.gp{padding:10px 0;border-bottom:1px solid var(--line)}.gp:first-of-type{padding-top:0}.gp:last-child{border-bottom:0;padding-bottom:0}
-.gpt{display:grid;grid-template-columns:1fr auto 44px;align-items:baseline;gap:8px;font-size:14.5px}.gpt b{font-weight:600}
-.gpt span{color:var(--ink-2);font-size:12.5px;text-align:right;font-variant-numeric:tabular-nums}.gpt em{font-style:normal;font-weight:600;text-align:right;font-variant-numeric:tabular-nums}
-.wkc .bar{height:7px;border-radius:999px;background:var(--chip);overflow:hidden;margin-top:8px}.wkc .bar i{display:block;height:100%;border-radius:999px;background:var(--good)}
+.gprog{margin-top:8px}
+.gprog .gpt{display:flex;justify-content:space-between;align-items:baseline;gap:10px;font-size:12.5px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.gprog .gpt em{font-style:normal;font-weight:600;color:var(--ink);font-size:13.5px}
+.gprog .bar{height:7px;border-radius:999px;background:var(--chip);overflow:hidden;margin-top:6px}.gprog .bar i{display:block;height:100%;border-radius:999px;background:var(--good)}
+.wkc{padding:16px}.wkc>.lab{margin-bottom:12px}
 .wrow{display:flex;justify-content:space-between;align-items:flex-end;gap:12px}.spark{width:120px;height:44px;flex:none}
 .wbig{font-size:34px;font-weight:600;letter-spacing:-.02em;line-height:1;font-variant-numeric:tabular-nums}.wbig small{font-size:16px;color:var(--ink-3);font-weight:500}
 .wsub{color:var(--ink-2);font-size:13.5px;margin-top:6px;line-height:1.4}
+.sh .wk7{margin-top:12px;border-top:1px solid var(--line);padding-top:6px}
+.sh .wk7 .d7:last-child{padding-bottom:0}
 </style>
 
 <canvas id="sky" aria-hidden="true"></canvas><div id="probe" aria-hidden="true"></div>
@@ -386,7 +377,7 @@ html.boot *{transition:none!important;animation-duration:.001s!important;animati
    To sync between phones on carmochest.github.io, paste your Firebase web config here
    (Firebase console → Project settings → Your apps → SDK setup → Config). Leave null for local-only. */
 /* AI helper on GitHub Pages: paste your Cloudflare Worker URL here (see worker.js). On claude.ai the page asks Claude directly. */
-const APP_VERSION="10.6";
+const APP_VERSION="10.7";
 const setHTML=(el,h)=>{ if(!el) return false; if(el.__h===h) return false; el.__h=h; el.innerHTML=h; return true; };
 const AI_ENDPOINT="";   // Cloudflare Worker URL (Ask + push); leave empty until the Worker exists
 const VAPID_PUBLIC="";  // Worker's VAPID public key (base64url); from the Worker setup
@@ -531,15 +522,20 @@ function weekSummary(today){ const age=ageDays(today); if(age===null||age<3) ret
   const next=[]; if(capN<g.stretch) next.push(th?`ยืดคืนถึง ${g.stretch} ชม. เมื่อเขาพร้อม`:`stretch nights toward ${g.stretch} h as he shows he can`); if(feeds!==null&&feeds>g.feeds+0.4) next.push(th?`ลดเหลือ ${g.feeds} มื้อ/วัน`:`move to ${g.feeds} feeds/day`); if(naps!==null&&naps>g.naps+0.4) next.push(th?`งีบ ${g.naps} ครั้ง`:`settle at ${g.naps} naps`); if(bed!==null&&Math.abs(bed-toH(g.bed))>0.34) next.push(th?`เข้านอน ${g.bed}`:`bedtime toward ${g.bed}`);
   return {lines,next}; }
 function statusSheet(today){ return `<div class="sh statussh">${U.nowHTML||""}</div>`; }
-function goalsSheet(today,T){ const th=U.lang==="th"; const age=ageDays(today); const g=goals(age);
-  const row=(lab,unit,inp)=>`<label class="frm"><span><b>${lab}</b>${unit?`<small>${unit}</small>`:""}</span>${inp}</label>`;
-  return `<section class="card gform">`+
-    row(th?"มื้อต่อวัน":"Feeds a day","",`<input type="number" inputmode="numeric" data-goal="feeds" value="${g.feeds}" min="4" max="12" step="1">`)+
-    row(th?"มื้อสุดท้าย":"Last feed","",`<input type="time" data-goal="last" value="${g.last||""}">`)+
-    row(th?"งีบต่อวัน":"Naps a day","",`<input type="number" inputmode="numeric" data-goal="naps" value="${g.naps}" min="1" max="6" step="1">`)+
-    row(th?"เข้านอน":"Bedtime","",`<input type="time" data-goal="bed" value="${g.bed}">`)+
-    row(th?"นอนยาวสุดกลางคืน":"Longest night stretch",th?"ชั่วโมง":"hours",`<input type="number" inputmode="decimal" data-goal="stretch" value="${g.stretch}" min="3" max="12" step="0.5">`)+
-  `</section>`; }
+function ageText(a){ if(a===null||a===undefined||a<0) return ""; const th=U.lang==="th"; if(a<14) return th?`${a} วัน`:a+(a===1?" day":" days"); if(a<84) return th?`${Math.floor(a/7)} สัปดาห์`:Math.floor(a/7)+" weeks"; return th?`${Math.floor(a/30.44)} เดือน`:Math.floor(a/30.44)+" months"; }
+function weightCard(today,age){ const th=U.lang==="th"; const w=weights(); if(!w.length) return ""; const l=w[w.length-1]; const vd=weightVerdict(ageDays(l.d),l.kg); const base=w.filter(x=>x.d<=addDays(l.d,-5)).slice(-1)[0]||(w.length>1?w[0]:null); let rate=null; if(base&&base!==l){ const dd=(new Date(l.d+"T12:00:00Z")-new Date(base.d+"T12:00:00Z"))/864e5; if(dd>=3) rate=Math.round((l.kg-base.kg)*1000/(dd/7)); } const [glo,ghi]=gainGuide(age===null?0:age);
+  const pts=w.slice(-12); let spark=""; if(pts.length>=2){ const t0=new Date(pts[0].d+"T12:00:00Z").getTime(), t1=new Date(pts[pts.length-1].d+"T12:00:00Z").getTime(); const lo=Math.min(...pts.map(x=>x.kg)), hi=Math.max(...pts.map(x=>x.kg)); const X=x=>6+(t1===t0?0:(new Date(x.d+"T12:00:00Z").getTime()-t0)/(t1-t0))*188, Y=x=>38-(hi===lo?0.5:(x.kg-lo)/(hi-lo))*30; spark=`<svg class="spark" viewBox="0 0 200 44" preserveAspectRatio="none" aria-hidden="true"><polyline fill="none" stroke="var(--good)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke" points="${pts.map(x=>X(x).toFixed(1)+","+Y(x).toFixed(1)).join(" ")}"/></svg>`; }
+  return `<section class="card wkc"><div class="lab">${th?"น้ำหนัก":"Weight"}</div><div class="wrow"><div><div class="wbig">${fmtKg(l.kg)}<small> kg</small></div><div class="wsub">${vd.pct!==null?(th?`เปอร์เซ็นไทล์ที่ ${vd.pct} (WHO)`:`${ordinal(vd.pct)} percentile (WHO)`):""}${rate!==null?`${vd.pct!==null?" · ":""}${rate>=0?"+":""}${rate} g ${th?"/สัปดาห์":"a week"} · ${th?"เกณฑ์":"guide"} ${glo}–${ghi}`:""}<br>${vd.ok?`<span style="color:#3F8F5A;font-weight:600">${th?"ปกติ ✓":"On track ✓"}</span>`:`<span style="color:var(--accent);font-weight:600">${th?"ควรปรึกษากุมารแพทย์":"Consult your paediatrician"}</span>`}</div></div>${spark}</div></section>`; }
+function goalsSheet(today,T){ const th=U.lang==="th"; const age=ageDays(today); const g=goals(age), d=goalDefaults(age), w7=weekAvg(today); const close=(a,b)=>100*Math.min(a,b)/Math.max(a,b);
+  const prog=(txt,pct)=>{ const p=Math.max(0,Math.min(100,Math.round(pct))); return `<div class="gprog"><div class="gpt"><span>${th?"เฉลี่ย 7 วัน":"7-day average"} ${txt}</span><em>${p}%</em></div><div class="bar"><i style="width:${p}%"></i></div></div>`; };
+  const fld=(k,lab,inp,rec,pr)=>{ const cur=g[k]===undefined?"":g[k], def=d[k]===undefined?"":d[k]; return `<div class="gf" data-rec="${def}"><div class="frm"><span><b>${lab}</b><small>${th?"แนะนำตามวัย":"Age guide"} ${rec}<button type="button" class="guse" data-goaluse="${k}" ${String(cur)===String(def)?"hidden":""}>${th?"ใช้ค่านี้":"Use"}</button></small></span>${inp}</div>${pr||""}</div>`; };
+  return `<section class="card gform"><div class="lab">${th?"เป้าหมาย":"Goals"}${age!==null&&age>=0?` · ${th?"แนะนำสำหรับอายุ":"guide at"} ${ageText(age)}`:""}</div>`+
+    fld("feeds",th?"มื้อต่อวัน":"Feeds a day",`<input type="number" inputmode="numeric" data-goal="feeds" value="${g.feeds}" min="4" max="12" step="1">`,d.feeds,w7.feeds!==null?prog(w7.feeds.toFixed(1),close(w7.feeds,g.feeds)):"")+
+    fld("last",th?"มื้อสุดท้าย":"Last feed",`<input type="time" data-goal="last" value="${g.last||""}">`,d.last||(th?"ไม่มี":"none"),"")+
+    fld("naps",th?"งีบต่อวัน":"Naps a day",`<input type="number" inputmode="numeric" data-goal="naps" value="${g.naps}" min="1" max="6" step="1">`,d.naps,w7.naps!==null?prog(w7.naps.toFixed(1),close(w7.naps,g.naps)):"")+
+    fld("bed",th?"เข้านอน":"Bedtime",`<input type="time" data-goal="bed" value="${g.bed}">`,d.bed,w7.bed!==null?prog(fmt(Math.round(w7.bed*12)/12),100-Math.abs(w7.bed-toH(g.bed))*60/120*100):"")+
+    fld("stretch",th?"นอนยาวสุดกลางคืน":"Longest night stretch",`<input type="number" inputmode="decimal" data-goal="stretch" value="${g.stretch}" min="3" max="12" step="0.5">`,d.stretch+(th?" ชั่วโมง":" hours"),w7.night!==null?prog(fmtDur(w7.night*60),w7.night/g.stretch*100):"")+
+  `</section>`+weightCard(today,age); }
 function commitGoals(){ const age=ageDays(scheduleDate(bkkNow())); const d=goalDefaults(age), g=goals(age); let ch=false; S.goalsOv=S.goalsOv||{};
   document.querySelectorAll("#sheetBody [data-goal]").forEach(i=>{ const k=i.dataset.goal; let v=i.value; if(k==="feeds"||k==="naps"||k==="stretch"){ v=+v; if(!(v>0)) return; v=k==="feeds"?Math.max(4,Math.min(12,Math.round(v))):k==="naps"?Math.max(1,Math.min(6,Math.round(v))):Math.max(3,Math.min(12,Math.round(v*2)/2)); } else if(k==="bed"){ if(!/^\d\d:\d\d$/.test(v)) return; } else if(v&&!/^\d\d:\d\d$/.test(v)) return;
     if(String(v)===String(g[k]===undefined?"":g[k])) return; if(String(v)===String(d[k])) delete S.goalsOv[k]; else S.goalsOv[k]=v; ch=true; });
@@ -686,7 +682,7 @@ const face=(sleeping,size)=>`<svg class="face ${sleeping?"zz":"aw"}" width="${si
   <path d="M17 30q3 2 6 0" stroke="#C9776A" stroke-width="1.3" fill="none" stroke-linecap="round"/>
   <g class="zs" font-family="var(--font)" font-weight="600" fill="#5B4670"><text x="29" y="12" font-size="7">z</text><text x="33" y="7" font-size="9">Z</text><text x="37" y="2" font-size="11">Z</text></g></svg>`;
 function sleepMin(log,nowA,carried){ const ev=log.filter(x=>x.type==="sleep"||x.type==="wake").sort((a,b)=>toH(a.t)-toH(b.t)); let tot=0, s=carried?DAY_START:null; ev.forEach(x=>{ if(x.type==="sleep"){ if(s===null) s=toH(x.t); } else if(s!==null){ tot+=Math.max(0,toH(x.t)-s); s=null; } }); if(s!==null) tot+=Math.max(0,nowA-s); return Math.round(tot*60); }
-function sleepGuide(ageDays){ return ageDays<120?[14,17]:ageDays<365?[12,15]:[11,14]; }
+function sleepGuide(ageDays){ return ageDays<120?[14,17]:ageDays<365?[12,16]:[11,14]; }
 function fmtDur(m){ m=Math.max(0,Math.round(m)); return m<60?`${m} ${U.lang==="th"?"นาที":"min"}`:`${Math.floor(m/60)} ${U.lang==="th"?"ชม.":"h"} ${pad(m%60)}`; }
 function sleepTotal(log,nowA,carried){ return fmtDur(sleepMin(log,nowA,carried)); }
 const stpH=(lab,val,k,step,unit)=>{ const inp=k==="tm"?`<span>${val}</span><input class="typ ov" type="time" data-typ="tm" value="${val}" aria-label="${lab}">`:k==="wd"?`<span>${val}</span><input class="typ ov" type="date" data-typ="wd" value="${U.wpick?U.wpick.d:""}" max="${scheduleDate(bkkNow())}" aria-label="${lab}">`:`<input class="typ" type="number" inputmode="${k==="kg"?"decimal":"numeric"}" data-typ="${k}" value="${val}" ${k==="kg"?'step="0.001" min="1" max="25"':k==="ml"?'step="10" min="0" max="400"':k==="pump"?'step="10" min="0" max="300"':'step="5" min="0" max="90"'}>`; return `<div class="stp"><span class="sl">${lab}</span><button class="st" data-adj="${k}:${-step}" aria-label="less">−</button><b>${inp}${unit?`<small>${unit}</small>`:""}</b><button class="st" data-adj="${k}:${step}" aria-label="more">+</button></div>`; };
@@ -834,31 +830,18 @@ function sheetRows(rows,ro){ const by=x=>`<span class="who"> · ${PEOPLE[x.who]?
 function weekAvg(today){ const ds=[...Array(7)].map((_,i)=>addDays(today,-7+i)); const mean=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:null;
   const feeds=ds.map(d=>((L[d]&&L[d].entries)||[]).filter(isFeed).length).filter(n=>n>=3), beds=ds.map(bedOn).filter(x=>x!==null), nights=ds.map(nightMaxOn).filter(x=>x>0), naps=ds.map(napsOn).filter(n=>n>0);
   return {feeds:mean(feeds),bed:mean(beds),night:mean(nights),naps:mean(naps),n:Math.max(feeds.length,beds.length,nights.length,naps.length)}; }
-function dataSheet(today,nowA){ const th=U.lang==="th"; const age=ageDays(today); if(age===null||age<0) return `<section class="card wkc"><p class="hint">${th?"จะมีข้อมูลเมื่อเคลย์เกิด":"This fills in once Clay has arrived."}</p></section>`;
-  const days=[...Array(7)].map((_,i)=>addDays(today,-6+i)), prev=[...Array(7)].map((_,i)=>addDays(today,-13+i));
-  const stat=d=>{ const x=dayStats(d,today,nowA); const a=ageDays(d); const wT=a===null?6:a<=0?1:a===1?2:a===2?3:a===3?4:6; const [lo,hi]=sleepGuide(a===null||a<0?0:a); return {d,has:x.en.some(e=>e.type!=="skip"),ml:x.ml,tg:x.tg,sleep:x.sleep,wet:x.wet,wT,dirty:x.dirty,lo,hi,pm:x.tg?Math.round(x.ml/x.tg*100):0,ps:Math.round(x.sleep/((lo+hi)/2*60)*100),pn:Math.round(x.wet/wT*100)}; };
-  const cur=days.map(stat), old=prev.map(stat); const done=cur.filter(x=>x.has&&x.d!==today), doneOld=old.filter(x=>x.has);
-  const avg=(arr,f)=>arr.length?arr.reduce((t,x)=>t+f(x),0)/arr.length:null; const rnd=v=>v===null?null:Math.round(v);
-  const delta=(a,b)=>a===null||b===null?"":`${th?"สัปดาห์ก่อน":"last week"} ${b}%`;
-  const aMl=avg(done,x=>x.ml), aTg=avg(done,x=>x.tg), aWet=avg(done,x=>x.wet), aWT=avg(done,x=>x.wT), aSl=avg(done,x=>x.sleep), last=done[done.length-1]||cur[cur.length-1];
-  const gd=th?"เกณฑ์":"guide", avW=th?"เฉลี่ย":"avg";
-  const mrow=(cls,lab,pk,txt)=>{ const p=rnd(avg(done,x=>x[pk])); return `<div class="gp ${cls}"><div class="gpt"><b>${lab}</b><span>${p===null?(th?"ยังไม่มีข้อมูล":"no full day yet"):txt}</span><em>${p===null?"—":p+"%"}</em></div><div class="bar"><i style="width:${p===null?0:Math.min(100,p)}%"></i></div></div>`; };
-  const tiles=mrow("mi","🍼 "+(th?"นม":"Milk"),"pm",aMl===null?"":`${avW} ${Math.round(aMl/10)*10} ${ui("ml")} · ${gd} ${Math.round(aTg/10)*10} ${ui("ml")}`)+
-    mrow("np","💧 "+(th?"ผ้าอ้อม":"Nappies"),"pn",aWet===null?"":`${avW} ${Math.round(aWet*10)/10} ${th?"ฉี่":"wet"} · ${gd} ${Math.round(aWT)}+`)+
-    mrow("sl","😴 "+(th?"การนอน":"Sleep"),"ps",aSl===null?"":`${avW} ${fmtDur(aSl)} · ${gd} ${last.lo}–${last.hi} ${th?"ชม.":"h"}`);
-  const sel=days.includes(U.dsel)?U.dsel:today; const sx=cur.find(x=>x.d===sel); const dn=d=>{ const x=new Date(d+"T12:00:00Z"); return (th?ui("days")[x.getUTCDay()]:DAYS[x.getUTCDay()])+" "+(+d.slice(8)); };
-  const rowP=(cls,emo,pk)=>`<span class="de">${emo}</span>`+cur.map(x=>`<button class="dv ${cls} ${x.d===sel?"sel":""}" data-dsel="${x.d}" aria-label="${dn(x.d)} ${x[pk]}%"><span><i style="height:${Math.min(100,x[pk])}%"></i></span></button>`).join("");
-  const dayCard=`<section class="card wkc"><div class="lab">${th?"รายวัน":"Day by day"}</div><div class="dsel"><b>${dn(sel)}${sel===today?(th?" · ถึงตอนนี้":" · so far"):""}</b><span>🍼 ${sx.ml} ${ui("ml")}</span><span>💧 ${sx.wet} · 💩 ${sx.dirty}</span><span>😴 ${fmtDur(sx.sleep)}</span></div><div class="dgrid">${rowP("top","🍼","pm")}${rowP("np","💧","pn")}${rowP("sl","😴","ps")}<span></span>${cur.map(x=>`<span class="dl ${x.d===sel?"t":""}">${th?ui("days")[new Date(x.d+"T12:00:00Z").getUTCDay()]:DAYS[new Date(x.d+"T12:00:00Z").getUTCDay()][0]}</span>`).join("")}</div></section>`;
-  const w7=weekAvg(today), g=goals(age); const close=(a,b)=>100*Math.min(a,b)/Math.max(a,b); const gp=(lab,pct,txt)=>{ const p=Math.max(0,Math.min(100,Math.round(pct))); return `<div class="gp"><div class="gpt"><b>${lab}</b><span>${txt}</span><em>${p}%</em></div><div class="bar"><i style="width:${p}%"></i></div></div>`; }; const av=th?"เฉลี่ย":"avg", gw=th?"เป้า":"goal";
-  const gl=[]; if(w7.feeds!==null) gl.push(gp(th?"มื้อต่อวัน":"Feeds a day",close(w7.feeds,g.feeds),`${av} ${w7.feeds.toFixed(1)} · ${gw} ${g.feeds}`));
-  if(w7.naps!==null) gl.push(gp(th?"งีบต่อวัน":"Naps a day",close(w7.naps,g.naps),`${av} ${w7.naps.toFixed(1)} · ${gw} ${g.naps}`));
-  if(w7.bed!==null){ const diff=Math.abs(w7.bed-toH(g.bed))*60; gl.push(gp(th?"เข้านอน":"Bedtime",100-diff/120*100,`${av} ${fmt(Math.round(w7.bed*12)/12)} · ${gw} ${g.bed}`)); }
-  if(w7.night!==null) gl.push(gp(th?"นอนยาวสุดกลางคืน":"Longest night stretch",w7.night/g.stretch*100,`${av} ${fmtDur(w7.night*60)} · ${gw} ${g.stretch} ${th?"ชม.":"h"}`));
-  const goalCard=gl.length?`<section class="card wkc"><div class="lab">${th?`เป้าหมาย · เฉลี่ย ${w7.n} วัน`:`Goals · average of ${w7.n} day${w7.n===1?"":"s"}`}</div>${gl.join("")}</section>`:"";
-  const w=weights(); let wt=""; if(w.length){ const l=w[w.length-1]; const vd=weightVerdict(ageDays(l.d),l.kg); const base=w.filter(x=>x.d<=addDays(l.d,-5)).slice(-1)[0]||(w.length>1?w[0]:null); let rate=null; if(base&&base!==l){ const dd=(new Date(l.d+"T12:00:00Z")-new Date(base.d+"T12:00:00Z"))/864e5; if(dd>=3) rate=Math.round((l.kg-base.kg)*1000/(dd/7)); } const [glo,ghi]=gainGuide(age);
-    const pts=w.slice(-12); let spark=""; if(pts.length>=2){ const t0=new Date(pts[0].d+"T12:00:00Z").getTime(), t1=new Date(pts[pts.length-1].d+"T12:00:00Z").getTime(); const lo=Math.min(...pts.map(x=>x.kg)), hi=Math.max(...pts.map(x=>x.kg)); const X=x=>6+(t1===t0?0:(new Date(x.d+"T12:00:00Z").getTime()-t0)/(t1-t0))*188, Y=x=>38-(hi===lo?0.5:(x.kg-lo)/(hi-lo))*30; spark=`<svg class="spark" viewBox="0 0 200 44" preserveAspectRatio="none" aria-hidden="true"><polyline fill="none" stroke="var(--good)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke" points="${pts.map(x=>X(x).toFixed(1)+","+Y(x).toFixed(1)).join(" ")}"/></svg>`; }
-    wt=`<section class="card wkc"><div class="lab">${th?"น้ำหนัก":"Weight"}</div><div class="wrow"><div><div class="wbig">${fmtKg(l.kg)}<small> kg</small></div><div class="wsub">${vd.pct!==null?(th?`เปอร์เซ็นไทล์ที่ ${vd.pct}`:`${ordinal(vd.pct)} percentile`):""}${rate!==null?`${vd.pct!==null?" · ":""}${rate>=0?"+":""}${rate} g ${th?"/สัปดาห์":"a week"} · ${gd} ${glo}–${ghi}`:""}<br>${vd.ok?`<span style="color:#3F8F5A;font-weight:600">${th?"ปกติ ✓":"On track ✓"}</span>`:`<span style="color:var(--accent);font-weight:600">${th?"ควรปรึกษากุมารแพทย์":"Consult your paediatrician"}</span>`}</div></div>${spark}</div></section>`; }
-  return `<section class="card wkc"><div class="lab">${th?"7 วันที่ผ่านมา · เฉลี่ยต่อวัน":"Last 7 days · daily average"}</div>${tiles}</section>${dayCard}${goalCard}${wt}`; }
+function dataSheet(today,nowA){ const th=U.lang==="th"; const age=ageDays(today); if(age===null||age<0) return `<div class="sh"><p class="hint">${th?"จะมีข้อมูลเมื่อเคลย์เกิด":"This fills in once Clay has arrived."}</p></div>`;
+  const days=[...Array(7)].map((_,i)=>addDays(today,-6+i));
+  const stat=d=>{ const x=dayStats(d,today,nowA); const a=ageDays(d); const wT=a===null?6:a<=0?1:a===1?2:a===2?3:a===3?4:6; const [lo,hi]=sleepGuide(a===null||a<0?0:a); return {d,has:x.en.some(e=>e.type!=="skip"),ml:x.ml,tg:x.tg,feeds:x.feeds,sleep:x.sleep,wet:x.wet,wT,dirty:x.dirty,lo,hi,pm:x.tg?Math.round(x.ml/x.tg*100):0,ps:Math.round(x.sleep/((lo+hi)/2*60)*100),pn:Math.round(x.wet/wT*100)}; };
+  const cur=days.map(stat); const done=cur.filter(x=>x.has&&x.d!==today); const avg=f=>done.length?done.reduce((t,x)=>t+f(x),0)/done.length:null; const rnd=v=>v===null?null:Math.round(v);
+  const dn=d=>{ const x=new Date(d+"T12:00:00Z"); return (th?ui("days")[x.getUTCDay()]:DAYS[x.getUTCDay()])+" "+(+d.slice(8)); };
+  const last=done[done.length-1]||cur[cur.length-1]; const none=th?"ยังไม่มีข้อมูลครบวัน":"No full day logged yet"; const aday=th?"ต่อวัน":"a day", of=ui("of"), gd=th?"เกณฑ์":"guide";
+  const sm=`style="font-size:16px;color:var(--ink-3)"`;
+  const sec=(cls,title,pk,big,sub,val)=>{ const p=rnd(avg(x=>x[pk])); return `<div class="sh ${cls}"><h3>${title} · ${th?"เฉลี่ย 7 วัน":"7-day average"}</h3><div class="big">${p===null?"—":big}</div><div class="sub2">${p===null?none:`${p}% ${of} ${sub}`}</div><div class="bar"><i style="width:${p===null?0:Math.min(100,p)}%"></i></div><div class="wk7">${cur.map(x=>`<div class="d7"><span class="dn">${dn(x.d)}</span><div class="bar"><i style="width:${Math.min(100,x[pk])}%"></i></div><span class="dv">${x.has?val(x):"—"}</span></div>`).join("")}</div></div>`; };
+  const aMl=avg(x=>x.ml), aTg=avg(x=>x.tg), aWet=avg(x=>x.wet), aWT=avg(x=>x.wT), aDirty=avg(x=>x.dirty), aSl=avg(x=>x.sleep);
+  return sec("",th?"นม":"Milk","pm",aMl===null?"":`${Math.round(aMl/10)*10} <small ${sm}>${ui("ml")} ${aday}</small>`,aTg===null?"":`${Math.round(aTg/10)*10} ${ui("ml")} ${gd}`,x=>x.feeds?x.ml+" "+ui("ml"):"—")+
+    sec("np",th?"ผ้าอ้อม":"Nappies","pn",aWet===null?"":`💧 ${Math.round(aWet*10)/10} <small ${sm}>${aday}</small> &nbsp; 💩 ${Math.round(aDirty*10)/10}`,aWT===null?"":`${Math.round(aWT)}+ ${th?"ฉี่":"wet"} ${gd}`,x=>`💧${x.wet} 💩${x.dirty}`)+
+    sec("sl",th?"การนอน":"Sleep","ps",aSl===null?"":`${fmtDur(aSl)} <small ${sm}>${aday}</small>`,`${last.lo}–${last.hi} ${th?"ชม.":"h"} ${gd}`,x=>x.sleep?fmtDur(x.sleep):"—"); }
 function askAvail(){ return !!(AI_ENDPOINT||(window.claude&&window.claude.use)); }
 function aiContext(){ const now=bkkNow(), today=scheduleDate(now), tdow=new Date(today+"T12:00:00Z").getUTCDay(); const T=build(tdow,today); const age=ageDays(today); const nowA=nowAbs(); const en=(L[today]&&L[today].entries)||[]; const feeds=en.filter(isFeed).sort((a,b)=>toH(a.t)-toH(b.t)); const bfml=bfEst(age,today); const ml=feeds.reduce((t,x)=>t+(x.type==="bottle"?(+x.ml||0):bfEst(age,today,x.min)),0); const tg=mlTarget(age,today); const wet=en.filter(x=>x.type==="pee").length, dirty=en.filter(x=>x.type==="poo").length; const sl=sleepMin(en,nowA,!!T.ysw); const [lo,hi]=sleepGuide(age); const next=T.feeds.find(f=>f.h>nowA-0.02&&!f.actual&&!f.missed)||T.nextOver; const days=[-3,-2,-1].map(k=>{ const d=addDays(today,k); const st=dayStats(d,today,nowA); return `${d}: ${st.feeds} feeds ~${st.ml} ml, sleep ${fmtDur(st.sleep)}, wet ${st.wet}, dirty ${st.dirty}`; }).join("\n");
   const who=({chet:"Chet (father)",prowe:"Prowe (mother)",view:"the nanny"})[U.me]||U.me;
@@ -964,7 +947,7 @@ if(!U.me||!PEOPLE[U.me]) U.me="chet";
 if(!Q.get("lang")) U.lang=U.me==="view"?"th":"en";
 try{ for(let i=0;i<localStorage.length;i++){ const k=localStorage.key(i); if(k.startsWith("clay.log.")) L[k.slice(9)]=JSON.parse(localStorage.getItem(k)); } }catch(e){}
 document.body.addEventListener("click",e=>{ let b=e.target.closest("button"); if(!b){ const r=e.target.closest(".fl[data-editfeed],.fl[data-wedit]"); if(!r) return; b=r; } const d=b.dataset;
-  if(d.dsel){ U.dsel=d.dsel; render(); }
+  if(d.goaluse){ const gf=b.closest(".gf"), i=gf&&gf.querySelector("[data-goal]"); if(i){ i.value=gf.dataset.rec; b.hidden=true; } }
   else if(d.me){ U.me=d.me; lsSet("clay.me",U.me); U.lang=U.me==="view"?"th":"en"; lsSet("clay.lang",U.lang); U.scrollKey=null; render(); }
   else if(d.lang){ U.lang=d.lang; lsSet("clay.lang",U.lang); lsSet("clay.langSet",true); render(); }
   else if(d.day){ U.day=+d.day; render(); }
@@ -1028,7 +1011,7 @@ document.body.addEventListener("focusin",e=>{ if(e.target.classList&&e.target.cl
 document.body.addEventListener("keydown",e=>{ if(e.key==="Enter"&&e.target.dataset&&e.target.dataset.goal){ e.preventDefault(); e.target.blur(); return; } if(e.target.id==="askIn"&&e.key==="Enter"&&!e.shiftKey){ e.preventDefault(); const v=e.target.value.trim(); if(v) askSend(v); return; } if(e.key==="Enter"&&e.target.closest&&e.target.closest(".pick")){ e.preventDefault(); if(e.target.classList.contains("typ")) e.target.dispatchEvent(new Event("change",{bubbles:true})); const b=document.querySelector("[data-picksave],[data-wsave]"); if(b) b.click(); } });
 document.body.addEventListener("change",e=>{ const gk=e.target.dataset&&e.target.dataset.goal; if(gk) return; const vx=e.target.dataset&&e.target.dataset.vax; if(vx){ const [id,f]=vx.split(":"); S.vax=S.vax||{}; const r=S.vax[id]||{}; const v=e.target.value; if(/^\d{4}-\d\d-\d\d$/.test(v)) r[f]=v; else delete r[f]; if(f==="done"&&r.done&&r.due&&r.due<=r.done) delete r.due; if(Object.keys(r).length) S.vax[id]=r; else delete S.vax[id]; saveSettings(); return; } const ty=e.target.dataset&&e.target.dataset.typ; if(ty){ syncTyped(); const el=e.target; if(ty==="tm"&&el.previousElementSibling) el.previousElementSibling.textContent=U.tm; if(ty==="wd"&&el.previousElementSibling&&U.wpick){ const today=scheduleDate(bkkNow()); el.previousElementSibling.textContent=U.wpick.d===today?(U.lang==="th"?"วันนี้":"Today"):niceDate(U.wpick.d); } return; }
  });
-document.body.addEventListener("input",e=>{ if(e.target.id==="askIn"){ e.target.style.height="auto"; e.target.style.height=Math.min(120,e.target.scrollHeight)+"px"; } if(e.target.id==="mlIn") U.ml=+e.target.value||U.ml; if(e.target.id==="minIn") U.min=+e.target.value||U.min; });
+document.body.addEventListener("input",e=>{ if(e.target.dataset&&e.target.dataset.goal){ const gf=e.target.closest(".gf"), u=gf&&gf.querySelector(".guse"); if(u) u.hidden=String(e.target.value)===gf.dataset.rec; } if(e.target.id==="askIn"){ e.target.style.height="auto"; e.target.style.height=Math.min(120,e.target.scrollHeight)+"px"; } if(e.target.id==="mlIn") U.ml=+e.target.value||U.ml; if(e.target.id==="minIn") U.min=+e.target.value||U.min; });
 
 
 document.body.addEventListener("toggle",e=>{ if(e.target.id==="feedlog"){ if(U.logOpen!==e.target.open){ U.logOpen=e.target.open; lsSet("clay.logOpen",U.logOpen); if(!U.pick) render(); } } if(e.target.classList&&e.target.classList.contains("person")){ U.setOpen=U.setOpen||{}; U.setOpen[e.target.dataset.person]=e.target.open; } },true);
