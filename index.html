@@ -328,31 +328,28 @@ html.boot *{transition:none!important;animation-duration:.001s!important;animati
 #alarm button.em{padding:5px 9px;font-size:19px;line-height:1.2}#alarm{gap:7px}
 #sheet .card{animation:none}
 .gform{padding:4px 16px}
-.frm{display:grid;grid-template-columns:1fr 124px;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);cursor:text}
+.frm{display:grid;grid-template-columns:1fr 132px;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);cursor:text}
 .frm:last-child{border-bottom:0}
 .frm b{display:block;font-size:15.5px;font-weight:600}.frm small{display:block;font-size:12px;color:var(--ink-3);margin-top:1px}
-.frm input{font:inherit;font-size:16px;font-weight:600;color:var(--ink);background:var(--chip);border:0;border-radius:12px;padding:0 10px;margin:0;width:124px;height:44px;text-align:center;box-sizing:border-box;-webkit-appearance:none;appearance:none;-moz-appearance:textfield;font-variant-numeric:tabular-nums}
+.frm input{font:inherit;font-size:16px;font-weight:400;color:var(--ink);caret-color:var(--accent);background:var(--chip);border:0;border-radius:12px;padding:0 14px;margin:0;width:132px;height:44px;text-align:left;letter-spacing:.01em;box-sizing:border-box;-webkit-appearance:none;appearance:none;-moz-appearance:textfield;font-variant-numeric:tabular-nums}
 .frm input::-webkit-inner-spin-button,.frm input::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
-.frm input::-webkit-date-and-time-value{text-align:center}
+.frm input::-webkit-date-and-time-value{text-align:left}
+.frm input[type="time"]{padding:0 10px 0 14px}
 .frm input:focus{outline:2px solid var(--accent);outline-offset:1px}
 .wkc{padding:16px}
 .wkc>.lab{margin-bottom:12px}
-.stats.wk{margin-top:0}
-.stats.wk .st{min-height:0;padding:12px 10px 12px;justify-content:flex-start;cursor:default;gap:1px}
-.stats.wk .st .em{margin-bottom:14px}
-.stats.wk .st .num{font-size:28px;margin-top:0;margin-bottom:5px}
-.stats.wk .st .num small{font-size:14px;margin-left:1px}
-.stats.wk .st .c{font-size:11.5px;color:var(--ink-3);white-space:normal;line-height:1.3;margin-top:1px}
-.stats.wk .st .c.v{font-size:12.5px;font-weight:600;color:var(--ink)}
 .dsel{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline;font-size:13.5px;color:var(--ink-2);font-variant-numeric:tabular-nums;margin-bottom:12px}
 .dsel b{font-size:15px;font-weight:600;color:var(--ink);flex-basis:100%}
-.dgrid{display:grid;grid-template-columns:26px repeat(7,1fr);gap:6px;align-items:center}
-.dgrid .de{font-size:16px;line-height:1}
-.dp{height:40px;border-radius:10px;background:var(--tile);position:relative;overflow:hidden;padding:0;width:100%}
-.dp i{position:absolute;left:0;right:0;bottom:0;background:rgba(242,118,106,.5)}
-.dp.np i{background:rgba(127,187,221,.7)}.dp.sl i{background:rgba(169,139,196,.65)}
-.dp.sel{box-shadow:inset 0 0 0 2px var(--on)}
-.dgrid .dl{text-align:center;font-size:11.5px;font-weight:600;color:var(--ink-3)}.dgrid .dl.t{color:var(--ink)}
+.dgrid{display:grid;grid-template-columns:26px repeat(7,1fr);gap:0 6px;align-items:stretch}
+.dgrid .de{font-size:16px;line-height:1;align-self:center}
+.dv{height:54px;display:flex;justify-content:center;align-items:stretch;padding:5px 0;width:100%}
+.dv span{display:block;width:8px;border-radius:999px;background:var(--chip);position:relative;overflow:hidden}
+.dv i{position:absolute;left:0;right:0;bottom:0;border-radius:999px;background:var(--accent)}
+.dv.np i{background:#7FBBDD}.dv.sl i{background:#A98BC4}
+.dv.sel{background:var(--tile)}.dv.sel.top{border-radius:10px 10px 0 0}
+.dgrid .dl{text-align:center;font-size:11.5px;font-weight:600;color:var(--ink-3);padding:4px 0 7px}
+.dgrid .dl.t{color:var(--ink);background:var(--tile);border-radius:0 0 10px 10px}
+.wkc .gp.mi .bar i{background:var(--accent)}.wkc .gp.np .bar i{background:#7FBBDD}.wkc .gp.sl .bar i{background:#A98BC4}
 .gp{padding:10px 0;border-bottom:1px solid var(--line)}.gp:first-of-type{padding-top:0}.gp:last-child{border-bottom:0;padding-bottom:0}
 .gpt{display:grid;grid-template-columns:1fr auto 44px;align-items:baseline;gap:8px;font-size:14.5px}.gpt b{font-weight:600}
 .gpt span{color:var(--ink-2);font-size:12.5px;text-align:right;font-variant-numeric:tabular-nums}.gpt em{font-style:normal;font-weight:600;text-align:right;font-variant-numeric:tabular-nums}
@@ -389,7 +386,7 @@ html.boot *{transition:none!important;animation-duration:.001s!important;animati
    To sync between phones on carmochest.github.io, paste your Firebase web config here
    (Firebase console → Project settings → Your apps → SDK setup → Config). Leave null for local-only. */
 /* AI helper on GitHub Pages: paste your Cloudflare Worker URL here (see worker.js). On claude.ai the page asks Claude directly. */
-const APP_VERSION="10.5";
+const APP_VERSION="10.6";
 const setHTML=(el,h)=>{ if(!el) return false; if(el.__h===h) return false; el.__h=h; el.innerHTML=h; return true; };
 const AI_ENDPOINT="";   // Cloudflare Worker URL (Ask + push); leave empty until the Worker exists
 const VAPID_PUBLIC="";  // Worker's VAPID public key (base64url); from the Worker setup
@@ -843,15 +840,15 @@ function dataSheet(today,nowA){ const th=U.lang==="th"; const age=ageDays(today)
   const cur=days.map(stat), old=prev.map(stat); const done=cur.filter(x=>x.has&&x.d!==today), doneOld=old.filter(x=>x.has);
   const avg=(arr,f)=>arr.length?arr.reduce((t,x)=>t+f(x),0)/arr.length:null; const rnd=v=>v===null?null:Math.round(v);
   const delta=(a,b)=>a===null||b===null?"":`${th?"สัปดาห์ก่อน":"last week"} ${b}%`;
-  const tile=(cls,emo,lab,pk,val,guide)=>{ const p=rnd(avg(done,x=>x[pk])), po=rnd(avg(doneOld,x=>x[pk])); const dl=delta(p,po); return `<div class="st ${cls}"><i class="fill" style="height:${p===null?0:Math.min(100,p)}%"></i><span class="em">${emo} <span class="tl">${lab}</span></span><b class="num">${p===null?"—":p+"<small>%</small>"}</b><span class="c v">${p===null?(th?"ยังไม่มีข้อมูล":"no full day yet"):val}</span>${p===null?"":`<span class="c">${guide}</span>`}${dl?`<span class="c">${dl}</span>`:""}</div>`; };
   const aMl=avg(done,x=>x.ml), aTg=avg(done,x=>x.tg), aWet=avg(done,x=>x.wet), aWT=avg(done,x=>x.wT), aSl=avg(done,x=>x.sleep), last=done[done.length-1]||cur[cur.length-1];
-  const perDay=th?" /วัน":" a day", gd=th?"เกณฑ์":"guide";
-  const tiles=tile("",`🍼`,th?"นม":"Milk","pm",aMl===null?"":Math.round(aMl/10)*10+" "+ui("ml")+perDay,aTg===null?"":`${gd} ${Math.round(aTg/10)*10} ${ui("ml")}`)+
-    tile("np",`💧`,th?"ผ้าอ้อม":"Nappies","pn",aWet===null?"":(Math.round(aWet*10)/10)+(th?" ฉี่":" wet")+perDay,aWT===null?"":`${gd} ${Math.round(aWT)}+`)+
-    tile("sl",`😴`,th?"การนอน":"Sleep","ps",aSl===null?"":fmtDur(aSl)+perDay,`${gd} ${last.lo}–${last.hi} ${th?"ชม.":"h"}`);
+  const gd=th?"เกณฑ์":"guide", avW=th?"เฉลี่ย":"avg";
+  const mrow=(cls,lab,pk,txt)=>{ const p=rnd(avg(done,x=>x[pk])); return `<div class="gp ${cls}"><div class="gpt"><b>${lab}</b><span>${p===null?(th?"ยังไม่มีข้อมูล":"no full day yet"):txt}</span><em>${p===null?"—":p+"%"}</em></div><div class="bar"><i style="width:${p===null?0:Math.min(100,p)}%"></i></div></div>`; };
+  const tiles=mrow("mi","🍼 "+(th?"นม":"Milk"),"pm",aMl===null?"":`${avW} ${Math.round(aMl/10)*10} ${ui("ml")} · ${gd} ${Math.round(aTg/10)*10} ${ui("ml")}`)+
+    mrow("np","💧 "+(th?"ผ้าอ้อม":"Nappies"),"pn",aWet===null?"":`${avW} ${Math.round(aWet*10)/10} ${th?"ฉี่":"wet"} · ${gd} ${Math.round(aWT)}+`)+
+    mrow("sl","😴 "+(th?"การนอน":"Sleep"),"ps",aSl===null?"":`${avW} ${fmtDur(aSl)} · ${gd} ${last.lo}–${last.hi} ${th?"ชม.":"h"}`);
   const sel=days.includes(U.dsel)?U.dsel:today; const sx=cur.find(x=>x.d===sel); const dn=d=>{ const x=new Date(d+"T12:00:00Z"); return (th?ui("days")[x.getUTCDay()]:DAYS[x.getUTCDay()])+" "+(+d.slice(8)); };
-  const rowP=(cls,emo,pk)=>`<span class="de">${emo}</span>`+cur.map(x=>`<button class="dp ${cls} ${x.d===sel?"sel":""}" data-dsel="${x.d}" aria-label="${dn(x.d)} ${x[pk]}%"><i style="height:${Math.min(100,x[pk])}%"></i></button>`).join("");
-  const dayCard=`<section class="card wkc"><div class="lab">${th?"รายวัน":"Day by day"}</div><div class="dsel"><b>${dn(sel)}${sel===today?(th?" · ถึงตอนนี้":" · so far"):""}</b><span>🍼 ${sx.ml} ${ui("ml")}</span><span>💧 ${sx.wet} · 💩 ${sx.dirty}</span><span>😴 ${fmtDur(sx.sleep)}</span></div><div class="dgrid">${rowP("","🍼","pm")}${rowP("np","💧","pn")}${rowP("sl","😴","ps")}<span></span>${cur.map(x=>`<span class="dl ${x.d===sel?"t":""}">${th?ui("days")[new Date(x.d+"T12:00:00Z").getUTCDay()]:DAYS[new Date(x.d+"T12:00:00Z").getUTCDay()][0]}</span>`).join("")}</div></section>`;
+  const rowP=(cls,emo,pk)=>`<span class="de">${emo}</span>`+cur.map(x=>`<button class="dv ${cls} ${x.d===sel?"sel":""}" data-dsel="${x.d}" aria-label="${dn(x.d)} ${x[pk]}%"><span><i style="height:${Math.min(100,x[pk])}%"></i></span></button>`).join("");
+  const dayCard=`<section class="card wkc"><div class="lab">${th?"รายวัน":"Day by day"}</div><div class="dsel"><b>${dn(sel)}${sel===today?(th?" · ถึงตอนนี้":" · so far"):""}</b><span>🍼 ${sx.ml} ${ui("ml")}</span><span>💧 ${sx.wet} · 💩 ${sx.dirty}</span><span>😴 ${fmtDur(sx.sleep)}</span></div><div class="dgrid">${rowP("top","🍼","pm")}${rowP("np","💧","pn")}${rowP("sl","😴","ps")}<span></span>${cur.map(x=>`<span class="dl ${x.d===sel?"t":""}">${th?ui("days")[new Date(x.d+"T12:00:00Z").getUTCDay()]:DAYS[new Date(x.d+"T12:00:00Z").getUTCDay()][0]}</span>`).join("")}</div></section>`;
   const w7=weekAvg(today), g=goals(age); const close=(a,b)=>100*Math.min(a,b)/Math.max(a,b); const gp=(lab,pct,txt)=>{ const p=Math.max(0,Math.min(100,Math.round(pct))); return `<div class="gp"><div class="gpt"><b>${lab}</b><span>${txt}</span><em>${p}%</em></div><div class="bar"><i style="width:${p}%"></i></div></div>`; }; const av=th?"เฉลี่ย":"avg", gw=th?"เป้า":"goal";
   const gl=[]; if(w7.feeds!==null) gl.push(gp(th?"มื้อต่อวัน":"Feeds a day",close(w7.feeds,g.feeds),`${av} ${w7.feeds.toFixed(1)} · ${gw} ${g.feeds}`));
   if(w7.naps!==null) gl.push(gp(th?"งีบต่อวัน":"Naps a day",close(w7.naps,g.naps),`${av} ${w7.naps.toFixed(1)} · ${gw} ${g.naps}`));
@@ -861,7 +858,7 @@ function dataSheet(today,nowA){ const th=U.lang==="th"; const age=ageDays(today)
   const w=weights(); let wt=""; if(w.length){ const l=w[w.length-1]; const vd=weightVerdict(ageDays(l.d),l.kg); const base=w.filter(x=>x.d<=addDays(l.d,-5)).slice(-1)[0]||(w.length>1?w[0]:null); let rate=null; if(base&&base!==l){ const dd=(new Date(l.d+"T12:00:00Z")-new Date(base.d+"T12:00:00Z"))/864e5; if(dd>=3) rate=Math.round((l.kg-base.kg)*1000/(dd/7)); } const [glo,ghi]=gainGuide(age);
     const pts=w.slice(-12); let spark=""; if(pts.length>=2){ const t0=new Date(pts[0].d+"T12:00:00Z").getTime(), t1=new Date(pts[pts.length-1].d+"T12:00:00Z").getTime(); const lo=Math.min(...pts.map(x=>x.kg)), hi=Math.max(...pts.map(x=>x.kg)); const X=x=>6+(t1===t0?0:(new Date(x.d+"T12:00:00Z").getTime()-t0)/(t1-t0))*188, Y=x=>38-(hi===lo?0.5:(x.kg-lo)/(hi-lo))*30; spark=`<svg class="spark" viewBox="0 0 200 44" preserveAspectRatio="none" aria-hidden="true"><polyline fill="none" stroke="var(--good)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke" points="${pts.map(x=>X(x).toFixed(1)+","+Y(x).toFixed(1)).join(" ")}"/></svg>`; }
     wt=`<section class="card wkc"><div class="lab">${th?"น้ำหนัก":"Weight"}</div><div class="wrow"><div><div class="wbig">${fmtKg(l.kg)}<small> kg</small></div><div class="wsub">${vd.pct!==null?(th?`เปอร์เซ็นไทล์ที่ ${vd.pct}`:`${ordinal(vd.pct)} percentile`):""}${rate!==null?`${vd.pct!==null?" · ":""}${rate>=0?"+":""}${rate} g ${th?"/สัปดาห์":"a week"} · ${gd} ${glo}–${ghi}`:""}<br>${vd.ok?`<span style="color:#3F8F5A;font-weight:600">${th?"ปกติ ✓":"On track ✓"}</span>`:`<span style="color:var(--accent);font-weight:600">${th?"ควรปรึกษากุมารแพทย์":"Consult your paediatrician"}</span>`}</div></div>${spark}</div></section>`; }
-  return `<section class="card wkc"><div class="lab">${th?"7 วันที่ผ่านมา · เฉลี่ยต่อวัน":"Last 7 days · daily average"}</div><div class="stats wk">${tiles}</div></section>${dayCard}${goalCard}${wt}`; }
+  return `<section class="card wkc"><div class="lab">${th?"7 วันที่ผ่านมา · เฉลี่ยต่อวัน":"Last 7 days · daily average"}</div>${tiles}</section>${dayCard}${goalCard}${wt}`; }
 function askAvail(){ return !!(AI_ENDPOINT||(window.claude&&window.claude.use)); }
 function aiContext(){ const now=bkkNow(), today=scheduleDate(now), tdow=new Date(today+"T12:00:00Z").getUTCDay(); const T=build(tdow,today); const age=ageDays(today); const nowA=nowAbs(); const en=(L[today]&&L[today].entries)||[]; const feeds=en.filter(isFeed).sort((a,b)=>toH(a.t)-toH(b.t)); const bfml=bfEst(age,today); const ml=feeds.reduce((t,x)=>t+(x.type==="bottle"?(+x.ml||0):bfEst(age,today,x.min)),0); const tg=mlTarget(age,today); const wet=en.filter(x=>x.type==="pee").length, dirty=en.filter(x=>x.type==="poo").length; const sl=sleepMin(en,nowA,!!T.ysw); const [lo,hi]=sleepGuide(age); const next=T.feeds.find(f=>f.h>nowA-0.02&&!f.actual&&!f.missed)||T.nextOver; const days=[-3,-2,-1].map(k=>{ const d=addDays(today,k); const st=dayStats(d,today,nowA); return `${d}: ${st.feeds} feeds ~${st.ml} ml, sleep ${fmtDur(st.sleep)}, wet ${st.wet}, dirty ${st.dirty}`; }).join("\n");
   const who=({chet:"Chet (father)",prowe:"Prowe (mother)",view:"the nanny"})[U.me]||U.me;
