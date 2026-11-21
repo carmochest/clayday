@@ -387,6 +387,21 @@ html.boot *{transition:none!important;animation-duration:.001s!important;animati
 #sheet.fit .wkc .wlist{flex:1 1 auto;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
 #sheet.fit .wkc .wlist.more{-webkit-mask-image:linear-gradient(to bottom,#000 calc(100% - 22px),transparent);mask-image:linear-gradient(to bottom,#000 calc(100% - 22px),transparent)}
 @media (max-height:720px){.gform{padding:10px 16px 10px}.gf{padding:6px 0 0}.frm input{height:38px}.gf .bar{margin-top:6px}.frm b{font-size:15px}.wkc{padding:8px 16px 6px}.wkc .big{font-size:26px}#sheet.fit .wkc{min-height:150px}.wkc .wlist .fl{padding:5px 0}}
+
+.glink.add{color:var(--accent)}
+.wkc .wtop{display:grid;grid-template-columns:1fr auto;align-items:baseline;gap:4px 12px;padding:4px 0 10px}
+.wkc .wtop .big{font-size:32px;margin:0;line-height:1.1}.wkc .wtop .big small{font-size:15px;font-weight:500;color:var(--ink-3);margin-left:5px;letter-spacing:0}
+.wkc .wtop b{font-size:14px;font-weight:600;text-align:right;white-space:nowrap}.wkc .wtop b.ok{color:#3F8F5A}.wkc .wtop b.warn{color:var(--accent)}
+.wkc .wmeta{font-size:13px;line-height:1.35;color:var(--ink-2);font-variant-numeric:tabular-nums}.wkc .wmeta.r{text-align:right;white-space:nowrap}
+.wkc .wlist .wrow{grid-template-columns:72px 1fr auto 24px;column-gap:10px;gap:10px;font-size:14.5px}.wkc .wrow .wkg{font-variant-numeric:tabular-nums}.wkc .wrow .wdl{color:var(--ink-2);font-size:13px;font-variant-numeric:tabular-nums;text-align:right}
+.wkc .wlist .fl button{width:32px;justify-self:end;margin-right:-11px}
+@media (max-height:720px){.wkc .wtop .big{font-size:28px}.wkc .wtop{padding:2px 0 8px}}
+
+.gf{padding:8px 0 0}.frm input{height:40px}.gf .gbar{display:flex;align-items:center;gap:10px;margin-top:5px;min-height:16px}.gf .gbar .bar{flex:1;margin-top:0}
+.gavg{flex:none;min-width:176px;text-align:right;font-size:12.5px;line-height:16px;color:var(--ink-3);font-variant-numeric:tabular-nums;white-space:nowrap}.gavg em{font-style:normal;font-weight:600;color:var(--ink-2)}.gavg em:not(:empty)::before{content:" · ";font-weight:400;color:var(--ink-3)}
+.gf:last-child .gbar .bar.none{background:transparent}
+.wkc.wset{padding:0}.wkc.wset .ghead{min-height:0;margin-bottom:2px}.wkc.wset .lab{font-size:11.5px;letter-spacing:.08em}
+@media (max-height:720px){.gform{padding:8px 16px 8px}.gf{padding:5px 0 0}.frm input{height:38px}.gf .gbar{margin-top:4px}.ghead{min-height:32px}}
 </style>
 
 <canvas id="sky" aria-hidden="true"></canvas><div id="probe" aria-hidden="true"></div>
@@ -416,7 +431,7 @@ html.boot *{transition:none!important;animation-duration:.001s!important;animati
    To sync between phones on carmochest.github.io, paste your Firebase web config here
    (Firebase console → Project settings → Your apps → SDK setup → Config). Leave null for local-only. */
 /* AI helper on GitHub Pages: paste your Cloudflare Worker URL here (see worker.js). On claude.ai the page asks Claude directly. */
-const APP_VERSION="10.17";
+const APP_VERSION="10.18";
 const setHTML=(el,h)=>{ if(!el) return false; if(el.__h===h) return false; el.__h=h; el.innerHTML=h; return true; };
 const AI_ENDPOINT="";   // Cloudflare Worker URL (Ask + push); leave empty until the Worker exists
 const VAPID_PUBLIC="";  // Worker's VAPID public key (base64url); from the Worker setup
@@ -575,8 +590,8 @@ function ageText(a){ if(a===null||a===undefined||a<0) return ""; const th=U.lang
 function goalPct(k,avg,v){ if(avg===null||avg===undefined||avg===""||v===null||v===undefined||v==="") return null; let p; if(k==="last"||k==="bed"){ if(!/^\d\d:\d\d/.test(v)) return null; p=100-Math.abs(avg-toH(v))*60/120*100; } else { const n=+v; if(!(n>0)) return null; p=k==="stretch"?avg/n*100:100*Math.min(avg,n)/Math.max(avg,n); } return Math.max(0,Math.min(100,Math.round(p))); }
 function goalsSheet(today,T){ const th=U.lang==="th"; const age=ageDays(today); const g=goals(age), d=goalDefaults(age), w7=weekAvg(today); const close=(a,b)=>100*Math.min(a,b)/Math.max(a,b);
   const AV={feeds:w7.feeds,last:w7.last,naps:w7.naps,bed:w7.bed,stretch:w7.night};
-  const prog=(txt,p)=>({sub:`${th?"เฉลี่ย 7 วัน":"7-day average"} ${txt}<em>${p===null?"":p+"%"}</em>`,bar:p===null?`<div class="bar none"></div>`:`<div class="bar"><i style="width:${p}%"></i></div>`});
-  const fld=(k,lab,inp,rec,pr)=>{ const cur=g[k]===undefined?"":g[k], def=d[k]===undefined?"":d[k]; return `<div class="gf" data-rec="${def}" data-avg="${AV[k]===null||AV[k]===undefined?"":AV[k]}"><div class="frm"><span><b>${lab}</b>${pr?`<small>${pr.sub}</small>`:""}</span>${inp}</div>${pr?pr.bar:`<div class="bar none"></div>`}</div>`; };
+  const prog=(txt,p)=>`<div class="gbar">${p===null?`<div class="bar none"></div>`:`<div class="bar"><i style="width:${p}%"></i></div>`}<span class="gavg">${th?"เฉลี่ย 7 วัน":"7-day average"} ${txt}<em>${p===null?"":p+"%"}</em></span></div>`;
+  const fld=(k,lab,inp,rec,pr)=>{ const cur=g[k]===undefined?"":g[k], def=d[k]===undefined?"":d[k]; return `<div class="gf" data-rec="${def}" data-avg="${AV[k]===null||AV[k]===undefined?"":AV[k]}"><div class="frm"><span><b>${lab}</b><small>${th?"แนะนำ":"Recommended"} ${rec}</small></span>${inp}</div>${pr||`<div class="gbar"><div class="bar none"></div></div>`}</div>`; };
   return `<section class="card gform"><div class="ghead"><div class="lab">${th?"เป้าหมาย":"Goals"}</div><button type="button" class="glink" data-goalrec>${th?"ใช้ค่าแนะนำ":"Default to recommendation"}</button></div>`+
     fld("feeds",th?"มื้อต่อวัน":"Feeds a day",`<input type="number" inputmode="numeric" data-goal="feeds" value="${g.feeds}" min="4" max="12" step="1">`,d.feeds,w7.feeds!==null?prog(w7.feeds.toFixed(1),goalPct("feeds",w7.feeds,g.feeds)):"")+
     fld("last",th?"มื้อสุดท้าย":"Last feed",`<input type="time" data-goal="last" value="${g.last||""}">`,d.last||(th?"ไม่มี":"none"),w7.last!==null?prog(fmt(Math.round(w7.last*12)/12),goalPct("last",w7.last,g.last)):"")+
@@ -584,7 +599,7 @@ function goalsSheet(today,T){ const th=U.lang==="th"; const age=ageDays(today); 
     fld("bed",th?"เข้านอน":"Bedtime",`<input type="time" data-goal="bed" value="${g.bed}">`,d.bed,w7.bed!==null?prog(fmt(Math.round(w7.bed*12)/12),goalPct("bed",w7.bed,g.bed)):"")+
     fld("stretch",th?"นอนยาวสุดกลางคืน":"Longest night stretch",`<input type="number" inputmode="decimal" data-goal="stretch" value="${g.stretch}" min="3" max="12" step="0.5">`,d.stretch+(th?" ชั่วโมง":" hours"),w7.night!==null?prog(fmtDur(w7.night*60),goalPct("stretch",w7.night,g.stretch)):"")+
   `</section><section class="card wkc${U.wpick?" wopen":""}">${weightBlock(age,today,false)}</section>`; }
-function goalLive(e){ const el=e.target; if(!el||!el.dataset||!el.dataset.goal) return; const gf=el.closest(".gf"); if(!gf||gf.dataset.avg==="") return; let avg=+gf.dataset.avg; const em=gf.querySelector("small em"), bar=gf.querySelector(".bar"); if(!em||!bar) return;
+function goalLive(e){ const el=e.target; if(!el||!el.dataset||!el.dataset.goal) return; const gf=el.closest(".gf"); if(!gf||gf.dataset.avg==="") return; let avg=+gf.dataset.avg; const em=gf.querySelector(".gavg em"), bar=gf.querySelector(".bar"); if(!em||!bar) return;
   if(el.dataset.goal==="last"&&/^\d\d:\d\d/.test(el.value)){ const today=scheduleDate(bkkNow()), gh=toH(el.value), ls=[...Array(7)].map((_,i)=>lastFeedOn(addDays(today,-7+i),gh)).filter(x=>x!==null); if(ls.length){ avg=ls.reduce((x,y)=>x+y,0)/ls.length; const tn=em.previousSibling; if(tn&&tn.nodeType===3) tn.textContent=tn.textContent.replace(/\S+$/,fmt(Math.round(avg*12)/12)); } }
   const p=goalPct(el.dataset.goal,avg,el.value); if(p===null){ em.textContent=""; bar.className="bar none"; bar.innerHTML=""; return; } em.textContent=p+"%"; bar.className="bar"; bar.innerHTML=`<i style="width:${p}%"></i>`; }
 document.addEventListener("input",goalLive); document.addEventListener("change",goalLive);
@@ -744,9 +759,12 @@ function weightBlock(age,today,compact){ const th=U.lang==="th", w=weights(), l=
   const prev=w.length>1?w[w.length-2]:null, dlt=prev?Math.round((l.kg-prev.kg)*1000):null;
   const ag=l?ageDays(l.d):age, med=ag!==null&&ag>=0?whoMedian(ag):null, [glo,ghi]=gainGuide(ag===null?0:ag);
   const vd=l?weightVerdict(ag,l.kg):null;
-  const sub=l?`${(th?"ชั่งเมื่อ ":"weighed ")+(l.d===today?(th?"วันนี้":"today"):niceDate(l.d))}${vd&&vd.pct!==null?` · ${th?`เปอร์เซ็นไทล์ที่ ${vd.pct}`:`${ordinal(vd.pct)} percentile`}`:""}${vd?"<br>":""}${vd?(vd.ok?`<span style="color:#3F8F5A;font-weight:600">${th?"ปกติ ✓":"On track ✓"}</span>`:`<span style="color:var(--accent);font-weight:600">${th?"ควรปรึกษากุมารแพทย์":"Consult your paediatrician"}</span>`):""}${(()=>{ const e=weightAt(today); return e&&l.d!==today&&Math.abs(e-l.kg)>=0.01?`${vd?" · ":"<br>"}${th?`ประมาณ ${fmtKg(e)} กก. วันนี้`:`est. ${fmtKg(e)} kg today`}`:""; })()}`:(th?"ยังไม่ได้ชั่ง":"Not weighed yet");
-  const rows=w.slice().reverse().slice(0,compact?3:14).map((x,i,arr)=>{ const p=w[w.indexOf(x)-1]; const g=p?Math.round((x.kg-p.kg)*1000):null; return `<div class="fl" style="grid-template-columns:64px 1fr auto" data-wedit="${x.d}" role="button"><span class="t">${x.d===today?(th?"วันนี้":"Today"):niceDate(x.d)}</span><span>${fmtKg(x.kg)} kg${S.birth&&x.d===S.birth?`<span class="dur"> · ${th?"แรกเกิด":"birth"}</span>`:""}${g!==null?`<span class="dur"> · ${g>=0?"+":""}${g} g</span>`:""}</span><button class="x" data-wdel="${x.d}" title="${ui("del")}">×</button></div>`; }).join("");
-  return `<div class="ghead"><div class="lab">${th?"น้ำหนัก":"Weight"}</div><button class="btn primary sm" data-weighopen>+ ${th?"น้ำหนัก":"Weight"}</button></div><div class="wtop"><div class="big">${l?fmtKg(l.kg):"—"} <small style="font-size:16px;color:var(--ink-3)">kg</small></div><div class="sub2">${sub}</div></div>${U.wpick?wpicker():""}${rows?`<div class="wlist">${rows}</div>`:""}`; }
+  const est=l?weightAt(today):null, showEst=l&&l.d!==today&&est&&Math.abs(est-l.kg)>=0.01;
+  const when=l?(th?"ชั่งเมื่อ ":"Weighed ")+(l.d===today?(th?"วันนี้":"today"):niceDate(l.d))+(showEst?` · ${th?`ประมาณ ${fmtKg(est)} กก. วันนี้`:`est. ${fmtKg(est)} kg today`}`:""):(th?"ยังไม่ได้ชั่ง":"Not weighed yet");
+  const verdict=vd?(vd.ok?`<b class="ok">${th?"ปกติ ✓":"On track ✓"}</b>`:`<b class="warn">${th?"ควรปรึกษากุมารแพทย์":"Consult your paediatrician"}</b>`):"";
+  const pct=vd&&vd.pct!==null?(th?`เปอร์เซ็นไทล์ที่ ${vd.pct}`:`${ordinal(vd.pct)} percentile`):"";
+  const rows=w.slice().reverse().slice(0,compact?3:14).map(x=>{ const p=w[w.indexOf(x)-1]; const g=p?Math.round((x.kg-p.kg)*1000):null; const note=S.birth&&x.d===S.birth?(th?"แรกเกิด":"birth"):g!==null?`${g>=0?"+":"−"}${Math.abs(g)} g`:""; return `<div class="fl wrow" data-wedit="${x.d}" role="button"><span class="t">${x.d===today?(th?"วันนี้":"Today"):niceDate(x.d)}</span><span class="wkg">${fmtKg(x.kg)} kg</span><span class="wdl">${note}</span><button class="x" data-wdel="${x.d}" title="${ui("del")}">×</button></div>`; }).join("");
+  return `<div class="ghead"><div class="lab">${th?"น้ำหนัก":"Weight"}</div><button type="button" class="glink add" data-weighopen>+ ${th?"น้ำหนัก":"Weight"}</button></div><div class="wtop"><div class="big">${l?fmtKg(l.kg):"—"}<small>kg</small></div>${verdict}<span class="wmeta">${when}</span><span class="wmeta r">${pct}</span></div>${U.wpick?wpicker():""}${rows?`<div class="wlist">${rows}</div>`:""}`; }
 function picker(){ const bottle=U.pick.mode==="bottle", solids=U.pick.mode==="solids"; const sw=U.pick.mode==="sleep"||U.pick.mode==="wake"||U.pick.mode==="pee"||U.pick.mode==="poo"; const ed=U.pick.edit; const late=(()=>{ const n=nowAbs(), h=toH(U.tm||nowHM()); return Math.round((h>n?n+24-h:n-h)*60); })();
   const stp=stpH;
   return `<div class="pick">
@@ -954,7 +972,7 @@ function renderSettings(age,today){
     person(EMO.clay,"Clay",S.birth?`${niceDate(S.birth)}${(w=>w?" · "+fmtKg(w.kg)+" kg":"")(lastW())} · ${({both:"bottle + breast",bottle:"bottle",breast:"breast"})[S.feedType||"both"]}`:"not here yet",`
       <div class="field"><span>Arrival</span>${S.birth?`<div class="frow"><b>Born ${niceDate(S.birth)}</b><button class="btn quiet sm" data-calopen>${U.calOpen?"Done":"Change"}</button></div>${U.calOpen?calendar():""}`:`<div class="frow"><button class="btn primary sm" data-born>Clay is here</button></div>${calendar()}`}</div>
       <div class="field"><span>Feeding</span><div class="seg sm" data-set="feedType"><button data-v="both" class="${(S.feedType||"both")==="both"?"on":""}">Bottle + breast</button><button data-v="bottle" class="${S.feedType==="bottle"?"on":""}">Bottle</button><button data-v="breast" class="${S.feedType==="breast"?"on":""}">Breast</button></div></div>
-      <div class="field"><span>Weight</span>${weightBlock(age,today,true)}</div>
+      <div class="field wkc wset">${weightBlock(age,today,true)}</div>
 
 `)+
     person("💉","Vaccines",(()=>{ const n=vaxNext(today); const done=VAX.filter(v=>(S.vax||{})[v[0]]&&S.vax[v[0]].done).length; return `${done} given${n?" · next "+VGROUP[n.g]+(n.booked?" · "+niceDate(n.booked):""):""}`; })(),vaxSettings(today))+
