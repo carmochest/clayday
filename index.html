@@ -373,6 +373,20 @@ html.boot *{transition:none!important;animation-duration:.001s!important;animati
 .wd2 em{font-style:normal;font-size:11.5px;font-weight:600;color:var(--ink-3)}.wd2.sel em{color:var(--ink)}
 .wread{display:flex;flex-wrap:wrap;gap:3px 14px;margin-top:10px;font-size:13.5px;color:var(--ink-2);font-variant-numeric:tabular-nums}.wread b{flex-basis:100%;color:var(--ink);font-size:14.5px;font-weight:600}
 .sh .wk7 .d7:last-child{padding-bottom:0}
+
+.gform{padding:14px 16px 14px}.ghead{display:flex;justify-content:space-between;align-items:center;gap:10px;min-height:34px}
+.glink{font:inherit;font-size:13px;font-weight:600;color:var(--ink-2);background:var(--chip);border:0;border-radius:999px;padding:7px 12px;white-space:nowrap}.glink:active{background:var(--chip-2)}
+.gf{padding:9px 0 0;border-bottom:0}.gf .frm{flex:1 0 auto}.frm input{height:42px}
+.frm small{display:block;min-height:0;font-size:12.5px;line-height:1.3;color:var(--ink-3);margin-top:2px;font-variant-numeric:tabular-nums}.frm small em{font-style:normal;font-weight:600;color:var(--ink-2)}
+.gf .bar{height:5px;border-radius:999px;background:var(--chip);overflow:hidden;margin-top:8px}.gf .bar i{display:block;height:100%;border-radius:999px;background:var(--good)}.gf .bar.none{height:1px;background:var(--line)}.gf:last-child .bar.none{background:transparent}
+.wkc{padding:12px 16px 10px}.wkc .big{font-size:30px;margin-top:2px}.wkc .sub2{font-size:13.5px;margin-top:3px;line-height:1.35}.wkc .wtop{display:flex;align-items:center;gap:14px;padding:2px 0 8px}.wkc .wtop .big{flex:none}.wkc .wtop .sub2{margin-top:0}.wkc .pick{margin:4px 0 8px}
+.wkc .wlist{border-top:1px solid var(--line)}.wkc .wlist .fl{padding:7px 0}.wkc .wlist .fl button{height:36px;width:36px}.wkc .wlist .fl:last-child{border-bottom:0}
+#sheet.fit{display:flex;flex-direction:column}#sheet.fit #sheetBody{flex:1 1 0;min-height:0;width:100%;display:flex;flex-direction:column}
+#sheet.fit .gform{flex:1 0 auto;display:flex;flex-direction:column;margin-bottom:12px}#sheet.fit .gf{flex:1 0 auto;display:flex;flex-direction:column}
+#sheet.fit .wkc{flex:0 1 auto;min-height:172px;display:flex;flex-direction:column;overflow:hidden;margin-bottom:0}#sheet.fit .wkc.wopen{flex-shrink:0}#sheet.fit .wkc>*{flex:none}
+#sheet.fit .wkc .wlist{flex:1 1 auto;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+#sheet.fit .wkc .wlist.more{-webkit-mask-image:linear-gradient(to bottom,#000 calc(100% - 22px),transparent);mask-image:linear-gradient(to bottom,#000 calc(100% - 22px),transparent)}
+@media (max-height:720px){.gform{padding:10px 16px 10px}.gf{padding:6px 0 0}.frm input{height:38px}.gf .bar{margin-top:6px}.frm b{font-size:15px}.wkc{padding:8px 16px 6px}.wkc .big{font-size:26px}#sheet.fit .wkc{min-height:150px}.wkc .wlist .fl{padding:5px 0}}
 </style>
 
 <canvas id="sky" aria-hidden="true"></canvas><div id="probe" aria-hidden="true"></div>
@@ -402,7 +416,7 @@ html.boot *{transition:none!important;animation-duration:.001s!important;animati
    To sync between phones on carmochest.github.io, paste your Firebase web config here
    (Firebase console → Project settings → Your apps → SDK setup → Config). Leave null for local-only. */
 /* AI helper on GitHub Pages: paste your Cloudflare Worker URL here (see worker.js). On claude.ai the page asks Claude directly. */
-const APP_VERSION="10.14";
+const APP_VERSION="10.15";
 const setHTML=(el,h)=>{ if(!el) return false; if(el.__h===h) return false; el.__h=h; el.innerHTML=h; return true; };
 const AI_ENDPOINT="";   // Cloudflare Worker URL (Ask + push); leave empty until the Worker exists
 const VAPID_PUBLIC="";  // Worker's VAPID public key (base64url); from the Worker setup
@@ -549,15 +563,15 @@ function weekSummary(today){ const age=ageDays(today); if(age===null||age<3) ret
 function statusSheet(today){ return `<div class="sh statussh">${U.nowHTML||""}</div>`; }
 function ageText(a){ if(a===null||a===undefined||a<0) return ""; const th=U.lang==="th"; if(a<14) return th?`${a} วัน`:a+(a===1?" day":" days"); if(a<84) return th?`${Math.floor(a/7)} สัปดาห์`:Math.floor(a/7)+" weeks"; return th?`${Math.floor(a/30.44)} เดือน`:Math.floor(a/30.44)+" months"; }
 function goalsSheet(today,T){ const th=U.lang==="th"; const age=ageDays(today); const g=goals(age), d=goalDefaults(age), w7=weekAvg(today); const close=(a,b)=>100*Math.min(a,b)/Math.max(a,b);
-  const prog=(txt,pct)=>{ const p=Math.max(0,Math.min(100,Math.round(pct))); return `<div class="gprog"><div class="gpt"><span>${th?"เฉลี่ย 7 วัน":"7-day average"} ${txt}</span><em>${p}%</em></div><div class="bar"><i style="width:${p}%"></i></div></div>`; };
-  const fld=(k,lab,inp,rec,pr)=>{ const cur=g[k]===undefined?"":g[k], def=d[k]===undefined?"":d[k]; return `<div class="gf" data-rec="${def}"><div class="frm"><span><b>${lab}</b></span>${inp}</div>${pr||""}</div>`; };
-  return `<section class="card gform"><div class="lab">${th?"เป้าหมาย":"Goals"}</div>`+
+  const prog=(txt,pct)=>{ const p=Math.max(0,Math.min(100,Math.round(pct))); return {sub:`${th?"เฉลี่ย 7 วัน":"7-day average"} ${txt} · <em>${p}%</em>`,bar:`<div class="bar"><i style="width:${p}%"></i></div>`}; };
+  const fld=(k,lab,inp,rec,pr)=>{ const cur=g[k]===undefined?"":g[k], def=d[k]===undefined?"":d[k]; return `<div class="gf" data-rec="${def}"><div class="frm"><span><b>${lab}</b>${pr?`<small>${pr.sub}</small>`:""}</span>${inp}</div>${pr?pr.bar:`<div class="bar none"></div>`}</div>`; };
+  return `<section class="card gform"><div class="ghead"><div class="lab">${th?"เป้าหมาย":"Goals"}</div><button type="button" class="glink" data-goalrec>${th?"ใช้ค่าแนะนำ":"Default to recommendation"}</button></div>`+
     fld("feeds",th?"มื้อต่อวัน":"Feeds a day",`<input type="number" inputmode="numeric" data-goal="feeds" value="${g.feeds}" min="4" max="12" step="1">`,d.feeds,w7.feeds!==null?prog(w7.feeds.toFixed(1),close(w7.feeds,g.feeds)):"")+
     fld("last",th?"มื้อสุดท้าย":"Last feed",`<input type="time" data-goal="last" value="${g.last||""}">`,d.last||(th?"ไม่มี":"none"),w7.last!==null&&g.last?prog(fmt(Math.round(w7.last*12)/12),100-Math.abs(w7.last-toH(g.last))*60/120*100):"")+
     fld("naps",th?"งีบต่อวัน":"Naps a day",`<input type="number" inputmode="numeric" data-goal="naps" value="${g.naps}" min="1" max="6" step="1">`,d.naps,w7.naps!==null?prog(w7.naps.toFixed(1),close(w7.naps,g.naps)):"")+
     fld("bed",th?"เข้านอน":"Bedtime",`<input type="time" data-goal="bed" value="${g.bed}">`,d.bed,w7.bed!==null?prog(fmt(Math.round(w7.bed*12)/12),100-Math.abs(w7.bed-toH(g.bed))*60/120*100):"")+
     fld("stretch",th?"นอนยาวสุดกลางคืน":"Longest night stretch",`<input type="number" inputmode="decimal" data-goal="stretch" value="${g.stretch}" min="3" max="12" step="0.5">`,d.stretch+(th?" ชั่วโมง":" hours"),w7.night!==null?prog(fmtDur(w7.night*60),w7.night/g.stretch*100):"")+
-  `<div class="grec"><button type="button" class="btn sm" data-goalrec>${th?"ใช้ค่าแนะนำ":"Default to recommendation"}</button></div></section><section class="card wkc"><div class="lab">${th?"น้ำหนัก":"Weight"}</div>${weightBlock(age,today,false)}</section>`; }
+  `</section><section class="card wkc${U.wpick?" wopen":""}">${weightBlock(age,today,false)}</section>`; }
 function commitGoals(){ const age=ageDays(scheduleDate(bkkNow())); const d=goalDefaults(age), g=goals(age); let ch=false; S.goalsOv=S.goalsOv||{};
   document.querySelectorAll("#sheetBody [data-goal]").forEach(i=>{ const k=i.dataset.goal; let v=i.value; if(k==="feeds"||k==="naps"||k==="stretch"){ v=+v; if(!(v>0)) return; v=k==="feeds"?Math.max(4,Math.min(12,Math.round(v))):k==="naps"?Math.max(1,Math.min(6,Math.round(v))):Math.max(3,Math.min(12,Math.round(v*2)/2)); } else if(k==="bed"){ if(!/^\d\d:\d\d$/.test(v)) return; } else if(v&&!/^\d\d:\d\d$/.test(v)) return;
     if(String(v)===String(g[k]===undefined?"":g[k])) return; if(String(v)===String(d[k])) delete S.goalsOv[k]; else S.goalsOv[k]=v; ch=true; });
@@ -714,9 +728,9 @@ function weightBlock(age,today,compact){ const th=U.lang==="th", w=weights(), l=
   const prev=w.length>1?w[w.length-2]:null, dlt=prev?Math.round((l.kg-prev.kg)*1000):null;
   const ag=l?ageDays(l.d):age, med=ag!==null&&ag>=0?whoMedian(ag):null, [glo,ghi]=gainGuide(ag===null?0:ag);
   const vd=l?weightVerdict(ag,l.kg):null;
-  const sub=l?`${(th?"ชั่งเมื่อ ":"weighed ")+(l.d===today?(th?"วันนี้":"today"):niceDate(l.d))}${vd&&vd.pct!==null?` · ${th?`เปอร์เซ็นไทล์ที่ ${vd.pct}`:`${ordinal(vd.pct)} percentile`}`:""}<br>${vd?(vd.ok?`<span style="color:#3F8F5A;font-weight:600">${th?"ปกติ ✓":"On track ✓"}</span>`:`<span style="color:var(--accent);font-weight:600">${th?"ควรปรึกษากุมารแพทย์":"Consult your paediatrician"}</span>`):""}`:(th?"ยังไม่ได้ชั่ง":"Not weighed yet");
+  const sub=l?`${(th?"ชั่งเมื่อ ":"weighed ")+(l.d===today?(th?"วันนี้":"today"):niceDate(l.d))}${vd&&vd.pct!==null?` · ${th?`เปอร์เซ็นไทล์ที่ ${vd.pct}`:`${ordinal(vd.pct)} percentile`}`:""}${vd?"<br>":""}${vd?(vd.ok?`<span style="color:#3F8F5A;font-weight:600">${th?"ปกติ ✓":"On track ✓"}</span>`:`<span style="color:var(--accent);font-weight:600">${th?"ควรปรึกษากุมารแพทย์":"Consult your paediatrician"}</span>`):""}`:(th?"ยังไม่ได้ชั่ง":"Not weighed yet");
   const rows=w.slice().reverse().slice(0,compact?3:14).map((x,i,arr)=>{ const p=w[w.indexOf(x)-1]; const g=p?Math.round((x.kg-p.kg)*1000):null; return `<div class="fl" style="grid-template-columns:64px 1fr auto" data-wedit="${x.d}" role="button"><span class="t">${x.d===today?(th?"วันนี้":"Today"):niceDate(x.d)}</span><span>${fmtKg(x.kg)} kg${S.birth&&x.d===S.birth?`<span class="dur"> · ${th?"แรกเกิด":"birth"}</span>`:""}${g!==null?`<span class="dur"> · ${g>=0?"+":""}${g} g</span>`:""}</span><button class="x" data-wdel="${x.d}" title="${ui("del")}">×</button></div>`; }).join("");
-  return `<div class="frow" style="justify-content:space-between;align-items:flex-start"><div><div class="big">${l?fmtKg(l.kg):"—"} <small style="font-size:16px;color:var(--ink-3)">kg</small></div><div class="sub2">${sub}</div></div><button class="btn primary sm" data-weighopen>+ ${th?"น้ำหนัก":"Weight"}</button></div>${U.wpick?wpicker():""}${rows?`<div style="padding-bottom:6px">${rows}</div>`:""}`; }
+  return `<div class="ghead"><div class="lab">${th?"น้ำหนัก":"Weight"}</div><button class="btn primary sm" data-weighopen>+ ${th?"น้ำหนัก":"Weight"}</button></div><div class="wtop"><div class="big">${l?fmtKg(l.kg):"—"} <small style="font-size:16px;color:var(--ink-3)">kg</small></div><div class="sub2">${sub}</div></div>${U.wpick?wpicker():""}${rows?`<div class="wlist">${rows}</div>`:""}`; }
 function picker(){ const bottle=U.pick.mode==="bottle", solids=U.pick.mode==="solids"; const sw=U.pick.mode==="sleep"||U.pick.mode==="wake"||U.pick.mode==="pee"||U.pick.mode==="poo"; const ed=U.pick.edit; const late=(()=>{ const n=nowAbs(), h=toH(U.tm||nowHM()); return Math.round((h>n?n+24-h:n-h)*60); })();
   const stp=stpH;
   return `<div class="pick">
@@ -789,7 +803,7 @@ function render(){
     </div></details>`
   :`<div class="lab">${U.lang==="th"?"ก่อนเคลย์เกิด":"Before Clay arrives"}</div><div class="big" style="font-size:34px">${niceDate(DUE)}</div><div class="sub">${U.lang==="th"?"แตะเมื่อเคลย์เกิดแล้ว":"tap the button the moment he's here"}</div><div class="acts"><button class="btn primary big full" data-born>${U.lang==="th"?"เคลย์เกิดแล้ว":"Clay is here"}</button></div>`);
 
-  $("sheet").hidden=!U.sheet; $("sheet").classList.toggle("fill",U.sheet==="data"); if(U.sheet){ const askIn=$("askIn"); const keep=askIn?{v:askIn.value,f:document.activeElement===askIn}:null; $("sheetTitle").textContent=({ask:U.lang==="th"?"ถามผู้ช่วย":"Ask",milk:U.lang==="th"?"นม":"Milk",nappy:U.lang==="th"?"ผ้าอ้อม":"Nappies",sleep:U.lang==="th"?"การนอน":"Sleep",vax:U.lang==="th"?"วัคซีน":"Vaccines",status:U.lang==="th"?"สถานะตอนนี้":"Right now",goals:U.lang==="th"?"เป้าหมาย":"Goals",data:U.lang==="th"?"สัปดาห์นี้":"This week",plan:U.lang==="th"?"ตารางวัน":"Timetable"})[U.sheet]; $("sheet").querySelector("[data-sheetclose]").textContent=U.lang==="th"?"เสร็จ":"Done"; if(U.sheet!=="plan"){ const sb=$("sheetBody"); const h=(U.pick?picker():"")+renderSheet(U.sheet,{tlog,real,ml,tg,pc,bml,bf,bfml,age,today,nowA,T}); if(sb.__h!==h){ sb.__h=h; sb.innerHTML=h; } } if(keep&&$("askIn")){ $("askIn").value=keep.v; if(keep.f) $("askIn").focus(); } } 
+  $("sheet").hidden=!U.sheet; $("sheet").classList.toggle("fill",U.sheet==="data"); $("sheet").classList.toggle("fit",U.sheet==="goals"); if(U.sheet==="goals") requestAnimationFrame(()=>{ const wl=$("sheet").querySelector(".wlist"); if(wl){ const f=()=>wl.classList.toggle("more",wl.scrollHeight-wl.scrollTop>wl.clientHeight+4); f(); wl.onscroll=f; } }); if(U.sheet){ const askIn=$("askIn"); const keep=askIn?{v:askIn.value,f:document.activeElement===askIn}:null; $("sheetTitle").textContent=({ask:U.lang==="th"?"ถามผู้ช่วย":"Ask",milk:U.lang==="th"?"นม":"Milk",nappy:U.lang==="th"?"ผ้าอ้อม":"Nappies",sleep:U.lang==="th"?"การนอน":"Sleep",vax:U.lang==="th"?"วัคซีน":"Vaccines",status:U.lang==="th"?"สถานะตอนนี้":"Right now",goals:U.lang==="th"?"เป้าหมาย":"Goals",data:U.lang==="th"?"สัปดาห์นี้":"This week",plan:U.lang==="th"?"ตารางวัน":"Timetable"})[U.sheet]; $("sheet").querySelector("[data-sheetclose]").textContent=U.lang==="th"?"เสร็จ":"Done"; if(U.sheet!=="plan"){ const sb=$("sheetBody"); const h=(U.pick?picker():"")+renderSheet(U.sheet,{tlog,real,ml,tg,pc,bml,bf,bfml,age,today,nowA,T}); if(sb.__h!==h){ sb.__h=h; sb.innerHTML=h; } } if(keep&&$("askIn")){ $("askIn").value=keep.v; if(keep.f) $("askIn").focus(); } } 
   /* bottom bar */
   document.documentElement.dataset.bar=U.bar&&S.birth?"1":""; document.documentElement.lang=U.lang==="th"?"th":"en"; document.documentElement.dataset.night=(U.night&&(nowA>=20||nowA<8))?"1":"";
   $("bar").hidden=!(U.bar&&S.birth); $("scrim").hidden=!(U.bar&&S.birth&&U.pick&&!U.sheet);
