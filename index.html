@@ -431,7 +431,7 @@ html.boot *{transition:none!important;animation-duration:.001s!important;animati
    To sync between phones on carmochest.github.io, paste your Firebase web config here
    (Firebase console → Project settings → Your apps → SDK setup → Config). Leave null for local-only. */
 /* AI helper on GitHub Pages: paste your Cloudflare Worker URL here (see worker.js). On claude.ai the page asks Claude directly. */
-const APP_VERSION="10.18";
+const APP_VERSION="10.19";
 const setHTML=(el,h)=>{ if(!el) return false; if(el.__h===h) return false; el.__h=h; el.innerHTML=h; return true; };
 const AI_ENDPOINT="";   // Cloudflare Worker URL (Ask + push); leave empty until the Worker exists
 const VAPID_PUBLIC="";  // Worker's VAPID public key (base64url); from the Worker setup
@@ -522,7 +522,7 @@ function gainGuide(age){ return age<90?[150,200]:age<180?[100,150]:[70,90]; }
 const stepTo=(now,goal,by)=>now===null||now===undefined?goal:now+Math.max(-by,Math.min(by,goal-now));
 /* ── goals: where the parents want the schedule to go. Age-appropriate defaults; a goal the parent sets steers the plan one small step at a time from what the baby is actually doing ── */
 function goalDefaults(age){ const a=age===null?0:age; const g={bed:a<90?"20:30":a<180?"19:30":"19:00",stretch:a<14?4:a<30?5:a<60?6:a<90?7:a<120?8:a<180?9:10,feeds:a<30?8:a<90?7:a<180?6:a<270?5:4,last:a<90?"23:00":a<150?"22:30":a<180?"22:00":"",naps:a<90?4:a<180?3:a<450?2:1}; const wc=weightCap(a,scheduleDate(bkkNow())); if(wc){ g.stretch=Math.min(g.stretch,wc.night); g.feeds=Math.max(g.feeds,Math.min(8,Math.ceil((24-wc.night)/wc.day)+1)); } return g; }
-function goals(age){ return Object.assign({},goalDefaults(age),S.goalsOv||{}); }
+function goals(age){ const g=Object.assign({},goalDefaults(age),S.goalsOv||{}); g.last=""; return g; }
 const goalSet=k=>(S.goalsOv||{})[k]!==undefined;
 /* what the baby has actually been doing over the last four logged days */
 let PACE=null;
@@ -539,13 +539,14 @@ function glideGap(age,date,hist,stretchD,stretchN){ if(!goalSet("feeds")||age===
 function bedPlan(today,age){ const g=goals(age); const goalH=toH(g.bed); const p=pace(today).bed; if(!goalSet("bed")||p===null) return {h:goalH,goal:goalH,now:p}; return {h:Math.round(stepTo(p,goalH,0.25)*12)/12,goal:goalH,now:p}; }
 function napsOn(d){ const en=(L[d]&&L[d].entries)||[]; return en.filter(x=>x.type==="sleep"&&toH(x.t)>=DAY_START&&toH(x.t)<19).length; }
 function bedOn(d){ const en=(L[d]&&L[d].entries)||[]; const x=en.find(x=>x.type==="sleep"&&toH(x.t)>=18&&toH(x.t)<23.5); return x?toH(x.t):null; }
-function nightMaxOn(d){ const fs=(L[d]&&L[d].entries||[]).filter(isFeed).map(x=>toH(x.t)).sort((a,b)=>a-b); let m=0; for(let i=1;i<fs.length;i++){ if(fs[i-1]>=20&&fs[i]-fs[i-1]>m) m=fs[i]-fs[i-1]; } return m; }
+function nightMaxOn(d){ const NF=nightFrom(); const fs=(L[d]&&L[d].entries||[]).filter(isFeed).map(x=>toH(x.t)).sort((a,b)=>a-b); let m=0; for(let i=1;i<fs.length;i++){ if(fs[i-1]>=NF&&fs[i]-fs[i-1]>m) m=fs[i]-fs[i-1]; } return m; }
+function nightFrom(){ const a=ageDays(scheduleDate(bkkNow())); return Math.min(20,toH(goals(a).bed)-1.75); }
 function feedSug(){ const today=scheduleDate(bkkNow()), age=ageDays(today); if(age===null||age<0) return null; return Math.max(10,Math.round(bfEst(age,today)/10)*10); }
 function mlTarget(age,date){ const d=date||scheduleDate(bkkNow()); const kg=weightAt(d); let t; if(kg) t=Math.min(1000,Math.round(kg*(age===null||age<0?150:perKg(age))/10)*10); else if(age===null||age<0) return 0; else t=age<7?400:age<14?500:age<30?650:age<60?800:age<120?950:1000; const sol=(L[d]&&L[d].entries||[]).reduce((a,x)=>a+(x.type==="solids"?(+x.ml||0):0),0); if(sol) t=Math.max(Math.round(t*0.75/10)*10,Math.round((t-sol*0.5)/10)*10); return t; }
 const lastSW=en=>(en||[]).filter(x=>x.type==="sleep"||x.type==="wake").sort((a,b)=>toH(a.t)-toH(b.t)).slice(-1)[0]||null; const carriedSleep=y=>{ const yy=y&&lastSW(y.entries); return yy&&yy.type==="sleep"&&toH(yy.t)>=17?yy:null; };
 const isFeed=x=>x.type==="bottle"||x.type==="breast"; const isNappy=x=>x.type==="pee"||x.type==="poo"; const isSolids=x=>x.type==="solids"; const SOLID=[["small",20],["medium",40],["large",60]];
-function typicalGap(){ const today=scheduleDate(bkkNow()), dates=Object.keys(L).sort().slice(-7); const day=[], night=[], nightR=[]; let nd=0, nn=0;
-  dates.forEach(d=>{ const recent=d>=addDays(today,-2); const fs=(L[d].entries||[]).filter(isFeed).map(x=>toH(x.t)).sort((a,b)=>a-b); for(let i=1;i<fs.length;i++){ const g=fs[i]-fs[i-1]; const isN=fs[i-1]>=20; if(g<1.5||g>(isN?9:6)) continue; const arr=isN?night:day; arr.push(g); if(recent){ arr.push(g); if(isN) nightR.push(g); } if(isN) nn++; else nd++; } });
+function typicalGap(){ const NF=nightFrom(); const today=scheduleDate(bkkNow()), dates=Object.keys(L).sort().slice(-7); const day=[], night=[], nightR=[]; let nd=0, nn=0;
+  dates.forEach(d=>{ const recent=d>=addDays(today,-2); const fs=(L[d].entries||[]).filter(isFeed).map(x=>toH(x.t)).sort((a,b)=>a-b); for(let i=1;i<fs.length;i++){ const g=fs[i]-fs[i-1]; const isN=fs[i-1]>=NF; if(g<1.5||g>(isN?9:6)) continue; const arr=isN?night:day; arr.push(g); if(recent){ arr.push(g); if(isN) nightR.push(g); } if(isN) nn++; else nd++; } });
   const med=a=>{ const x=a.slice().sort((p,q)=>p-q), m=x.length; return Math.round((m%2?x[(m-1)/2]:(x[m/2-1]+x[m/2])/2)*4)/4; };
   const gap=nd>=4?med(day):3, ngap=nightR.length>=2?med(nightR):nn>=3?med(night):Math.min(4,gap+0.5); return {gap,ngap,nightMax:nightR.length?Math.max(...nightR):null,learned:nd>=4,nlearned:nn>=3}; }
 /* longest stretch Clay should go between feeds: age-based ceiling, pulled in if weight is behind, pushed toward what he's actually shown he can do */
@@ -594,7 +595,6 @@ function goalsSheet(today,T){ const th=U.lang==="th"; const age=ageDays(today); 
   const fld=(k,lab,inp,rec,pr)=>{ const cur=g[k]===undefined?"":g[k], def=d[k]===undefined?"":d[k]; return `<div class="gf" data-rec="${def}" data-avg="${AV[k]===null||AV[k]===undefined?"":AV[k]}"><div class="frm"><span><b>${lab}</b><small>${th?"แนะนำ":"Recommended"} ${rec}</small></span>${inp}</div>${pr||`<div class="gbar"><div class="bar none"></div></div>`}</div>`; };
   return `<section class="card gform"><div class="ghead"><div class="lab">${th?"เป้าหมาย":"Goals"}</div><button type="button" class="glink" data-goalrec>${th?"ใช้ค่าแนะนำ":"Default to recommendation"}</button></div>`+
     fld("feeds",th?"มื้อต่อวัน":"Feeds a day",`<input type="number" inputmode="numeric" data-goal="feeds" value="${g.feeds}" min="4" max="12" step="1">`,d.feeds,w7.feeds!==null?prog(w7.feeds.toFixed(1),goalPct("feeds",w7.feeds,g.feeds)):"")+
-    fld("last",th?"มื้อสุดท้าย":"Last feed",`<input type="time" data-goal="last" value="${g.last||""}">`,d.last||(th?"ไม่มี":"none"),w7.last!==null?prog(fmt(Math.round(w7.last*12)/12),goalPct("last",w7.last,g.last)):"")+
     fld("naps",th?"งีบต่อวัน":"Naps a day",`<input type="number" inputmode="numeric" data-goal="naps" value="${g.naps}" min="1" max="6" step="1">`,d.naps,w7.naps!==null?prog(w7.naps.toFixed(1),goalPct("naps",w7.naps,g.naps)):"")+
     fld("bed",th?"เข้านอน":"Bedtime",`<input type="time" data-goal="bed" value="${g.bed}">`,d.bed,w7.bed!==null?prog(fmt(Math.round(w7.bed*12)/12),goalPct("bed",w7.bed,g.bed)):"")+
     fld("stretch",th?"นอนยาวสุดกลางคืน":"Longest night stretch",`<input type="number" inputmode="decimal" data-goal="stretch" value="${g.stretch}" min="3" max="12" step="0.5">`,d.stretch+(th?" ชั่วโมง":" hours"),w7.night!==null?prog(fmtDur(w7.night*60),goalPct("stretch",w7.night,g.stretch)):"")+
@@ -631,15 +631,15 @@ function build(dow,date){
   if(isToday&&(real.length||yLast!==null)){ const last=real.length?toH(real[real.length-1].t):yLast, first=real.length?toH(real[0].t):yLast;
     plan.filter(f=>f.h<first-0.75).forEach(f=>feeds.push({...f,missed:f.h<nowA}));
     real.forEach(x=>feeds.push({h:toH(x.t),actual:x}));
-    const nightLast=(last>=20||last<DAY_START); let t=last+(nightLast?ngap:gap), due=false, planH=null; if(t<nowA){ planH=t; t=nowA+0.03; due=true; } let firstP=true, stretched=false;
+    const NF=nightFrom(); const nightLast=(last>=NF||last<DAY_START); let t=last+(nightLast?ngap:gap), due=false, planH=null; if(t<nowA){ planH=t; t=nowA+0.03; due=true; } let firstP=true, stretched=false;
     let pre="feed@";
     while(t<30){ const key=pre+fmt(due&&firstP&&planH!=null?planH:t);
       if(skips.has(key)&&!stretched){ stretched=true; pre="stretch@"; const alt=Math.max(last+(nightLast?stretchN:stretchD),(planH!=null?planH:t)); if(alt>nowA+0.05){ t=alt; due=false; planH=null; } else { planH=alt; t=nowA+0.03; due=true; } continue; }   // skipped → stretch to his safe maximum from the last real feed
       if(skips.has(key)){ t+=gap; firstP=false; continue; }
-      if(!(noFeed&&t>noFeed[0]&&t<noFeed[1])) feeds.push({h:t,key,pred:true,due:due&&firstP,plan:due&&firstP?planH:null,whenWakes:due&&firstP&&sleeping,stretch:pre==="stretch@"&&firstP}); pre="feed@"; t+=(t>=20?ngap:gap); firstP=false; }
+      if(!(noFeed&&t>noFeed[0]&&t<noFeed[1])) feeds.push({h:t,key,pred:true,due:due&&firstP,plan:due&&firstP?planH:null,whenWakes:due&&firstP&&sleeping,stretch:pre==="stretch@"&&firstP}); pre="feed@"; t+=(t>=NF?ngap:gap); firstP=false; }
     if(!feeds.some(f=>f.pred)) nextOver={h:t,pred:true,over:true,whenWakes:sleeping};
   } else if(isToday){ plan.forEach(f=>{ if(f.h<nowA-0.75) feeds.push({...f,missed:true}); }); const nextPlan=plan.find(f=>f.h>=nowA-0.75); let t=nextPlan?Math.max(nextPlan.h,nowA+0.03):nowA+0.03; const overdue=t<=nowA+0.06; let firstP=true;
-    while(t<30){ if(!(noFeed&&t>noFeed[0]&&t<noFeed[1])) feeds.push({h:t,key:"feed@"+fmt(firstP&&overdue&&nextPlan?nextPlan.h:t),pred:!firstP||overdue,due:firstP&&overdue,plan:firstP&&overdue&&nextPlan?nextPlan.h:null,whenWakes:firstP&&overdue&&sleeping}); t+=(t>=20?ngap:gap); firstP=false; } }
+    while(t<30){ if(!(noFeed&&t>noFeed[0]&&t<noFeed[1])) feeds.push({h:t,key:"feed@"+fmt(firstP&&overdue&&nextPlan?nextPlan.h:t),pred:!firstP||overdue,due:firstP&&overdue,plan:firstP&&overdue&&nextPlan?nextPlan.h:null,whenWakes:firstP&&overdue&&sleeping}); t+=(t>=nightFrom()?ngap:gap); firstP=false; } }
   else plan.forEach(f=>feeds.push({...f}));
   feeds=feeds.filter(f=>!(f.key&&isToday&&skips.has(f.key))); feeds.sort((a,b)=>a.h-b.h);
   const raw=(L[date]&&L[date].entries)||[];   // insertion order: a toggle tapped after a feed ends that feed, even in the same minute
@@ -1050,7 +1050,7 @@ document.body.addEventListener("click",e=>{ let b=e.target.closest("button"); if
   else if(d.state){ addLog(d.state); }
   else if(d.nappy){ U.pick={mode:d.nappy}; U.tm=nowHM(); render(); }
   else if(d.again!==undefined){ const l=JSON.parse(d.again); addLog(l.type,l.type==="bottle"?{ml:l.ml}:(l.min?{min:l.min}:{})); }
-  else if(d.pickopen){ U.pick={mode:d.pickopen}; U.tm=nowHM(); U.pump=0; if(d.pickopen==="bottle"){ const sg=feedSug(), us=usualMl(); const def=us&&(!sg||(us>=sg*0.6&&us<=sg*1.5))?us:sg; if(def) U.ml=def; } render(); }
+  else if(d.pickopen){ U.pick={mode:d.pickopen}; U.tm=nowHM(); U.pump=0; if(d.pickopen==="bottle"){ const sg=feedSug(), us=usualMl(); const def=sg?(us&&us>=sg&&us<=sg*1.5?us:sg):us; if(def) U.ml=def; } render(); }
   else if(d.editfeed){ const date=scheduleDate(bkkNow()); const x=(L[date]&&L[date].entries||[]).find(e=>e.id===d.editfeed); if(!x) return; U.logOpen=true; if(x.type==="bottle") U.ml=x.ml||U.ml; else if(x.type==="solids") U.portion=x.portion||"medium"; else if(x.min) U.min=x.min; U.pump=x.pump||0; U.pick={mode:x.type,edit:x}; U.tm=x.t; render(); }
   else if(d.delfeed){ U.pick=null; U.logOpen=true; removeLog(d.delfeed); }
   else if(d.adj){ const [k,dv]=d.adj.split(":"); const v=+dv; if(k==="kg"){ if(!U.wpick) return; U.wpick.kg=Math.max(1,Math.min(25,Math.round((U.wpick.kg+v/100)*1000)/1000)); } else if(k==="wd"){ if(!U.wpick) return; const today=scheduleDate(bkkNow()); let nd=addDays(U.wpick.d,v); if(nd>today) nd=today; const lo=S.birth||addDays(today,-400); if(nd<lo) nd=lo; U.wpick.d=nd; } else if(k==="pump"){ U.pump=Math.max(0,Math.min(300,(U.pump||0)+v)); } else if(k==="ml") U.ml=Math.max(10,Math.min(400,U.ml+v)); else if(k==="min") U.min=Math.max(0,Math.min(90,U.min+v)); else { let h=toH(U.tm)+v/60; const now=nowAbs(); if(h<DAY_START) h+=24; if(h>=DAY_START+24) h-=24; if(!U.pick.edit&&h>now&&h<=now+6) h=now; U.tm=fmt(h); } render(); }
@@ -1077,7 +1077,7 @@ document.body.addEventListener("click",e=>{ let b=e.target.closest("button"); if
   else if(d.hnudge){ const [k,i,dm]=d.hnudge.split(":"); const cur=k==="nannyHrs"?nannyHrs():k==="driverHrs"?driverHrs():maidHrs(); const v=[cur[0],cur[1]]; v[+i]=Math.max(0,Math.min(23.5,v[+i]+(+dm)/60)); if(v[1]-v[0]<1){ toast("Keep at least 1 hour"); return; } S[k]=hm(v[0])+"-"+hm(v[1]); saveSettings(); }
   else if(d.dd){ const x=+d.dd; S.driverDays=S.driverDays.includes(x)?S.driverDays.filter(y=>y!==x):[...S.driverDays,x]; saveSettings(); }
   else if(d.md){ const x=+d.md; S.maidDays=S.maidDays.includes(x)?S.maidDays.filter(y=>y!==x):[...S.maidDays,x]; saveSettings(); }
-  else if(b.hasAttribute("data-alarmlog")){ const types=[d.alarmlog||((S.feedType||"both")==="both"?"bottle":S.feedType)]; U.pick={mode:types[0]}; U.tm=nowHM(); if(types[0]==="bottle"){ const sg=feedSug(), us=usualMl(); const def=us&&(!sg||(us>=sg*0.6&&us<=sg*1.5))?us:sg; if(def) U.ml=def; } U.al.dismiss=U.al.key; render(); }
+  else if(b.hasAttribute("data-alarmlog")){ const types=[d.alarmlog||((S.feedType||"both")==="both"?"bottle":S.feedType)]; U.pick={mode:types[0]}; U.tm=nowHM(); if(types[0]==="bottle"){ const sg=feedSug(), us=usualMl(); const def=sg?(us&&us>=sg&&us<=sg*1.5?us:sg):us; if(def) U.ml=def; } U.al.dismiss=U.al.key; render(); }
   else if(b.hasAttribute("data-alarmsnooze")){ U.al.snooze=nowAbs()+10/60; U.al.fired=null; render(); toast(U.lang==="th"?"เตือนอีกครั้งใน 10 นาที":"Reminding again in 10 min"); }
   else if(b.hasAttribute("data-alarmoff")){ U.al.dismiss=U.al.key; render(); }
   else if(d.v&&b.closest(".seg[data-set]")){ const k=b.closest(".seg[data-set]").dataset.set; if(k==="lead"){ U.lead=+d.v; lsSet("clay.lead",U.lead); U.al.fired=null; render(); return; } if(k==="portion"){ U.portion=d.v; render(); return; } S[k]=d.v; saveSettings(); }
