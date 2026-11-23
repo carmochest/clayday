@@ -431,7 +431,7 @@ html.boot *{transition:none!important;animation-duration:.001s!important;animati
    To sync between phones on carmochest.github.io, paste your Firebase web config here
    (Firebase console → Project settings → Your apps → SDK setup → Config). Leave null for local-only. */
 /* AI helper on GitHub Pages: paste your Cloudflare Worker URL here (see worker.js). On claude.ai the page asks Claude directly. */
-const APP_VERSION="10.19";
+const APP_VERSION="10.22";
 const setHTML=(el,h)=>{ if(!el) return false; if(el.__h===h) return false; el.__h=h; el.innerHTML=h; return true; };
 const AI_ENDPOINT="";   // Cloudflare Worker URL (Ask + push); leave empty until the Worker exists
 const VAPID_PUBLIC="";  // Worker's VAPID public key (base64url); from the Worker setup
@@ -532,13 +532,18 @@ function pace(today){ if(PACE&&PACE.k===today) return PACE.v; const ds=[-4,-3,-2
   PACE={k:today,v}; return v; }
 function feedsPerDay(age){ const d=goalDefaults(age).feeds; if(!goalSet("feeds")) return d; const p=pace(scheduleDate(bkkNow())).feeds; return Math.max(4,Math.min(12,Math.round(stepTo(p===null?d:p,+S.goalsOv.feeds,1)))); }
 /* stretching is only offered while intake and weight are on track */
-function onTrack(date){ const age=ageDays(date); const wv=age!==null&&age>=3?weightCheck(date):null; if(wv&&!wv.ok) return false; const today=scheduleDate(bkkNow()); const ds=[-2,-1].map(k=>dayStats(addDays(date,k),today,nowAbs())).filter(x=>x.feeds>=3); if(!ds.length) return false; return ds.every(x=>!x.tg||x.ml>=x.tg*0.9); }
+function onTrack(date){ const age=ageDays(date); const wv=age!==null&&age>=3?weightCheck(date):null; if(wv&&!wv.ok) return false; const today=scheduleDate(bkkNow()); const ds=[-2,-1].map(k=>dayStats(addDays(date,k),today,nowAbs())).filter(x=>x.feeds>=3); if(!ds.length) return false; return ds.every(x=>(!x.tg||x.ml>=x.tg*0.9)&&(age<5||x.wet+x.dirty===0||x.wet+x.dirty>=5)); }
 /* a feeds-a-day goal nudges the predicted gap 15 minutes at a time from his own usual gap */
 function glideGap(age,date,hist,stretchD,stretchN){ if(!goalSet("feeds")||age===null) return hist.gap; const goalGap=Math.max(2,Math.min(stretchD,(24-stretchN)/Math.max(2,+S.goalsOv.feeds-1))); const d=goalGap-hist.gap; if(Math.abs(d)<0.1) return hist.gap; if(d>0&&!onTrack(date)) return hist.gap; return Math.round((hist.gap+Math.max(-0.25,Math.min(0.25,d)))*12)/12; }
 /* tonight's bedtime: his recent bedtime moved at most 15 minutes toward the goal */
 function bedPlan(today,age){ const g=goals(age); const goalH=toH(g.bed); const p=pace(today).bed; if(!goalSet("bed")||p===null) return {h:goalH,goal:goalH,now:p}; return {h:Math.round(stepTo(p,goalH,0.25)*12)/12,goal:goalH,now:p}; }
 function napsOn(d){ const en=(L[d]&&L[d].entries)||[]; return en.filter(x=>x.type==="sleep"&&toH(x.t)>=DAY_START&&toH(x.t)<19).length; }
 function bedOn(d){ const en=(L[d]&&L[d].entries)||[]; const x=en.find(x=>x.type==="sleep"&&toH(x.t)>=18&&toH(x.t)<23.5); return x?toH(x.t):null; }
+/* the bedtime feed is the last feed between the start of the night and ¾ h after bedtime; the first stretch runs from it to the next feed (which may be logged on the next day) */
+function bedWin(){ const a=ageDays(scheduleDate(bkkNow())); return [nightFrom(),toH(goals(a).bed)+0.75]; }
+function firstNightGap(d){ const [NF,BE]=bedWin(); const fs=(L[d]&&L[d].entries||[]).filter(isFeed).map(x=>toH(x.t)).sort((a,b)=>a-b); let i=-1; fs.forEach((h,k)=>{ if(h>=NF&&h<=BE) i=k; }); if(i<0) i=fs.findIndex(h=>h>=NF); if(i<0) return null; let nx=fs[i+1]; if(nx===undefined){ const n=L[addDays(d,1)]; const f2=(n&&n.entries||[]).filter(isFeed).map(x=>toH(x.t)).sort((a,b)=>a-b); if(!f2.length) return null; nx=f2[0]+24; } const g=nx-fs[i]; return g>=1.5&&g<=14?g:null; }
+/* tonight's first stretch: 15 min longer than he has been doing, up to the night limit, and only while weight, milk and nappies are on track */
+function firstStretch(date,usual,limit){ const today=scheduleDate(bkkNow()); const v=[1,2,3].map(k=>firstNightGap(addDays(today,-k))); const got=v.filter(x=>x!==null); if(!got.length) return Math.min(usual,limit); const x=got.slice().sort((p,q)=>p-q), med=x[Math.floor((x.length-1)/2)]; const base=Math.max(med,v[0]!==null?Math.min(v[0],med+0.25):med); if(base>=limit) return limit; return Math.min(limit,Math.round((base+(onTrack(date)?0.25:0))*12)/12); }
 function nightMaxOn(d){ const NF=nightFrom(); const fs=(L[d]&&L[d].entries||[]).filter(isFeed).map(x=>toH(x.t)).sort((a,b)=>a-b); let m=0; for(let i=1;i<fs.length;i++){ if(fs[i-1]>=NF&&fs[i]-fs[i-1]>m) m=fs[i]-fs[i-1]; } return m; }
 function nightFrom(){ const a=ageDays(scheduleDate(bkkNow())); return Math.min(20,toH(goals(a).bed)-1.75); }
 function feedSug(){ const today=scheduleDate(bkkNow()), age=ageDays(today); if(age===null||age<0) return null; return Math.max(10,Math.round(bfEst(age,today)/10)*10); }
@@ -550,7 +555,7 @@ function typicalGap(){ const NF=nightFrom(); const today=scheduleDate(bkkNow()),
   const med=a=>{ const x=a.slice().sort((p,q)=>p-q), m=x.length; return Math.round((m%2?x[(m-1)/2]:(x[m/2-1]+x[m/2])/2)*4)/4; };
   const gap=nd>=4?med(day):3, ngap=nightR.length>=2?med(nightR):nn>=3?med(night):Math.min(4,gap+0.5); return {gap,ngap,nightMax:nightR.length?Math.max(...nightR):null,learned:nd>=4,nlearned:nn>=3}; }
 /* longest stretch Clay should go between feeds: age-based ceiling, pulled in if weight is behind, pushed toward what he's actually shown he can do */
-function maxStretch(age,date,night){ const a=age===null?0:age; let cap=night?(a<14?4.5:a<30?5:a<60?6:a<90?7:8):(a<30?4:a<90?4.5:5); if(night){ cap+=(+S.stretchBoost||0); cap=Math.min(cap,goals(a).stretch); } const wc=weightCap(a,date); if(wc) cap=Math.min(cap,night?wc.night:wc.day); return Math.round(Math.max(night?3:2,cap)*4)/4; }
+function maxStretch(age,date,night){ const a=age===null?0:age; let cap=night?(a<14?4.5:a<30?5:a<60?6:a<90?7:a<120?8:a<180?9:10):(a<30?4:a<90?4.5:5); if(night){ cap+=(+S.stretchBoost||0); cap=Math.min(cap,goals(a).stretch); } const wc=weightCap(a,date); if(wc) cap=Math.min(cap,night?wc.night:wc.day); return Math.round(Math.max(night?3:2,cap)*4)/4; }
 function wakeWindow(age){ const dates=Object.keys(L).sort().slice(-7); const ws=[]; dates.forEach(d=>{ const tr=(L[d].entries||[]).filter(x=>x.type==="sleep"||x.type==="wake").sort((a,b)=>toH(a.t)-toH(b.t)); for(let i=1;i<tr.length;i++){ if(tr[i].type==="sleep"&&tr[i-1].type==="wake"){ const w=toH(tr[i].t)-toH(tr[i-1].t); if(w>=0.4&&w<=4) ws.push(w); } } });
   if(ws.length>=3){ const x=ws.sort((a,b)=>a-b); return {ww:Math.round(x[Math.floor(x.length/2)]*4)/4,learned:true}; } const a=age===null?0:age; return {ww:a<30?1:a<60?1.25:a<90?1.5:a<120?1.75:a<180?2:a<270?2.5:a<365?3:3.5,learned:false}; }
 function usualMl(){ const today=scheduleDate(bkkNow()); const b=[]; for(let k=0;k>-3;k--){ const d=L[addDays(today,k)]; (d&&d.entries||[]).forEach(x=>{ if(x.type==="bottle"&&+x.ml>0) b.push(+x.ml); }); } if(b.length<4) return null; b.sort((p,q)=>p-q); return Math.round(b[Math.floor(b.length/2)]/10)*10; }
@@ -624,22 +629,22 @@ function build(dow,date){
 
   /* Clay's feeds: plan, then live prediction from the last real feed */
   const plan=sortedFeeds().filter(f=>!f.off).map(f=>({h:toH(f.t),key:"feed@"+f.t}));
-  const real=log.filter(isFeed); const hist=typicalGap(); const stretchN=maxStretch(age,date,true), stretchD=maxStretch(age,date,false); const gap=Math.min(glideGap(age,date,hist,stretchD,stretchN),stretchD), ngap=Math.min(hist.ngap,stretchN), learned=hist.learned;
+  const real=log.filter(isFeed); const hist=typicalGap(); const stretchN=maxStretch(age,date,true), stretchD=maxStretch(age,date,false); const gap=Math.min(glideGap(age,date,hist,stretchD,stretchN),stretchD), ngap=Math.min(hist.ngap,stretchN), learned=hist.learned; const [NF0,BE0]=bedWin(), fgap=firstStretch(date,ngap,stretchN), gapAfter=h=>h<NF0?gap:h<=BE0?fgap:ngap;
   let sw=lastSW(log), carried=false, ysw=null; if(isToday){ const yy=carriedSleep(L[addDays(date,-1)]); if(yy){ ysw=yy; if(!sw){ sw=yy; carried=true; } } } const sleeping=isToday&&!!(sw&&sw.type==="sleep");
   let feeds=[], nextOver=null; const g0=goals(age); const noFeed=(g0.last&&(m46()||(maxStretch(age,date,true)>=7)))?[toH(g0.last)+0.6,31.5]:null;
   const yLast=(()=>{ if(!isToday||real.length) return null; const y=L[addDays(date,-1)]; const yl=y&&(y.entries||[]).filter(isFeed).sort((a,b)=>toH(a.t)-toH(b.t)).slice(-1)[0]; if(!yl) return null; const h=toH(yl.t)-24; return h>=-4?h:null; })();   // a feed after 02:00 carries into the new day
   if(isToday&&(real.length||yLast!==null)){ const last=real.length?toH(real[real.length-1].t):yLast, first=real.length?toH(real[0].t):yLast;
     plan.filter(f=>f.h<first-0.75).forEach(f=>feeds.push({...f,missed:f.h<nowA}));
     real.forEach(x=>feeds.push({h:toH(x.t),actual:x}));
-    const NF=nightFrom(); const nightLast=(last>=NF||last<DAY_START); let t=last+(nightLast?ngap:gap), due=false, planH=null; if(t<nowA){ planH=t; t=nowA+0.03; due=true; } let firstP=true, stretched=false;
+    const NF=nightFrom(); const nightLast=(last>=NF||last<DAY_START); let t=last+(last<DAY_START?ngap:gapAfter(last)), due=false, planH=null; if(t<nowA){ planH=t; t=nowA+0.03; due=true; } let firstP=true, stretched=false;
     let pre="feed@";
     while(t<30){ const key=pre+fmt(due&&firstP&&planH!=null?planH:t);
       if(skips.has(key)&&!stretched){ stretched=true; pre="stretch@"; const alt=Math.max(last+(nightLast?stretchN:stretchD),(planH!=null?planH:t)); if(alt>nowA+0.05){ t=alt; due=false; planH=null; } else { planH=alt; t=nowA+0.03; due=true; } continue; }   // skipped → stretch to his safe maximum from the last real feed
       if(skips.has(key)){ t+=gap; firstP=false; continue; }
-      if(!(noFeed&&t>noFeed[0]&&t<noFeed[1])) feeds.push({h:t,key,pred:true,due:due&&firstP,plan:due&&firstP?planH:null,whenWakes:due&&firstP&&sleeping,stretch:pre==="stretch@"&&firstP}); pre="feed@"; t+=(t>=NF?ngap:gap); firstP=false; }
+      if(!(noFeed&&t>noFeed[0]&&t<noFeed[1])) feeds.push({h:t,key,pred:true,due:due&&firstP,plan:due&&firstP?planH:null,whenWakes:due&&firstP&&sleeping,stretch:pre==="stretch@"&&firstP}); pre="feed@"; t+=gapAfter(t); firstP=false; }
     if(!feeds.some(f=>f.pred)) nextOver={h:t,pred:true,over:true,whenWakes:sleeping};
   } else if(isToday){ plan.forEach(f=>{ if(f.h<nowA-0.75) feeds.push({...f,missed:true}); }); const nextPlan=plan.find(f=>f.h>=nowA-0.75); let t=nextPlan?Math.max(nextPlan.h,nowA+0.03):nowA+0.03; const overdue=t<=nowA+0.06; let firstP=true;
-    while(t<30){ if(!(noFeed&&t>noFeed[0]&&t<noFeed[1])) feeds.push({h:t,key:"feed@"+fmt(firstP&&overdue&&nextPlan?nextPlan.h:t),pred:!firstP||overdue,due:firstP&&overdue,plan:firstP&&overdue&&nextPlan?nextPlan.h:null,whenWakes:firstP&&overdue&&sleeping}); t+=(t>=nightFrom()?ngap:gap); firstP=false; } }
+    while(t<30){ if(!(noFeed&&t>noFeed[0]&&t<noFeed[1])) feeds.push({h:t,key:"feed@"+fmt(firstP&&overdue&&nextPlan?nextPlan.h:t),pred:!firstP||overdue,due:firstP&&overdue,plan:firstP&&overdue&&nextPlan?nextPlan.h:null,whenWakes:firstP&&overdue&&sleeping}); t+=gapAfter(t); firstP=false; } }
   else plan.forEach(f=>feeds.push({...f}));
   feeds=feeds.filter(f=>!(f.key&&isToday&&skips.has(f.key))); feeds.sort((a,b)=>a.h-b.h);
   const raw=(L[date]&&L[date].entries)||[];   // insertion order: a toggle tapped after a feed ends that feed, even in the same minute
