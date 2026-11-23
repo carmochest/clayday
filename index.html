@@ -431,7 +431,7 @@ html.boot *{transition:none!important;animation-duration:.001s!important;animati
    To sync between phones on carmochest.github.io, paste your Firebase web config here
    (Firebase console → Project settings → Your apps → SDK setup → Config). Leave null for local-only. */
 /* AI helper on GitHub Pages: paste your Cloudflare Worker URL here (see worker.js). On claude.ai the page asks Claude directly. */
-const APP_VERSION="10.22";
+const APP_VERSION="10.23";
 const setHTML=(el,h)=>{ if(!el) return false; if(el.__h===h) return false; el.__h=h; el.innerHTML=h; return true; };
 const AI_ENDPOINT="";   // Cloudflare Worker URL (Ask + push); leave empty until the Worker exists
 const VAPID_PUBLIC="";  // Worker's VAPID public key (base64url); from the Worker setup
@@ -538,7 +538,7 @@ function glideGap(age,date,hist,stretchD,stretchN){ if(!goalSet("feeds")||age===
 /* tonight's bedtime: his recent bedtime moved at most 15 minutes toward the goal */
 function bedPlan(today,age){ const g=goals(age); const goalH=toH(g.bed); const p=pace(today).bed; if(!goalSet("bed")||p===null) return {h:goalH,goal:goalH,now:p}; return {h:Math.round(stepTo(p,goalH,0.25)*12)/12,goal:goalH,now:p}; }
 function napsOn(d){ const en=(L[d]&&L[d].entries)||[]; return en.filter(x=>x.type==="sleep"&&toH(x.t)>=DAY_START&&toH(x.t)<19).length; }
-function bedOn(d){ const en=(L[d]&&L[d].entries)||[]; const x=en.find(x=>x.type==="sleep"&&toH(x.t)>=18&&toH(x.t)<23.5); return x?toH(x.t):null; }
+function bedOn(d){ const en=(L[d]&&L[d].entries)||[]; const B=toH(goals(ageDays(scheduleDate(bkkNow()))).bed); const c=en.filter(x=>x.type==="sleep").map(x=>toH(x.t)).filter(h=>Math.abs(h-B)<=2).sort((p,q)=>Math.abs(p-B)-Math.abs(q-B)); return c.length?c[0]:null; }
 /* the bedtime feed is the last feed between the start of the night and ¾ h after bedtime; the first stretch runs from it to the next feed (which may be logged on the next day) */
 function bedWin(){ const a=ageDays(scheduleDate(bkkNow())); return [nightFrom(),toH(goals(a).bed)+0.75]; }
 function firstNightGap(d){ const [NF,BE]=bedWin(); const fs=(L[d]&&L[d].entries||[]).filter(isFeed).map(x=>toH(x.t)).sort((a,b)=>a-b); let i=-1; fs.forEach((h,k)=>{ if(h>=NF&&h<=BE) i=k; }); if(i<0) i=fs.findIndex(h=>h>=NF); if(i<0) return null; let nx=fs[i+1]; if(nx===undefined){ const n=L[addDays(d,1)]; const f2=(n&&n.entries||[]).filter(isFeed).map(x=>toH(x.t)).sort((a,b)=>a-b); if(!f2.length) return null; nx=f2[0]+24; } const g=nx-fs[i]; return g>=1.5&&g<=14?g:null; }
